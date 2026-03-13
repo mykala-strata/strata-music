@@ -9,19 +9,19 @@
   font-family: 'Telegraf';
   font-weight: 200;
   font-style: normal;
-  src: url('https://raw.githubusercontent.com/mykala-strata/strata-music/main/Telegraf%20UltraLight%20200.otf') format('opentype');
+  src: url('Telegraf UltraLight 200.otf') format('opentype');
 }
 @font-face {
   font-family: 'Telegraf';
   font-weight: 400;
   font-style: normal;
-  src: url('https://raw.githubusercontent.com/mykala-strata/strata-music/main/TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype');
+  src: url('TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype');
 }
 @font-face {
   font-family: 'Telegraf';
   font-weight: 800;
   font-style: normal;
-  src: url('https://raw.githubusercontent.com/mykala-strata/strata-music/main/Telegraf%20UltraBold%20800.otf') format('opentype');
+  src: url('Telegraf UltraBold 800.otf') format('opentype');
 }
 </style>
 <style>
@@ -36,7 +36,7 @@
   --green-dim: #8a7048;
   --border: rgba(200,169,110,0.18);
   --card: rgba(200,169,110,0.06);
-  --amber: #e8956a;
+  --amber: #b5623e;
   --red: #e05555;
   --accent2: #7a9e8a;
 }
@@ -47,9 +47,9 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 /* HERO */
 .hero { padding:72px 0 52px; border-bottom:1px solid var(--border); position:relative; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--accent2) 100%); opacity:0.5; }
-.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,92px); font-weight:800; color:var(--green); margin-bottom:20px; line-height:1; letter-spacing:normal; }
+.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,92px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:20px; line-height:1; letter-spacing:normal; }
 .hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(24px,4.5vw,52px); line-height:0.88; margin-bottom:24px; color:var(--text); letter-spacing:-.01em; }
-.hero h1 em { font-family:'Cormorant Garamond',serif; font-style:italic; color:#b8f5cc; font-size:1.35em; }
+.hero h1 em { font-family:'Cormorant Garamond',serif; font-style:italic; color:#7a9e8a; font-size:1.35em; }
 .hero p { font-size:15px; line-height:1.75; color:var(--muted); font-weight:400; }
 
 /* SECTIONS */
@@ -86,8 +86,8 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .btn-green:disabled { opacity:.35; cursor:not-allowed; }
 .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); padding:11px 18px; }
 .btn-outline:hover { border-color:var(--text); }
-.btn-ghost { background:transparent; color:var(--green); border:1px solid rgba(29,185,84,.35); padding:11px 22px; }
-.btn-ghost:hover { background:rgba(29,185,84,.08); border-color:var(--green); }
+.btn-ghost { background:transparent; color:#7a9e8a; border:1px solid rgba(122,158,138,.45); padding:11px 22px; }
+.btn-ghost:hover { background:rgba(122,158,138,.08); border-color:#7a9e8a; }
 
 /* DIVIDER */
 .or-divider { display:flex; align-items:center; gap:14px; margin:26px 0 22px; }
@@ -95,8 +95,8 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .or-divider span { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
 
 /* DEMO BOX */
-.demo-box { padding:22px 26px; border:1px solid rgba(29,185,84,.22); border-radius:2px; background:rgba(29,185,84,.04); }
-.demo-box-title { font-size:26px; color:var(--green); margin-bottom:8px; font-weight:400; }
+.demo-box { padding:22px 26px; border:1px solid rgba(122,158,138,.35); border-radius:2px; background:rgba(122,158,138,.06); }
+.demo-box-title { font-size:20px; color:var(--green); margin-bottom:8px; font-weight:400; }
 .demo-box p { font-size:15px; color:var(--muted); line-height:1.65; margin-bottom:16px; }
 
 /* AUTH BOX */
@@ -194,6 +194,10 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .done-n { font-family:'Telegraf',sans-serif; font-size:40px; font-weight:300; color:var(--green); }
 .done-l { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
 
+.tier-check { display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:8px 14px; cursor:pointer; font-size:14px; color:var(--text); transition:border-color 0.2s; }
+.tier-check:hover { border-color:var(--green); }
+.tier-check input { accent-color:var(--green); width:14px; height:14px; cursor:pointer; }
+
 /* ERROR */
 .err { font-size:12px; color:var(--red); margin-top:8px; padding:9px 13px; border:1px solid rgba(224,85,85,.3); border-radius:2px; display:none; }
 .err.show { display:block; }
@@ -210,14 +214,13 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <div class="eyebrow">Strata</div>
     <div class="strata-mark"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
     <h1>The deeper you dig,<br>the more you <em>remember.</em></h1>
-    <p>The years keep coming — the same days, the same months, the same seasons. But you're <strong>always</strong> evolving. Revisit every past version of you through music. Strata organizes your liked songs by when you liked them, so you can remember the moments and memories by what you were listening to.</p>
-    <p style="font-size:14px; color:var(--gold); margin-top:16px; font-style:italic;">Your past self had good taste. It's time to revisit.</p>
+    <p>The years keep coming — the same days, the same months, the same seasons. <strong>But you're always evolving.</strong> Revisit every past version of you through music. Strata organizes your liked songs by <strong>when</strong> you liked them, so you never forget the moments that made you the person you are today.</p>
   </header>
 
   <!-- DEMO -->
   <div class="demo-box" style="margin-bottom:32px">
-    <div class="demo-box-title">Try Demo Mode ✦</div>
-    <p>A full simulation of 6,000 songs across 2016–2026. See exactly how it works — no Spotify account needed.</p>
+    <div class="demo-box-title">✦ Try Demo Mode ✦</div>
+    <p style="font-size:13px; line-height:1.6;">A full simulation of 6,000 songs across 2016–2026. See exactly how it works — no Spotify account needed.</p>
     <button class="btn-ghost" id="btn-demo">Launch Demo →</button>
   </div>
 
@@ -272,6 +275,16 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
       <div class="folder-note-title">📁 About Folders</div>
       <p>Spotify's API no longer supports creating folders programmatically. After your playlists are created, organize them in the <strong>Spotify desktop app</strong> by right-clicking any playlist and selecting "Add to folder". Suggested: <strong>Phases / Months / Seasons / Years</strong>.</p>
     </div>
+    <div style="margin:32px 0 24px;">
+      <h2>Which playlist tiers would you like to create?</h2>
+      <p style="font-size:13px; color:var(--muted); margin:8px 0 14px;">You must select at least one. Mix and match however you like.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <label class="tier-check"><input type="checkbox" id="cb-phase" checked> Phases <span style="color:var(--muted); font-size:12px;">(jan I, jan II…)</span></label>
+        <label class="tier-check"><input type="checkbox" id="cb-month" checked> Months <span style="color:var(--muted); font-size:12px;">(J A N U A R Y…)</span></label>
+        <label class="tier-check"><input type="checkbox" id="cb-season" checked> Seasons <span style="color:var(--muted); font-size:12px;">(S P R I N G…)</span></label>
+        <label class="tier-check"><input type="checkbox" id="cb-year" checked> Years <span style="color:var(--muted); font-size:12px;">(2016, 2017…)</span></label>
+      </div>
+    </div>
     <div class="actions">
       <button class="btn-green" id="btn-create">Create Playlists →</button>
       <button class="btn-outline">Start Over</button>
@@ -282,10 +295,10 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
   <section class="sec hidden" id="sec-done">
     <div class="sec-label">Step 05 — Done</div>
     <div class="done-box">
-      <h2>Every song is a memory, every memory has a season — embrace the nostalgia and relive all of it now. ✦</h2>
+      <h2>Your past self had good taste. It's time to revisit. ✦</h2>
       <div class="done-stats" id="done-stats"></div>
       <p>Your layered soundtracks are ready.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
-      <p style="font-size:14px; color:var(--gold); margin-top:16px; font-style:italic;">Your past self had good taste. It's time to revisit.</p>
+      <p style="font-size:14px; color:var(--gold); margin-top:16px; font-style:italic;">Every song connects to a memory, every memory has a season — embrace the nostalgia and relive all of it now.</p>
       <div style="margin-top:22px"><button class="btn-outline">Run Again</button></div>
     </div>
     <div style="margin-top:48px" id="lookup-section-done"></div>
@@ -396,6 +409,10 @@ function randomDate(start, end) {
 function startAuth() {
   var cid = document.getElementById('cid').value.trim();
   if (!cid || cid.length < 10) { showErr('err-setup', 'Please enter a valid Client ID.'); return; }
+  var anyChecked = ['phase','month','season','year'].some(function(t) {
+    var cb = document.getElementById('cb-' + t); return cb && cb.checked;
+  });
+  if (!anyChecked) { showErr('err-setup', 'Please select at least one playlist tier.'); return; }
   localStorage.setItem('ylip_cid', cid);
   showSec('sec-auth');
 }
@@ -537,10 +554,20 @@ async function loadExisting() {
 }
 
 // ── BUILD PLAYLISTS ───────────────────────────────────────────────────────────
+function getSelectedTiers() {
+  var tiers = {};
+  ['phase','month','season','year'].forEach(function(t) {
+    var cb = document.getElementById('cb-' + t);
+    tiers[t] = cb ? cb.checked : true;
+  });
+  return tiers;
+}
+
 function buildPlaylists() {
   playlists = {};
   trackIndex = {};
   window.trackIndex = trackIndex;
+  var tiers = getSelectedTiers();
 
 function ensure(key, name, desc, tier) {
     if (!playlists[key]) playlists[key] = { name: name, desc: desc, tier: tier, tracks: [] };
@@ -554,22 +581,31 @@ function ensure(key, name, desc, tier) {
     var season = getSeason(d);
     var mSpaced = spacedMonth(month);
 
-    var pk = 'ph_' + month + '_' + phase.num;
-    ensure(pk, phase.name, phase.desc, 'phase');
-    if (playlists[pk].tracks.indexOf(t.uri) === -1) playlists[pk].tracks.push(t.uri);
     trackIndex[t.uri] = { name: t.name, artist: t.artist, added: t.added };
 
-    var mk = 'mo_' + month;
-    ensure(mk, mSpaced, '', 'month');
-    if (playlists[mk].tracks.indexOf(t.uri) === -1) playlists[mk].tracks.push(t.uri);
+    if (tiers.phase) {
+      var pk = 'ph_' + month + '_' + phase.num;
+      ensure(pk, phase.name, phase.desc, 'phase');
+      if (playlists[pk].tracks.indexOf(t.uri) === -1) playlists[pk].tracks.push(t.uri);
+    }
 
-    var sk = 'se_' + season;
-    ensure(sk, season, '', 'season');
-    if (playlists[sk].tracks.indexOf(t.uri) === -1) playlists[sk].tracks.push(t.uri);
+    if (tiers.month) {
+      var mk = 'mo_' + month;
+      ensure(mk, mSpaced, '', 'month');
+      if (playlists[mk].tracks.indexOf(t.uri) === -1) playlists[mk].tracks.push(t.uri);
+    }
 
-    var yk = 'yr_' + year;
-    ensure(yk, '' + year, '', 'year');
-    if (playlists[yk].tracks.indexOf(t.uri) === -1) playlists[yk].tracks.push(t.uri);
+    if (tiers.season) {
+      var sk = 'se_' + season;
+      ensure(sk, season, '', 'season');
+      if (playlists[sk].tracks.indexOf(t.uri) === -1) playlists[sk].tracks.push(t.uri);
+    }
+
+    if (tiers.year) {
+      var yk = 'yr_' + year;
+      ensure(yk, '' + year, '', 'year');
+      if (playlists[yk].tracks.indexOf(t.uri) === -1) playlists[yk].tracks.push(t.uri);
+    }
   }
 }
 
@@ -863,7 +899,7 @@ function renderPreview(isDemo) {
     '<div class="stat"><div class="stat-n">' + allTracks.length.toLocaleString() + '</div><div class="stat-l">Songs</div></div>' +
     '<div class="stat"><div class="stat-n">' + newCount + '</div><div class="stat-l">New Playlists</div></div>' +
     '<div class="stat"><div class="stat-n">' + updateCount + '</div><div class="stat-l">To Update</div></div>' +
-    '<div class="stat"><div class="stat-n">' + tiers.year.length + '</div><div class="stat-l">Years</div></div>';
+    '<div class="stat"><div class="stat-n">' + tiers.year.length + '</div><div class="stat-l">' + (tiers.year.length === 1 ? 'Year' : 'Years') + '</div></div>';
 
   // Demo banner
   var bannerSlot = document.getElementById('demo-banner-slot');
