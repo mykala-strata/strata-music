@@ -392,7 +392,7 @@ async function generateCodeChallenge(verifier) {
 
 async function doAuth() {
   var cid = localStorage.getItem('ylip_cid');
-  var redir = 'https://strata-app.netlify.app';
+  var redir = 'https://mykala-strata.github.io/strata-music';
   var verifier = generateRandomString(64);
   var challenge = await generateCodeChallenge(verifier);
   localStorage.setItem('ylip_verifier', verifier);
@@ -413,7 +413,7 @@ async function extractToken() {
   if (!code) return false;
   var cid = localStorage.getItem('ylip_cid');
   var verifier = localStorage.getItem('ylip_verifier');
-  var redir = 'https://strata-app.netlify.app';
+  var redir = 'https://mykala-strata.github.io/strata-music';
   history.replaceState(null, '', window.location.pathname);
   var res = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
