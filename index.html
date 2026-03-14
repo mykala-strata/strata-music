@@ -47,7 +47,7 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 /* HERO */
 .hero { padding:72px 0 52px; border-bottom:1px solid var(--border); position:relative; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--accent2) 100%); opacity:0.5; }
-.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,92px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:20px; line-height:1; letter-spacing:normal; }
+.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,96px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1; letter-spacing:normal; }
 .hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(24px,4.5vw,52px); line-height:0.88; margin-bottom:24px; color:var(--text); letter-spacing:-.01em; }
 .hero h1 em { font-family:'Cormorant Garamond',serif; font-style:italic; color:#7a9e8a; font-size:1.35em; }
 .hero p { font-size:15px; line-height:1.75; color:var(--muted); font-weight:400; }
@@ -212,6 +212,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 
   <header class="hero">
     <div class="eyebrow">Strata</div>
+    <p style="font-size:13px; font-weight:200; color:var(--muted); letter-spacing:.04em; margin-top:-16px; margin-bottom:24px;">You saved the songs. Strata saves the moments.</p>
     <div class="strata-mark"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
     <h1>The deeper you dig,<br>the more you <em>remember.</em></h1>
     <p>The years keep repeating — the same days, months, and seasons. <strong>But you're always evolving.</strong> Rediscover past versions of yourself through the songs you saved at the time. Strata organizes your liked songs by <strong>when</strong> you liked them, so every season of your life has its own soundtrack.</p>
@@ -296,6 +297,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <div class="done-box">
       <h2 style="font-size:clamp(18px,3vw,28px); white-space:nowrap;">Your past self had good taste. It's time to revisit.</h2>
       <div class="done-stats" id="done-stats"></div>
+      <div style="border-top:1px solid var(--border); margin:20px 0;"></div>
       <p>Your layered soundtracks are ready.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
       <div style="margin-top:22px"><button class="btn-outline">Run Again</button></div>
     </div>
