@@ -1076,7 +1076,7 @@ async function createAll() {
           }
           await sleep(100);
         }
-        if (existing[pl.name] && createdList.indexOf(pl.name) === -1) { updated++; updatedList.push(pl.name + '  (+' + newUris.length + ')'); addLog('Updated: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else if (createdList.indexOf(pl.name) !== -1) { var ci = createdList.indexOf(pl.name); createdList[ci] = pl.name + '  (+' + newUris.length + ')'; addLog('Created: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else { createdList.push(pl.name + ' (+' + newUris.length + ')'); addLog('Added ' + newUris.length + ' tracks to: ' + pl.name, 'ok'); }
+        if (existing[pl.name] && createdList.indexOf(pl.name) === -1) { updated++; updatedList.push(pl.name + '&nbsp;&nbsp;(' + '+' + newUris.length + ')'); addLog('Updated: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else if (createdList.indexOf(pl.name) !== -1) { var ci = createdList.indexOf(pl.name); createdList[ci] = pl.name + '&nbsp;&nbsp;(' + '+' + newUris.length + ')'; addLog('Created: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else { createdList.push(pl.name + ' (+' + newUris.length + ')'); addLog('Added ' + newUris.length + ' tracks to: ' + pl.name, 'ok'); }
       } else if (existing[pl.name]) { addLog('Unchanged: ' + pl.name, 'info'); }
     } catch(e) { addLog('ERROR - ' + pl.name + ': ' + e.message, 'warn'); console.error('Playlist error:', pl.name, e); }
     await sleep(80);
@@ -1086,9 +1086,9 @@ async function createAll() {
   var listHtml = '';
   if (createdList.length || updatedList.length) {
     listHtml = '<div style="margin-bottom:20px; font-size:13px; color:var(--muted); line-height:1.8;">';
-    if (createdList.length) listHtml += '<div><strong style="color:var(--text); font-size:13px;">Playlists created:</strong> ' + createdList.join(' &nbsp;&nbsp;|&nbsp;&nbsp; ') + '</div>';
-    if (updatedList.length) listHtml += '<div style="margin-top:6px;"><strong style="color:var(--text); font-size:13px;">Playlists updated:</strong> ' + updatedList.join(' &nbsp;&nbsp;|&nbsp;&nbsp; ') + '</div>';
-    listHtml += '</div><div style="border-top:1px solid var(--border); margin-bottom:20px;"></div>';
+    if (createdList.length) listHtml += '<div><strong style="color:var(--text); font-size:13px;">Playlists created:</strong>&nbsp;&nbsp;' + createdList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
+    if (updatedList.length) listHtml += '<div style="margin-top:6px;"><strong style="color:var(--text); font-size:13px;">Playlists updated:</strong>&nbsp;&nbsp;' + updatedList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
+    listHtml += '</div><div style="border-top:1px solid var(--border); margin-top:20px; margin-bottom:20px;"></div>';
   }
   var updatedHtml = listHtml;
   document.getElementById('done-stats').innerHTML =
