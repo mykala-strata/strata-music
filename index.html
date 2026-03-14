@@ -298,7 +298,6 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
       <div class="done-stats" id="done-stats"></div>
       <p>Your layered soundtracks are ready.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
       <div style="margin-top:22px"><button class="btn-outline">Run Again</button></div>
-      <p style="font-size:12px; color:var(--muted); margin-top:16px; font-style:italic; text-align:center;">Every song connects to a memory, every memory has a season — embrace the nostalgia and relive all of it now.</p>
     </div>
     <div style="margin-top:48px" id="lookup-section-done"></div>
   </section>
@@ -996,7 +995,7 @@ async function createAll() {
 
   var keys = Object.keys(playlists);
   var created = 0, updated = 0, coversSet = 0;
-  var updatedList = [];
+  var createdList = [], updatedList = [];
 
   for (var i = 0; i < keys.length; i++) {
     var pl = playlists[keys[i]];
@@ -1010,7 +1009,7 @@ async function createAll() {
           body: '{"name":"' + pl.name.replace(/"/g,'\\"') + '","public":true,"description":"' + (pl.desc||'').replace(/"/g,'\\"') + '"}'
         });
         if (!r || !r.id) throw new Error('No playlist ID returned');
-        pid = r.id; created++;
+        pid = r.id; created++; createdList.push(pl.name);
         addLog('Created: ' + pl.name, 'ok');
         await sleep(500);
       } else if (pl.desc) {
@@ -1077,14 +1076,21 @@ async function createAll() {
           }
           await sleep(100);
         }
-        if (existing[pl.name]) { updated++; updatedList.push(pl.name + ' (+' + newUris.length + ')'); addLog('Updated: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else { addLog('Added ' + newUris.length + ' tracks to: ' + pl.name, 'ok'); }
+        if (existing[pl.name] && createdList.indexOf(pl.name) === -1) { updated++; updatedList.push(pl.name + ' (+' + newUris.length + ')'); addLog('Updated: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else if (createdList.indexOf(pl.name) !== -1) { var ci = createdList.indexOf(pl.name); createdList[ci] = pl.name + ' (+' + newUris.length + ')'; addLog('Created: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else { createdList.push(pl.name + ' (+' + newUris.length + ')'); addLog('Added ' + newUris.length + ' tracks to: ' + pl.name, 'ok'); }
       } else if (existing[pl.name]) { addLog('Unchanged: ' + pl.name, 'info'); }
     } catch(e) { addLog('ERROR - ' + pl.name + ': ' + e.message, 'warn'); console.error('Playlist error:', pl.name, e); }
     await sleep(80);
   }
 
   setProgress(keys.length, keys.length, 'Complete!');
-  var updatedHtml = updatedList.length ? '<div style="margin-top:24px; font-size:13px; color:var(--muted); line-height:2;"><strong style="color:var(--text); font-size:14px;">Playlists updated:</strong><br>' + updatedList.join('<br>') + '</div>' : '';
+  var listHtml = '';
+  if (createdList.length || updatedList.length) {
+    listHtml = '<div style="margin-top:24px; font-size:13px; color:var(--muted); line-height:1.8; border-top:1px solid var(--border); padding-top:20px;">';
+    if (createdList.length) listHtml += '<div><strong style="color:var(--text); font-size:13px;">Playlists created:</strong> ' + createdList.join(' &nbsp;|&nbsp; ') + '</div>';
+    if (updatedList.length) listHtml += '<div style="margin-top:6px;"><strong style="color:var(--text); font-size:13px;">Playlists updated:</strong> ' + updatedList.join(' &nbsp;|&nbsp; ') + '</div>';
+    listHtml += '</div>';
+  }
+  var updatedHtml = listHtml;
   document.getElementById('done-stats').innerHTML =
     '<div class="done-stat"><div class="done-n">' + created + '</div><div class="done-l">Created</div></div>' +
     '<div class="done-stat"><div class="done-n">' + updated + '</div><div class="done-l">Updated</div></div>' +
