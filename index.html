@@ -42,8 +42,8 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 @media (max-width: 600px) {
-  .eyebrow { font-size:19vw !important; }
-  .hero h1 { font-size:8.5vw !important; }
+  .eyebrow { font-size:22vw !important; }
+  .hero h1 { font-size:6.5vw !important; }
 }
 body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; min-height:100vh; }
 .wrap { max-width:760px; margin:0 auto; padding:0 28px; }
@@ -61,9 +61,9 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 .sec-label { font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:16px; }
 .strata-mark { display:flex; gap:3px; margin-bottom:32px; }
 .strata-mark span { height:3px; border-radius:1px; }
-.strata-mark .s1 { width:48px; background:var(--green); }
-.strata-mark .s2 { width:28px; background:var(--amber); opacity:.7; }
-.strata-mark .s3 { width:16px; background:var(--accent2); opacity:.5; }
+.strata-mark .s1 { width:20px; background:var(--green); }
+.strata-mark .s2 { width:150px; background:var(--amber); opacity:.7; }
+.strata-mark .s3 { width:200px; background:var(--accent2); opacity:.5; }
 .sec h2 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:26px; margin-bottom:20px; }
 .sec.hidden { display:none; }
 
@@ -229,6 +229,36 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <button class="btn-ghost" id="btn-demo">Launch Demo →</button>
   </div>
 
+  <!-- LOOKUP TEASER -->
+  <div style="margin-bottom:48px;">
+    <h3 style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px;">Look up a track</h3>
+    <div style="position:relative;">
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button style="background:none; border:1px solid rgba(200,169,110,0.3); color:var(--green); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY TITLE / ARTIST</button>
+        <button style="background:none; border:1px solid rgba(200,169,110,0.15); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY NUMBER</button>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6;">Type a song title, artist, or both to find when you saved it and where it lives.</p>
+      <div style="display:flex; gap:12px; margin-bottom:24px;">
+        <input type="text" value="hello" disabled style="flex:1; background:var(--card); border:1px solid var(--border); color:var(--muted); padding:10px 14px; font-family:'Telegraf',sans-serif; font-size:14px; border-radius:2px; opacity:0.6;">
+        <button disabled style="background:#b5623e; color:#0f0d0a; border:none; padding:10px 22px; font-family:'Telegraf',sans-serif; font-size:13px; font-weight:700; letter-spacing:.08em; border-radius:2px; opacity:0.6;">SEARCH</button>
+      </div>
+      <div style="border:1px solid var(--border); border-radius:2px; padding:16px 20px; background:var(--card); opacity:0.75;">
+        <div style="font-family:'Telegraf',sans-serif; font-size:22px; font-weight:400; color:var(--text); margin-bottom:4px;">Hello</div>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:16px; font-family:'Telegraf',sans-serif;">Adele</div>
+        <div style="font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px;">Saved on</div>
+        <div style="font-family:'Telegraf',sans-serif; font-size:36px; color:var(--text); font-weight:300; margin-bottom:4px;">November 20, 2015</div>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:10px; font-family:'Telegraf',sans-serif;">Friday &nbsp;·&nbsp; 9:13 PM</div>
+        <div style="font-size:13px; color:var(--muted); font-family:'Telegraf',sans-serif;">Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">november II</span> &nbsp;·&nbsp; Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">N O V E M B E R</span> &nbsp;·&nbsp; Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">F A L L</span> &nbsp;·&nbsp; Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">2015</span></div>
+      </div>
+      <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent 70%, rgba(15,13,10,0.4) 100%); border-radius:2px; pointer-events:none;"></div>
+    </div>
+    <div style="text-align:center; margin-top:14px; opacity:0.7;">
+      <span style="font-size:16px;">🔒</span>
+      <span style="font-size:13px; color:var(--muted); margin-left:8px;">Available after connecting your Spotify — your real data, your actual songs.</span>
+    </div>
+  </div>
+
+
   <!-- SETUP -->
   <section class="sec" id="sec-setup">
     <div class="sec-label">Step 01 — Setup</div>
@@ -301,9 +331,9 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <div class="done-box">
       <h2 style="font-size:clamp(18px,3vw,28px); white-space:nowrap;">Your past self had good taste. It's time to revisit.</h2>
       <div class="done-stats" id="done-stats"></div>
-      <div style="border-top:1px solid var(--border); margin:20px 0;"></div>
-      <p>Your layered soundtracks are ready.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
+      <p style="margin-top:20px;">Your layered soundtracks are ready.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
       <div style="margin-top:22px"><button class="btn-outline">Run Again</button></div>
+      <div id="done-playlist-list"></div>
     </div>
     <div style="margin-top:48px" id="lookup-section-done"></div>
   </section>
@@ -734,7 +764,7 @@ window.searchByTitle = function searchByTitle(uid) {
     var hours = d.getHours(), mins = d.getMinutes(), ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12; if (hours === 0) hours = 12;
     var timeStr = hours + ':' + (mins < 10 ? '0' : '') + mins + ' ' + ampm;
-    var placementStr = r.placements.map(function(p) { return 'Track #' + p.pos + ' in ' + p.pl.name; }).join(' &nbsp;·&nbsp; ');
+    var placementStr = r.placements.map(function(p) { return 'Track #' + p.pos + '\u00a0\u00a0in\u00a0\u00a0' + p.pl.name; }).join(' &nbsp;·&nbsp; ');
     html += '<div class="lr-result-block">' +
       '<div class="lr-track">' + r.track.name + '</div>' +
       '<div class="lr-artist">' + (r.track.artist || 'Unknown Artist') + '</div>' +
@@ -1095,15 +1125,15 @@ async function createAll() {
   listHtml = '<div style="margin-bottom:' + (bothPresent ? '20' : '4') + 'px; font-size:13px; color:var(--muted); line-height:1.8;">';
     if (createdList.length) listHtml += '<div><strong style="color:var(--text); font-size:13px;">Playlists created:</strong>&nbsp;&nbsp;' + createdList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
     if (updatedList.length) listHtml += '<div style="margin-top:6px;"><strong style="color:var(--text); font-size:13px;">Playlists updated:</strong>&nbsp;&nbsp;' + updatedList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
-    listHtml += '</div><div style="border-top:1px solid var(--border); margin-top:20px; margin-bottom:20px;"></div>';
+    listHtml += '</div>';
   }
   var updatedHtml = listHtml;
+  if (listHtml) { document.getElementById('done-playlist-list').innerHTML = '<div style="border-top:1px solid var(--border); margin:24px 0 0;"></div>' + listHtml; }
   document.getElementById('done-stats').innerHTML =
     '<div class="done-stat"><div class="done-n">' + created + '</div><div class="done-l">Created</div></div>' +
     '<div class="done-stat"><div class="done-n">' + updated + '</div><div class="done-l">Updated</div></div>' +
     '<div class="done-stat"><div class="done-n">' + coversSet + '</div><div class="done-l">Covers Set</div></div>' +
-    '<div class="done-stat"><div class="done-n">' + allTracks.length.toLocaleString() + '</div><div class="done-l">Songs Organized</div></div>' +
-    updatedHtml;
+    '<div class="done-stat"><div class="done-n">' + allTracks.length.toLocaleString() + '</div><div class="done-l">Songs Organized</div></div>';
   showSec('sec-done');
   buildLookupSection('lookup-section-done');
 }
