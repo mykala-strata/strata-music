@@ -61,9 +61,9 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 .sec-label { font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:16px; }
 .strata-mark { display:flex; gap:3px; margin-bottom:32px; }
 .strata-mark span { height:3px; border-radius:1px; }
-.strata-mark .s1 { width:20px; background:var(--green); }
-.strata-mark .s2 { width:150px; background:var(--amber); opacity:.7; }
-.strata-mark .s3 { width:200px; background:var(--accent2); opacity:.5; }
+.strata-mark .s1 { width:113px; background:var(--green); }
+.strata-mark .s2 { width:113px; background:var(--amber); opacity:.7; }
+.strata-mark .s3 { width:113px; background:var(--accent2); opacity:.5; }
 .sec h2 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:26px; margin-bottom:20px; }
 .sec.hidden { display:none; }
 
@@ -150,6 +150,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .lookup-tab:hover { border-color:var(--green); color:var(--green); }
 .lr-result-block { border-top:1px solid rgba(200,169,110,0.15); padding-top:16px; margin-top:16px; }
 .lr-result-block:first-child { border-top:none; padding-top:0; margin-top:0; }
+.lr-age { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:18px; color:#7a9e8a; margin-top:14px; line-height:1.6; }
 .lookup-result .lr-context { font-size:13px; color:var(--muted); margin-top:10px; font-family:'Telegraf',sans-serif; }
 .cover-sec { margin-bottom:32px; }
 .cover-sec h3 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:20px; margin-bottom:8px; }
@@ -682,6 +683,7 @@ function buildLookupSection(targetId) {
         '<button class="lookup-tab" id="ltab-num-' + uid + '">By number</button>' +
       '</div>' +
       '<div id="lpanel-title-' + uid + '">' +
+        '<div style="margin-bottom:14px;"><label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px;">YOUR BIRTHDAY (optional — for age context)</label><input type="date" id="lbirthday-' + uid + '" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:\'Telegraf\',sans-serif; font-size:13px; border-radius:2px; width:180px;" onchange="saveBirthday(this.value)"></div>' +
         '<p>Type a song title, artist, or both to find when you saved it and where it lives.</p>' +
         '<div class="lookup-row">' +
           '<input type="text" id="lsearch-' + uid + '" placeholder="Song title or artist..." style="flex:1">' +
@@ -717,6 +719,59 @@ function buildLookupSection(targetId) {
   document.getElementById('lnum-' + uid).addEventListener('keydown', (function(u){ return function(e){ if (e.key === 'Enter') window.lookupTrack(u); }; })(uid));
   document.getElementById('lsbtn-' + uid).addEventListener('click', (function(u){ return function(){ window.searchByTitle(u); }; })(uid));
   document.getElementById('lsearch-' + uid).addEventListener('keydown', (function(u){ return function(e){ if (e.key === 'Enter') window.searchByTitle(u); }; })(uid));
+}
+
+function saveBirthday(val) {
+  localStorage.setItem('strata_birthday', val);
+  // update all birthday inputs
+  var inputs = document.querySelectorAll('[id^="lbirthday-"]');
+  for (var i = 0; i < inputs.length; i++) inputs[i].value = val;
+}
+
+function loadBirthday(uid) {
+  var saved = localStorage.getItem('strata_birthday');
+  if (saved) {
+    var el = document.getElementById('lbirthday-' + uid);
+    if (el) el.value = saved;
+  }
+  return saved;
+}
+
+async function getTrackReleaseDate(uri) {
+  try {
+    var trackId = uri.replace('spotify:track:', '');
+    var data = await api('https://api.spotify.com/v1/tracks/' + trackId);
+    return data && data.album ? data.album.release_date : null;
+  } catch(e) { return null; }
+}
+
+function calcAgeText(birthday, releaseDate, savedDate) {
+  if (!birthday) return null;
+  var bDay = new Date(birthday);
+  var lines = [];
+
+  if (releaseDate) {
+    var relYear = parseInt(releaseDate.substring(0, 4));
+    var bYear = bDay.getFullYear();
+    var ageAtRelease = relYear - bYear;
+    if (ageAtRelease < 0) {
+      lines.push('This song was released ' + Math.abs(ageAtRelease) + ' year' + (Math.abs(ageAtRelease) === 1 ? '' : 's') + ' before you were born.');
+    } else if (ageAtRelease === 0) {
+      lines.push('You were born the same year this song was released.');
+    } else {
+      lines.push('You were ' + ageAtRelease + ' when this song was released.');
+    }
+  }
+
+  if (savedDate) {
+    var saved = new Date(savedDate);
+    var ageAtSave = saved.getFullYear() - bDay.getFullYear();
+    var m = saved.getMonth() - bDay.getMonth();
+    if (m < 0 || (m === 0 && saved.getDate() < bDay.getDate())) ageAtSave--;
+    lines.push('You were ' + ageAtSave + ' when you saved it.');
+  }
+
+  return lines.length ? lines.join(' ') : null;
 }
 
 window.searchByTitle = function searchByTitle(uid) {
@@ -765,6 +820,17 @@ window.searchByTitle = function searchByTitle(uid) {
     hours = hours % 12; if (hours === 0) hours = 12;
     var timeStr = hours + ':' + (mins < 10 ? '0' : '') + mins + ' ' + ampm;
     var placementStr = r.placements.map(function(p) { return 'Track #' + p.pos + '\u00a0\u00a0in\u00a0\u00a0' + p.pl.name; }).join(' &nbsp;·&nbsp; ');
+    var birthday = localStorage.getItem('strata_birthday');
+    var ageHtml = '';
+    if (birthday) {
+      getTrackReleaseDate(r.uri).then(function(releaseDate) {
+        var ageText = calcAgeText(birthday, releaseDate, r.track.added);
+        if (ageText) {
+          var ageEl = document.getElementById('lr-age-' + r.uri.replace(/[^a-z0-9]/gi,''));
+          if (ageEl) ageEl.textContent = ageText;
+        }
+      });
+    }
     html += '<div class="lr-result-block">' +
       '<div class="lr-track">' + r.track.name + '</div>' +
       '<div class="lr-artist">' + (r.track.artist || 'Unknown Artist') + '</div>' +
@@ -772,6 +838,7 @@ window.searchByTitle = function searchByTitle(uid) {
       '<div class="lr-date">' + dateStr + '</div>' +
       '<div class="lr-context">' + dayStr + ' &nbsp;·&nbsp; ' + timeStr + '</div>' +
       '<div class="lr-context" style="margin-top:4px;font-size:11px;">' + placementStr + '</div>' +
+      (birthday ? '<div class="lr-age" id="lr-age-' + r.uri.replace(/[^a-z0-9]/gi,'') + '"></div>' : '') +
       '</div>';
   });
   if (results.length > 5) html += '<div class="lr-context" style="margin-top:8px;">...and ' + (results.length - 5) + ' more results. Try a more specific title.</div>';
@@ -992,6 +1059,7 @@ function renderPreview(isDemo) {
   }
 
   showSec('sec-preview');
+  setTimeout(function() { loadBirthday('lookupsection'); }, 100);
 }
 
 function toggleTier(key) {
