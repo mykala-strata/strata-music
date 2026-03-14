@@ -41,6 +41,10 @@
   --accent2: #7a9e8a;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
+@media (max-width: 600px) {
+  .eyebrow { font-size:19vw !important; }
+  .hero h1 { font-size:8.5vw !important; }
+}
 body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; min-height:100vh; }
 .wrap { max-width:760px; margin:0 auto; padding:0 28px; }
 
@@ -1088,7 +1092,7 @@ async function createAll() {
   var listHtml = '';
   if (createdList.length || updatedList.length) {
     var bothPresent = createdList.length && updatedList.length;
-  listHtml = '<div style="margin-bottom:' + (bothPresent ? '20' : '12') + 'px; font-size:13px; color:var(--muted); line-height:1.8;">';
+  listHtml = '<div style="margin-bottom:' + (bothPresent ? '20' : '4') + 'px; font-size:13px; color:var(--muted); line-height:1.8;">';
     if (createdList.length) listHtml += '<div><strong style="color:var(--text); font-size:13px;">Playlists created:</strong>&nbsp;&nbsp;' + createdList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
     if (updatedList.length) listHtml += '<div style="margin-top:6px;"><strong style="color:var(--text); font-size:13px;">Playlists updated:</strong>&nbsp;&nbsp;' + updatedList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
     listHtml += '</div><div style="border-top:1px solid var(--border); margin-top:20px; margin-bottom:20px;"></div>';
