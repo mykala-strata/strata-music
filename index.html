@@ -49,7 +49,7 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 .wrap { max-width:760px; margin:0 auto; padding:0 28px; }
 
 /* HERO */
-.hero { padding:72px 0 52px; border-bottom:1px solid var(--border); position:relative; }
+.hero { padding:72px 0 28px; border-bottom:1px solid var(--border); position:relative; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--accent2) 100%); opacity:0.5; }
 .eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,96px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1; letter-spacing:normal; }
 .hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(24px,4.5vw,52px); line-height:0.88; margin-bottom:24px; color:var(--text); letter-spacing:-.01em; }
@@ -150,7 +150,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .lookup-tab:hover { border-color:var(--green); color:var(--green); }
 .lr-result-block { border-top:1px solid rgba(200,169,110,0.15); padding-top:16px; margin-top:16px; }
 .lr-result-block:first-child { border-top:none; padding-top:0; margin-top:0; }
-.lr-age { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:18px; color:#7a9e8a; margin-top:14px; line-height:1.6; }
+.lr-age { font-family:'Telegraf',sans-serif; font-size:13px; color:#7a9e8a; margin-top:10px; }
 .lookup-result .lr-context { font-size:13px; color:var(--muted); margin-top:10px; font-family:'Telegraf',sans-serif; }
 .cover-sec { margin-bottom:32px; }
 .cover-sec h3 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:20px; margin-bottom:8px; }
@@ -231,7 +231,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
   </div>
 
   <!-- LOOKUP TEASER -->
-  <div style="margin-bottom:48px;">
+  <div style="margin-bottom:24px;">
     <h3 style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px;">Look up a track</h3>
     <div style="position:relative;">
       <div style="display:flex; gap:8px; margin-bottom:12px;">
@@ -683,7 +683,7 @@ function buildLookupSection(targetId) {
         '<button class="lookup-tab" id="ltab-num-' + uid + '">By number</button>' +
       '</div>' +
       '<div id="lpanel-title-' + uid + '">' +
-        '<div style="margin-bottom:14px;"><label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px;">YOUR BIRTHDAY (optional — for age context)</label><input type="date" id="lbirthday-' + uid + '" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:\'Telegraf\',sans-serif; font-size:13px; border-radius:2px; width:180px;" onchange="saveBirthday(this.value)"></div>' +
+        '<div style="margin-bottom:14px; margin-top:12px;"><label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px;">YOUR BIRTHDAY (optional — for age context)</label><input type="date" id="lbirthday-' + uid + '" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:\'Telegraf\',sans-serif; font-size:13px; border-radius:2px; width:180px;" onchange="saveBirthday(this.value)"></div>' +
         '<p>Type a song title, artist, or both to find when you saved it and where it lives.</p>' +
         '<div class="lookup-row">' +
           '<input type="text" id="lsearch-' + uid + '" placeholder="Song title or artist..." style="flex:1">' +
