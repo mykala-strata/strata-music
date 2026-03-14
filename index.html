@@ -214,7 +214,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <div class="eyebrow">Strata</div>
     <div class="strata-mark"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
     <h1>The deeper you dig,<br>the more you <em>remember.</em></h1>
-    <p>The years keep coming — the same days, the same months, the same seasons. <strong>But you're always evolving.</strong> Revisit every past version of you through music. Strata organizes your liked songs by <strong>when</strong> you liked them, so you never forget the moments that made you the person you are today.</p>
+    <p>The years keep repeating — the same days, months, and seasons. <strong>But you're always evolving.</strong> Rediscover past versions of yourself through the songs you saved at the time. Strata organizes your liked songs by <strong>when</strong> you liked them, so every season of your life has its own soundtrack.</p>
   </header>
 
   <!-- DEMO -->
@@ -967,6 +967,7 @@ function runDemo() {
   allTracks = [];
   existing = {};
   userId = 'demo';
+  document.getElementById('sec-setup').classList.add('hidden');
   var start = new Date('2016-03-15');
   var end = new Date('2026-02-28');
   for (var i = 0; i < 6000; i++) {
@@ -1092,6 +1093,7 @@ function resetApp() {
   allTracks = []; playlists = {}; existing = {}; covers = {};
   var all = ['sec-auth','sec-load','sec-preview','sec-done'];
   for (var i = 0; i < all.length; i++) document.getElementById(all[i]).classList.add('hidden');
+  document.getElementById('sec-setup').classList.remove('hidden');
   document.getElementById('err-setup').classList.remove('show');
   document.getElementById('log').innerHTML = '';
   document.getElementById('prog-fill').style.width = '0%';
