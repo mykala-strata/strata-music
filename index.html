@@ -81,8 +81,8 @@ input[type=text]::placeholder { color:var(--muted); opacity:.5; }
 
 /* BUTTONS */
 button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; border:none; border-radius:2px; transition:all .2s; }
-.btn-green { background:var(--green); color:#000; padding:11px 22px; font-weight:700; }
-.btn-green:hover { background:#22d65f; }
+.btn-green { background:#b5623e; color:#0f0d0a; padding:11px 22px; font-weight:700; }
+.btn-green:hover { background:#c8714a; }
 .btn-green:disabled { opacity:.35; cursor:not-allowed; }
 .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); padding:11px 18px; }
 .btn-outline:hover { border-color:var(--text); }
@@ -106,7 +106,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 /* PROGRESS */
 .prog-label { font-size:12px; color:var(--muted); margin-bottom:8px; }
 .prog-track { height:2px; background:var(--border); border-radius:1px; overflow:hidden; margin-bottom:18px; }
-.prog-fill { height:100%; background:var(--green); width:0%; transition:width .3s; }
+.prog-fill { height:100%; background:#b5623e; width:0%; transition:width .3s; }
 .log-box { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:14px; max-height:200px; overflow-y:auto; font-size:11px; line-height:1.9; }
 .log-box .ok { color:var(--green); }
 .log-box .info { color:var(--text); }
@@ -122,10 +122,10 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .demo-banner { background:rgba(29,185,84,.07); border:1px solid rgba(29,185,84,.2); border-radius:2px; padding:10px 16px; margin-bottom:22px; font-size:11px; letter-spacing:.08em; color:var(--green); text-align:center; }
 
 /* COVER GRID */
-.lookup-sec { margin-bottom: 48px; padding-bottom: 36px; border-bottom: 1px solid rgba(200,169,110,0.15); }
-.lookup-sec h3 { font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:6px; }
-.lookup-sec p { font-size:13px; color:var(--muted); margin-bottom:24px; line-height:1.6; }
-.lookup-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:24px; }
+.lookup-sec { margin-bottom: 32px; padding-bottom: 0; }
+.lookup-sec h3 { font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px; }
+.lookup-sec p { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6; }
+.lookup-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:12px; }
 .lookup-row select, .lookup-row input { background:#1a1612; border:1px solid rgba(200,169,110,0.25); color:var(--text); font-family:'Telegraf',sans-serif; font-size:14px; padding:10px 14px; border-radius:4px; outline:none; }
 .lookup-row select { min-width:200px; }
 .lookup-row input { width:100px; }
@@ -138,9 +138,9 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .lookup-result .lr-artist { font-size:13px; color:var(--muted); margin-bottom:16px; font-family:'Telegraf',sans-serif; }
 .lookup-result .lr-date { font-family:'Telegraf',sans-serif; font-size:36px; font-weight:300; color:var(--gold); letter-spacing:.02em; }
 .lookup-result .lr-label { font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; font-family:'Telegraf',sans-serif; }
-.covers-optional-label { font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.1em; color:var(--green); text-transform:uppercase; margin-bottom:8px; }
+.covers-optional-label { font-family:'Telegraf',sans-serif; font-size:16px; letter-spacing:.05em; color:var(--green); text-transform:uppercase; margin-bottom:8px; }
 .covers-optional-hint { font-size:13px; color:var(--muted); margin-bottom:24px; }
-.lookup-tabs { display:flex; gap:8px; margin-bottom:16px; }
+.lookup-tabs { display:flex; gap:8px; margin-bottom:12px; }
 .lookup-tab { background:none; border:1px solid rgba(200,169,110,0.3); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:6px 16px; cursor:pointer; border-radius:2px; transition:all .2s; }
 .lookup-tab.active { border-color:var(--green); color:var(--green); }
 .lookup-tab:hover { border-color:var(--green); color:var(--green); }
@@ -194,7 +194,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .done-n { font-family:'Telegraf',sans-serif; font-size:40px; font-weight:300; color:var(--green); }
 .done-l { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
 
-.tier-check { display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:8px 14px; cursor:pointer; font-size:14px; color:var(--text); transition:border-color 0.2s; }
+.tier-check { display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:7px 14px; cursor:pointer; font-size:13px; color:var(--text); transition:border-color 0.2s; }
 .tier-check:hover { border-color:var(--green); }
 .tier-check input { accent-color:var(--green); width:14px; height:14px; cursor:pointer; }
 
@@ -268,22 +268,21 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <h2>Review before creating</h2>
     <div id="demo-banner-slot"></div>
     <div class="stats" id="stats"></div>
+    <div id="lookup-section" style="margin-top:32px; padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);"></div>
+    <div style="margin:32px 0 24px; padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);">
+      <h2 style="margin-bottom:12px;">Which playlist tiers would you like to create?</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <label class="tier-check"><input type="checkbox" id="cb-phase" checked> Phases</label>
+        <label class="tier-check"><input type="checkbox" id="cb-month" checked> Months</label>
+        <label class="tier-check"><input type="checkbox" id="cb-season" checked> Seasons</label>
+        <label class="tier-check"><input type="checkbox" id="cb-year" checked> Years</label>
+      </div>
+    </div>
     <div id="tiers"></div>
-    <div id="lookup-section"></div>
-    <div id="covers-section"></div>
+    <div id="covers-section" style="padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);"></div>
     <div class="folder-note">
       <div class="folder-note-title">📁 About Folders</div>
       <p>Spotify's API no longer supports creating folders programmatically. After your playlists are created, organize them in the <strong>Spotify desktop app</strong> by right-clicking any playlist and selecting "Add to folder". Suggested: <strong>Phases / Months / Seasons / Years</strong>.</p>
-    </div>
-    <div style="margin:32px 0 24px;">
-      <h2>Which playlist tiers would you like to create?</h2>
-      <p style="font-size:13px; color:var(--muted); margin:8px 0 14px;">You must select at least one. Mix and match however you like.</p>
-      <div style="display:flex; flex-wrap:wrap; gap:10px;">
-        <label class="tier-check"><input type="checkbox" id="cb-phase" checked> Phases <span style="color:var(--muted); font-size:12px;">(jan I, jan II…)</span></label>
-        <label class="tier-check"><input type="checkbox" id="cb-month" checked> Months <span style="color:var(--muted); font-size:12px;">(J A N U A R Y…)</span></label>
-        <label class="tier-check"><input type="checkbox" id="cb-season" checked> Seasons <span style="color:var(--muted); font-size:12px;">(S P R I N G…)</span></label>
-        <label class="tier-check"><input type="checkbox" id="cb-year" checked> Years <span style="color:var(--muted); font-size:12px;">(2016, 2017…)</span></label>
-      </div>
     </div>
     <div class="actions">
       <button class="btn-green" id="btn-create">Create Playlists →</button>
