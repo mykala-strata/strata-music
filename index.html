@@ -5,28 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Strata</title>
 <style>
-@font-face {
-  font-family: 'Telegraf';
-  font-weight: 200;
-  font-style: normal;
-  src: url('Telegraf UltraLight 200.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Telegraf';
-  font-weight: 400;
-  font-style: normal;
-  src: url('TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Telegraf';
-  font-weight: 800;
-  font-style: normal;
-  src: url('Telegraf UltraBold 800.otf') format('opentype');
-}
-</style>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400;1,600&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
 
 :root {
   --bg: #0f0d0a;
@@ -36,35 +15,31 @@
   --green-dim: #8a7048;
   --border: rgba(200,169,110,0.18);
   --card: rgba(200,169,110,0.06);
-  --amber: #b5623e;
+  --amber: #e8956a;
   --red: #e05555;
   --accent2: #7a9e8a;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-@media (max-width: 600px) {
-  .eyebrow { font-size:22vw !important; }
-  .hero h1 { font-size:6.5vw !important; }
-}
-body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; min-height:100vh; }
+body { background:var(--bg); color:var(--text); font-family:'Courier Prime',monospace; min-height:100vh; }
 .wrap { max-width:760px; margin:0 auto; padding:0 28px; }
 
 /* HERO */
-.hero { padding:72px 0 28px; border-bottom:1px solid var(--border); position:relative; }
+.hero { padding:72px 0 52px; border-bottom:1px solid var(--border); position:relative; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--accent2) 100%); opacity:0.5; }
-.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,96px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1; letter-spacing:normal; }
-.hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(24px,4.5vw,52px); line-height:0.88; margin-bottom:24px; color:var(--text); letter-spacing:-.01em; }
-.hero h1 em { font-family:'Cormorant Garamond',serif; font-style:italic; color:#7a9e8a; font-size:1.35em; }
-.hero p { font-size:15px; line-height:1.75; color:var(--muted); font-weight:400; }
+.eyebrow { font-family:'Bebas Neue',sans-serif; font-size:clamp(42px,6vw,72px); font-weight:400; color:var(--green); margin-bottom:20px; line-height:1; letter-spacing:.12em; text-transform:uppercase; }
+.hero h1 { font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(52px,8vw,88px); line-height:1.05; margin-bottom:24px; color:var(--text); letter-spacing:-.01em; }
+.hero h1 em { font-style:italic; color:#b8f5cc; }
+.hero p { font-size:13px; line-height:1.75; color:var(--muted); max-width:500px; }
 
 /* SECTIONS */
 .sec { padding:48px 0; border-bottom:1px solid var(--border); }
 .sec-label { font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:16px; }
 .strata-mark { display:flex; gap:3px; margin-bottom:32px; }
-.strata-mark span { height:2px; border-radius:1px; }
-.strata-mark .s1 { width:120px; background:#c8a96e; }
-.strata-mark .s2 { width:110px; background:#b5623e; opacity:.7; }
-.strata-mark .s3 { width:100px; background:#7a9e8a; opacity:.5; }
-.sec h2 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:26px; margin-bottom:20px; }
+.strata-mark span { height:3px; border-radius:1px; }
+.strata-mark .s1 { width:48px; background:var(--green); }
+.strata-mark .s2 { width:28px; background:var(--amber); opacity:.7; }
+.strata-mark .s3 { width:16px; background:var(--accent2); opacity:.5; }
+.sec h2 { font-family:'Cormorant Garamond',serif; font-weight:400; font-size:26px; margin-bottom:20px; }
 .sec.hidden { display:none; }
 
 /* STEPS */
@@ -79,19 +54,19 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 .field { margin-top:24px; }
 .field-label { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; display:block; }
 .row { display:flex; gap:10px; }
-input[type=text] { flex:1; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-size:13px; padding:11px 14px; outline:none; border-radius:2px; transition:border-color .2s; }
+input[type=text] { flex:1; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Courier Prime',monospace; font-size:13px; padding:11px 14px; outline:none; border-radius:2px; transition:border-color .2s; }
 input[type=text]:focus { border-color:var(--green); }
 input[type=text]::placeholder { color:var(--muted); opacity:.5; }
 
 /* BUTTONS */
-button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; border:none; border-radius:2px; transition:all .2s; }
-.btn-green { background:#b5623e; color:#0f0d0a; padding:11px 22px; font-weight:700; }
-.btn-green:hover { background:#c8714a; }
+button { font-family:'Courier Prime',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; border:none; border-radius:2px; transition:all .2s; }
+.btn-green { background:var(--green); color:#000; padding:11px 22px; font-weight:700; }
+.btn-green:hover { background:#22d65f; }
 .btn-green:disabled { opacity:.35; cursor:not-allowed; }
 .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); padding:11px 18px; }
 .btn-outline:hover { border-color:var(--text); }
-.btn-ghost { background:transparent; color:#7a9e8a; border:1px solid rgba(122,158,138,.45); padding:11px 22px; }
-.btn-ghost:hover { background:rgba(122,158,138,.08); border-color:#7a9e8a; }
+.btn-ghost { background:transparent; color:var(--green); border:1px solid rgba(29,185,84,.35); padding:11px 22px; }
+.btn-ghost:hover { background:rgba(29,185,84,.08); border-color:var(--green); }
 
 /* DIVIDER */
 .or-divider { display:flex; align-items:center; gap:14px; margin:26px 0 22px; }
@@ -99,9 +74,9 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .or-divider span { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
 
 /* DEMO BOX */
-.demo-box { padding:22px 26px; border:1px solid rgba(122,158,138,.35); border-radius:2px; background:rgba(122,158,138,.06); }
-.demo-box-title { font-size:20px; color:var(--green); margin-bottom:8px; font-weight:400; }
-.demo-box p { font-size:15px; color:var(--muted); line-height:1.65; margin-bottom:16px; }
+.demo-box { padding:22px 26px; border:1px solid rgba(29,185,84,.22); border-radius:2px; background:rgba(29,185,84,.04); }
+.demo-box-title { font-size:12px; letter-spacing:.1em; color:var(--green); margin-bottom:8px; font-weight:700; }
+.demo-box p { font-size:12px; color:var(--muted); line-height:1.65; margin-bottom:16px; }
 
 /* AUTH BOX */
 .auth-box { padding:28px; background:var(--card); border:1px solid var(--border); border-radius:2px; text-align:center; }
@@ -110,7 +85,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 /* PROGRESS */
 .prog-label { font-size:12px; color:var(--muted); margin-bottom:8px; }
 .prog-track { height:2px; background:var(--border); border-radius:1px; overflow:hidden; margin-bottom:18px; }
-.prog-fill { height:100%; background:#b5623e; width:0%; transition:width .3s; }
+.prog-fill { height:100%; background:var(--green); width:0%; transition:width .3s; }
 .log-box { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:14px; max-height:200px; overflow-y:auto; font-size:11px; line-height:1.9; }
 .log-box .ok { color:var(--green); }
 .log-box .info { color:var(--text); }
@@ -119,41 +94,38 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 /* STATS GRID */
 .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:28px; }
 .stat { padding:16px; background:var(--card); border:1px solid var(--border); border-radius:2px; text-align:center; }
-.stat-n { font-family:'Telegraf',sans-serif; font-size:34px; font-weight:300; line-height:1; margin-bottom:4px; }
+.stat-n { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; line-height:1; margin-bottom:4px; }
 .stat-l { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
 
 /* DEMO BANNER */
 .demo-banner { background:rgba(29,185,84,.07); border:1px solid rgba(29,185,84,.2); border-radius:2px; padding:10px 16px; margin-bottom:22px; font-size:11px; letter-spacing:.08em; color:var(--green); text-align:center; }
 
 /* COVER GRID */
-.lookup-sec { margin-bottom: 32px; padding-bottom: 0; }
-.lookup-sec h3 { font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px; }
-.lookup-sec p { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6; }
+.lookup-sec { margin-bottom: 48px; padding-bottom: 36px; border-bottom: 1px solid rgba(200,169,110,0.15); }
+.lookup-sec h3 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:6px; }
+.lookup-sec p { font-size:13px; color:var(--muted); margin-bottom:24px; line-height:1.6; }
 .lookup-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:24px; }
-.lookup-row select, .lookup-row input { background:#1a1612; border:1px solid rgba(200,169,110,0.25); color:var(--text); font-family:'Telegraf',sans-serif; font-size:14px; padding:10px 14px; border-radius:4px; outline:none; }
+.lookup-row select, .lookup-row input { background:#1a1612; border:1px solid rgba(200,169,110,0.25); color:var(--text); font-family:'Courier Prime',monospace; font-size:14px; padding:10px 14px; border-radius:4px; outline:none; }
 .lookup-row select { min-width:200px; }
 .lookup-row input { width:100px; }
 .lookup-row input:focus, .lookup-row select:focus { border-color:var(--gold); }
-.lookup-btn { background:var(--amber); color:#0f0d0a; border:none; font-family:'Telegraf',sans-serif; font-size:13px; font-weight:700; padding:10px 22px; border-radius:4px; cursor:pointer; letter-spacing:.05em; }
+.lookup-btn { background:var(--amber); color:#0f0d0a; border:none; font-family:'Courier Prime',monospace; font-size:13px; font-weight:700; padding:10px 22px; border-radius:4px; cursor:pointer; letter-spacing:.05em; }
 .lookup-btn:hover { background:#d4784a; }
 .lookup-result { background:#1a1612; border:1px solid rgba(200,169,110,0.2); border-radius:6px; padding:20px 24px; display:none; }
 .lookup-result.visible { display:block; }
-.lookup-result .lr-track { font-family:'Telegraf',sans-serif; font-size:28px; font-weight:800; color:var(--text); margin-bottom:2px; }
-.lookup-result .lr-artist { font-size:15px; color:var(--muted); margin-bottom:20px; font-family:'Telegraf',sans-serif; letter-spacing:.01em; line-height:1.6; }
-.lookup-result .lr-date { font-family:'Telegraf',sans-serif; font-size:26px; font-weight:300; color:var(--gold); letter-spacing:.02em; }
-.lookup-result .lr-label { font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; font-family:'Telegraf',sans-serif; }
-.covers-optional-label { font-family:'Telegraf',sans-serif; font-size:16px; letter-spacing:.05em; color:var(--green); text-transform:uppercase; margin-bottom:8px; }
-.covers-optional-hint { font-size:13px; color:var(--muted); margin-bottom:24px; }
-.lookup-tabs { display:flex; gap:8px; margin-bottom:12px; }
-.lookup-tab { background:none; border:1px solid rgba(200,169,110,0.3); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:6px 16px; cursor:pointer; border-radius:2px; transition:all .2s; }
+.lookup-result .lr-track { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:var(--text); margin-bottom:4px; }
+.lookup-result .lr-artist { font-size:13px; color:var(--muted); margin-bottom:16px; font-family:'Courier Prime',monospace; }
+.lookup-result .lr-date { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; color:var(--gold); letter-spacing:.02em; }
+.lookup-result .lr-label { font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; font-family:'Courier Prime',monospace; }
+.lookup-tabs { display:flex; gap:8px; margin-bottom:16px; }
+.lookup-tab { background:none; border:1px solid rgba(200,169,110,0.3); color:var(--muted); font-family:'Courier Prime',monospace; font-size:12px; letter-spacing:.08em; padding:6px 16px; cursor:pointer; border-radius:2px; transition:all .2s; }
 .lookup-tab.active { border-color:var(--green); color:var(--green); }
 .lookup-tab:hover { border-color:var(--green); color:var(--green); }
-.lr-result-block { border-top:1px solid rgba(200,169,110,0.15); padding-top:24px; margin-top:24px; }
+.lr-result-block { border-top:1px solid rgba(200,169,110,0.15); padding-top:16px; margin-top:16px; }
 .lr-result-block:first-child { border-top:none; padding-top:0; margin-top:0; }
-.lr-age { font-family:'Telegraf',sans-serif; font-size:15px; color:#7a9e8a; font-weight:400; margin-top:10px; margin-bottom:10px; }
-.lookup-result .lr-context { font-size:13px; color:var(--muted); margin-top:10px; font-family:'Telegraf',sans-serif; }
+.lookup-result .lr-context { font-size:13px; color:var(--muted); margin-top:10px; font-family:'Courier Prime',monospace; }
 .cover-sec { margin-bottom:32px; }
-.cover-sec h3 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:20px; margin-bottom:8px; }
+.cover-sec h3 { font-family:'Cormorant Garamond',serif; font-weight:400; font-size:20px; margin-bottom:8px; }
 .cover-sec p { font-size:12px; color:var(--muted); margin-bottom:18px; line-height:1.6; }
 .cover-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
 .cover-cell { position:relative; aspect-ratio:1; border:1px solid var(--border); border-radius:2px; background:var(--card); cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; overflow:hidden; transition:border-color .2s; }
@@ -192,16 +164,12 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 
 /* DONE */
 .done-box { padding:40px; background:var(--card); border:1px solid rgba(29,185,84,.25); border-radius:2px; text-align:center; }
-.done-box h2 { font-family:'Telegraf',sans-serif; font-weight:300; font-size:34px; margin-bottom:10px; }
+.done-box h2 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:34px; margin-bottom:10px; }
 .done-box p { font-size:13px; color:var(--muted); line-height:1.6; }
 .done-stats { display:flex; justify-content:center; gap:36px; margin:24px 0; flex-wrap:wrap; }
 .done-stat { text-align:center; }
-.done-n { font-family:'Telegraf',sans-serif; font-size:40px; font-weight:300; color:var(--green); }
+.done-n { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:300; color:var(--green); }
 .done-l { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
-
-.tier-check { display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:7px 14px; cursor:pointer; font-size:13px; color:var(--text); transition:border-color 0.2s; }
-.tier-check:hover { border-color:var(--green); }
-.tier-check input { accent-color:var(--green); width:14px; height:14px; cursor:pointer; }
 
 /* ERROR */
 .err { font-size:12px; color:var(--red); margin-top:8px; padding:9px 13px; border:1px solid rgba(224,85,85,.3); border-radius:2px; display:none; }
@@ -217,103 +185,13 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 
   <header class="hero">
     <div class="eyebrow">Strata</div>
-    <p style="font-size:clamp(11px,1.2vw,13px); font-weight:200; color:var(--muted); letter-spacing:.04em; margin-top:-16px; margin-bottom:24px;">You saved the songs. Strata saves the moments.</p>
     <div class="strata-mark"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
-    <h1>The deeper you dig,<br>the more you <em>remember.</em></h1>
-    <p>The years keep repeating — the same days, months, and seasons. <strong>But you're always evolving.</strong> Rediscover past versions of yourself through the songs you saved at the time. Strata organizes your liked songs by <strong>when</strong> you liked them, so every season of your life has its own soundtrack.</p>
+    <h1>The deeper<br>you dig, the more<br>you <em>remember.</em></h1>
+    <p>Strata transforms your Spotify library into a living record of your life — every song organized by the exact moment you saved it, so you can listen to your own history, one layer at a time.</p>
   </header>
 
-  <!-- DEMO -->
-  <div class="demo-box" style="margin-bottom:32px">
-    <div class="demo-box-title">✦   Try Demo Mode   ✦</div>
-    <p style="font-size:13px; line-height:1.6;">A full simulation of 6,000 songs across 2016–2026. See exactly how it works — no Spotify account needed.</p>
-    <button class="btn-ghost" id="btn-demo">Launch Demo →</button>
-  </div>
-
-  <div style="height:1px; background:var(--border); margin:32px 0;"></div>
-
-  <!-- LOOKUP TEASER -->
-  <script>
-  (function() {
-    var songs = [
-      { title: 'Hello', artist: 'Adele  |  25', date: 'November 20, 2019', day: 'Wednesday', time: '9:13 PM', ageRelease: 'You were 18 when this song was released.', ageSaved: 'You were 23 when you saved it.', search: 'hello', releaseDay: 'Friday', releaseDate: 'October 23, 2015' },
-      { title: 'Bad Romance', artist: 'Lady Gaga  |  The Fame Monster', date: 'March 8, 2018', day: 'Thursday', time: '11:42 PM', ageRelease: 'You were 12 when this song was released.', ageSaved: 'You were 21 when you saved it.', search: 'bad romance', releaseDay: 'Monday', releaseDate: 'October 26, 2009' },
-      { title: 'Umbrella', artist: 'Rihanna  |  Good Girl Gone Bad', date: 'July 3, 2017', day: 'Monday', time: '2:08 PM', ageRelease: 'You were 10 when this song was released.', ageSaved: 'You were 20 when you saved it.', search: 'rihanna', releaseDay: 'Saturday', releaseDate: 'May 5, 2007' },
-      { title: 'Oscar Winning Tears', artist: 'RAYE  |  My 21st Century Blues', date: 'February 3, 2023', day: 'Friday', time: '7:44 PM', ageRelease: 'You were 25 when this song was released.', ageSaved: 'You were 26 when you saved it.', search: 'tears', releaseDay: 'Friday', releaseDate: 'February 3, 2023' },
-      { title: 'Bohemian Rhapsody', artist: 'Queen  |  A Night at the Opera', date: 'January 12, 2020', day: 'Sunday', time: '10:22 PM', ageRelease: 'This song was released 21 years before you were born.', ageSaved: 'You were 23 when you saved it.', search: 'bohemian', releaseDay: 'Friday', releaseDate: 'October 31, 1975' },
-      { title: 'Thriller', artist: 'Michael Jackson  |  Thriller', date: 'October 31, 2018', day: 'Wednesday', time: '10:31 PM', ageRelease: 'This song was released 14 years before you were born.', ageSaved: 'You were 21 when you saved it.', search: 'thriller', releaseDay: 'Wednesday', releaseDate: 'November 2, 1983' },
-      { title: 'And She Was', artist: 'Talking Heads  |  Little Creatures', date: 'April 22, 2016', day: 'Friday', time: '3:17 PM', ageRelease: 'This song was released 11 years before you were born.', ageSaved: 'You were 19 when you saved it.', search: 'talking heads', releaseDay: 'Monday', releaseDate: 'June 10, 1985' },
-      { title: 'The Morning', artist: 'The Weeknd  |  House of Balloons', date: 'August 5, 2021', day: 'Thursday', time: '1:44 AM', ageRelease: 'You were 14 when this song was released.', ageSaved: 'You were 24 when you saved it.', search: 'morning', releaseDay: 'Tuesday', releaseDate: 'March 15, 2011' },
-      { title: 'Nights', artist: 'Frank Ocean  |  Blonde', date: 'September 14, 2018', day: 'Friday', time: '11:58 PM', ageRelease: 'You were 19 when this song was released.', ageSaved: 'You were 21 when you saved it.', search: 'nights frank ocean', releaseDay: 'Saturday', releaseDate: 'August 20, 2016' },
-      { title: 'Move Me', artist: 'Charli XCX  |  CRASH', date: 'May 7, 2022', day: 'Saturday', time: '4:22 PM', ageRelease: 'You were 25 when this song was released.', ageSaved: 'You were 25 when you saved it.', search: 'charli xcx', releaseDay: 'Friday', releaseDate: 'March 18, 2022' },
-      { title: 'Throw Away', artist: 'Future  |  Monster', date: 'March 19, 2017', day: 'Sunday', time: '2:00 AM', ageRelease: 'You were 20 when this song was released.', ageSaved: 'You were 20 when you saved it.', search: 'throw away future', releaseDay: 'Friday', releaseDate: 'October 7, 2016' },
-      { title: 'Cinderella (feat. Toro y Moi)', artist: 'Don Toliver  |  Lovesick', date: 'June 11, 2021', day: 'Friday', time: '8:08 PM', ageRelease: 'You were 23 when this song was released.', ageSaved: 'You were 24 when you saved it.', search: 'cinderella', releaseDay: 'Friday', releaseDate: 'January 8, 2021' },
-      { title: 'Hanging On', artist: 'Ellie Goulding  |  Halcyon', date: 'January 27, 2015', day: 'Tuesday', time: '9:45 PM', ageRelease: 'You were 15 when this song was released.', ageSaved: 'You were 18 when you saved it.', search: 'ellie goulding', releaseDay: 'Monday', releaseDate: 'October 8, 2012' },
-      { title: 'Sorry Not Sorry', artist: 'Bryson Tiller  |  Trapsoul', date: 'November 20, 2017', day: 'Monday', time: '12:12 AM', ageRelease: 'You were 20 when this song was released.', ageSaved: 'You were 21 when you saved it.', search: 'bryson tiller', releaseDay: 'Friday', releaseDate: 'October 2, 2015' },
-      { title: 'She Wolf (Falling to Pieces)', artist: 'David Guetta ft. Sia  |  Nothing but the Beat', date: 'July 4, 2019', day: 'Thursday', time: '6:30 PM', ageRelease: 'You were 14 when this song was released.', ageSaved: 'You were 22 when you saved it.', search: 'david guetta', releaseDay: 'Tuesday', releaseDate: 'August 30, 2011' }
-    ];
-    var s = songs[Math.floor(Math.random() * songs.length)];
-    document.addEventListener('DOMContentLoaded', function() {
-      var el = document.getElementById('teaser-song-title'); if (el) el.textContent = s.title;
-      var el2 = document.getElementById('teaser-song-artist'); if (el2) el2.textContent = s.artist;
-      var el3 = document.getElementById('teaser-song-date'); if (el3) el3.textContent = s.date;
-      var el4 = document.getElementById('teaser-song-daytime'); if (el4) el4.textContent = 'Saved on ' + s.day + ' at ' + s.time;
-      var el6 = document.getElementById('teaser-song-relday'); if (el6) el6.textContent = 'Released on ' + s.releaseDay;
-      var el7 = document.getElementById('teaser-song-reldate'); if (el7) el7.textContent = s.releaseDate;
-      var el5 = document.getElementById('teaser-song-age'); if (el5) el5.textContent = s.ageRelease + ' ' + s.ageSaved;
-      var el6 = document.getElementById('teaser-search-input'); if (el6) el6.value = s.search;
-    });
-  })();
-  </script>
-  <div style="margin-bottom:-6px;">
-    <div style="position:relative; opacity:0.75;">
-    <h3 style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px;">Look up a track</h3>
-      <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <button style="background:none; border:1px solid rgba(200,169,110,0.3); color:var(--green); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY TITLE / ARTIST</button>
-        <button style="background:none; border:1px solid rgba(200,169,110,0.15); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY NUMBER</button>
-      </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6;">Type a song title, artist, or both to find when you saved it and where it lives.</p>
-      <div style="display:flex; gap:12px; margin-bottom:24px;">
-        <input id="teaser-search-input" type="text" value="hello" disabled style="flex:1; background:var(--card); border:1px solid var(--border); color:var(--muted); padding:10px 14px; font-family:'Telegraf',sans-serif; font-size:14px; border-radius:2px; opacity:0.6;">
-        <button disabled style="background:#b5623e; color:#0f0d0a; border:none; padding:10px 22px; font-family:'Telegraf',sans-serif; font-size:13px; font-weight:700; letter-spacing:.08em; border-radius:2px; opacity:0.6;">SEARCH</button>
-      </div>
-      <div style="margin-bottom:24px; margin-top:4px;">
-        <label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (optional — for age context)</label>
-        <input type="date" value="1996-11-20" disabled style="background:var(--card); border:1px solid var(--border); color:var(--muted); padding:8px 12px; font-family:'Telegraf',sans-serif; font-size:13px; border-radius:2px; width:180px; opacity:0.6;">
-      </div>
-      <div style="border:1px solid var(--border); border-radius:2px; background:var(--card); overflow:hidden;">
-        <div style="padding:21px 20px 14px; border-bottom:1px solid rgba(200,169,110,0.1); text-align:center;">
-          <div id="teaser-song-title" style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:800; color:var(--text); margin-bottom:2px;">Hello</div>
-          <div id="teaser-song-artist" style="font-size:15px; color:var(--muted); font-family:'Telegraf',sans-serif; letter-spacing:.01em; line-height:1.6;">Adele</div>
-        </div>
-        <div style="padding:21px 20px 14px; border-bottom:1px solid rgba(200,169,110,0.1); display:flex; align-items:stretch;">
-          <div style="flex:1; text-align:center;">
-            <div style="font-size:13px; color:var(--muted); font-family:'Telegraf',sans-serif; margin-bottom:6px;" id="teaser-song-relday">Released on Friday</div>
-            <div id="teaser-song-reldate" style="font-family:'Telegraf',sans-serif; font-size:26px; color:var(--text); font-weight:300;">October 23, 2015</div>
-          </div>
-          <div style="width:1px; background:rgba(200,169,110,0.18); margin:0 24px; flex-shrink:0;"></div>
-          <div style="flex:1; text-align:center;">
-            <div style="font-size:13px; color:var(--muted); font-family:'Telegraf',sans-serif; margin-bottom:6px;" id="teaser-song-daytime">Saved on Wednesday at 9:13 PM</div>
-            <div id="teaser-song-date" style="font-family:'Telegraf',sans-serif; font-size:26px; color:var(--text); font-weight:300;">November 20, 2019</div>
-          </div>
-        </div>
-        <div style="padding:16px 20px; min-height:90px; display:flex; flex-direction:column; justify-content:center; text-align:center;">
-          <div id="teaser-song-age" style="font-family:'Telegraf',sans-serif; font-size:15px; color:#7a9e8a; font-weight:400; margin-bottom:8px;">You were 18 when this song was released. You were 23 when you saved it.</div>
-          <div style="font-size:13px; color:var(--muted); font-family:'Telegraf',sans-serif;">Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">november II</span> &nbsp;·&nbsp; Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">N O V E M B E R</span> &nbsp;·&nbsp; Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">F A L L</span> &nbsp;·&nbsp; Track #118&nbsp;&nbsp;in&nbsp;&nbsp;<span style="color:var(--muted);">2015</span></div>
-        </div>
-      </div>
-      <div style="position:absolute; inset:0; background:rgba(15,13,10,0.35); border-radius:2px; pointer-events:none;"></div>
-    </div>
-    <div style="text-align:center; margin-top:14px; opacity:0.7;">
-      <span style="font-size:16px;">🔒</span>
-      <span style="font-size:13px; color:var(--muted); margin-left:8px;">Available after connecting your Spotify — your real data, your actual songs.</span>
-    </div>
-  </div>
-
-  <div style="height:1px; background:var(--border); margin:32px 0;"></div>
-
   <!-- SETUP -->
-  <section class="sec" id="sec-setup" style="padding-top:0;">
+  <section class="sec" id="sec-setup">
     <div class="sec-label">Step 01 — Setup</div>
     <h2>Connect your Spotify</h2>
     <div class="steps">
@@ -328,6 +206,12 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
         <button class="btn-green" id="btn-connect">Connect →</button>
       </div>
       <div class="err" id="err-setup"></div>
+    </div>
+    <div class="or-divider"><span>or</span></div>
+    <div class="demo-box">
+      <div class="demo-box-title">✦ Try Demo Mode</div>
+      <p>See the full experience with 6,000 simulated songs across 2016–2026. No account needed — nothing is created anywhere. Just explore the layers.</p>
+      <button class="btn-ghost" id="btn-demo">Launch Demo →</button>
     </div>
   </section>
 
@@ -356,18 +240,9 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <h2>Review before creating</h2>
     <div id="demo-banner-slot"></div>
     <div class="stats" id="stats"></div>
-    <div id="lookup-section" style="margin-top:32px; padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);"></div>
-    <div style="margin:32px 0 24px; padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);">
-      <h2 style="margin-bottom:12px;">Which playlist tiers would you like to create?</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:10px;">
-        <label class="tier-check"><input type="checkbox" id="cb-phase" checked> Phases</label>
-        <label class="tier-check"><input type="checkbox" id="cb-month" checked> Months</label>
-        <label class="tier-check"><input type="checkbox" id="cb-season" checked> Seasons</label>
-        <label class="tier-check"><input type="checkbox" id="cb-year" checked> Years</label>
-      </div>
-    </div>
+    <div id="lookup-section"></div>
     <div id="tiers"></div>
-    <div id="covers-section" style="padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);"></div>
+    <div id="covers-section"></div>
     <div class="folder-note">
       <div class="folder-note-title">📁 About Folders</div>
       <p>Spotify's API no longer supports creating folders programmatically. After your playlists are created, organize them in the <strong>Spotify desktop app</strong> by right-clicking any playlist and selecting "Add to folder". Suggested: <strong>Phases / Months / Seasons / Years</strong>.</p>
@@ -382,11 +257,10 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
   <section class="sec hidden" id="sec-done">
     <div class="sec-label">Step 05 — Done</div>
     <div class="done-box">
-      <h2 style="font-size:clamp(18px,3vw,28px); white-space:nowrap;">Your past self had good taste. It's time to revisit.</h2>
+      <h2>Your layers are ready. ✦</h2>
       <div class="done-stats" id="done-stats"></div>
-      <p style="margin-top:20px;">Your layered soundtracks are ready.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
+      <p>Open Spotify and find your layers waiting.<br>Run Strata again anytime — only new songs are added, never duplicated.</p>
       <div style="margin-top:22px"><button class="btn-outline">Run Again</button></div>
-      <div id="done-playlist-list"></div>
     </div>
     <div style="margin-top:48px" id="lookup-section-done"></div>
   </section>
@@ -496,10 +370,6 @@ function randomDate(start, end) {
 function startAuth() {
   var cid = document.getElementById('cid').value.trim();
   if (!cid || cid.length < 10) { showErr('err-setup', 'Please enter a valid Client ID.'); return; }
-  var anyChecked = ['phase','month','season','year'].some(function(t) {
-    var cb = document.getElementById('cb-' + t); return cb && cb.checked;
-  });
-  if (!anyChecked) { showErr('err-setup', 'Please select at least one playlist tier.'); return; }
   localStorage.setItem('ylip_cid', cid);
   showSec('sec-auth');
 }
@@ -563,22 +433,10 @@ async function extractToken() {
 }
 
 // ── API ───────────────────────────────────────────────────────────────────────
-async function api(url, opts, _retry) {
+async function api(url, opts) {
   opts = opts || {};
-  _retry = _retry || 0;
   var headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
   var res = await fetch(url, Object.assign({ headers: headers }, opts));
-  if (res.status === 429) {
-    var retryAfter = parseInt(res.headers.get('Retry-After') || '10', 10);
-    var waitMs = (retryAfter + 1) * 1000;
-    if (_retry < 5) {
-      addLog('Rate limited by Spotify — waiting ' + retryAfter + 's before retrying...', 'info');
-      await sleep(waitMs);
-      return api(url, opts, _retry + 1);
-    } else {
-      throw new Error('Spotify rate limit hit repeatedly. Please wait a few minutes and try again.');
-    }
-  }
   if (res.status === 401) throw new Error('Session expired. Please refresh and reconnect.');
   if (!res.ok) { var e = await res.json().catch(function() { return {}; }); throw new Error((e.error && e.error.message) || ('API error ' + res.status)); }
   if (res.status === 204) return null;
@@ -611,7 +469,7 @@ async function loadLibrary() {
     }
     url = data.next;
     setProgress(allTracks.length, total, 'Loading songs... ' + allTracks.length.toLocaleString() + ' / ' + total.toLocaleString());
-    await sleep(200);
+    await sleep(50);
   }
   addLog('Loaded ' + allTracks.length.toLocaleString() + ' songs', 'ok');
   addLog('Loading existing playlists...', 'info');
@@ -641,20 +499,10 @@ async function loadExisting() {
 }
 
 // ── BUILD PLAYLISTS ───────────────────────────────────────────────────────────
-function getSelectedTiers() {
-  var tiers = {};
-  ['phase','month','season','year'].forEach(function(t) {
-    var cb = document.getElementById('cb-' + t);
-    tiers[t] = cb ? cb.checked : true;
-  });
-  return tiers;
-}
-
 function buildPlaylists() {
   playlists = {};
   trackIndex = {};
   window.trackIndex = trackIndex;
-  var tiers = getSelectedTiers();
 
 function ensure(key, name, desc, tier) {
     if (!playlists[key]) playlists[key] = { name: name, desc: desc, tier: tier, tracks: [] };
@@ -668,31 +516,22 @@ function ensure(key, name, desc, tier) {
     var season = getSeason(d);
     var mSpaced = spacedMonth(month);
 
+    var pk = 'ph_' + month + '_' + phase.num;
+    ensure(pk, phase.name, phase.desc, 'phase');
+    if (playlists[pk].tracks.indexOf(t.uri) === -1) playlists[pk].tracks.push(t.uri);
     trackIndex[t.uri] = { name: t.name, artist: t.artist, added: t.added };
 
-    if (tiers.phase) {
-      var pk = 'ph_' + month + '_' + phase.num;
-      ensure(pk, phase.name, phase.desc, 'phase');
-      if (playlists[pk].tracks.indexOf(t.uri) === -1) playlists[pk].tracks.push(t.uri);
-    }
+    var mk = 'mo_' + month;
+    ensure(mk, mSpaced, '', 'month');
+    if (playlists[mk].tracks.indexOf(t.uri) === -1) playlists[mk].tracks.push(t.uri);
 
-    if (tiers.month) {
-      var mk = 'mo_' + month;
-      ensure(mk, mSpaced, '', 'month');
-      if (playlists[mk].tracks.indexOf(t.uri) === -1) playlists[mk].tracks.push(t.uri);
-    }
+    var sk = 'se_' + season;
+    ensure(sk, season, '', 'season');
+    if (playlists[sk].tracks.indexOf(t.uri) === -1) playlists[sk].tracks.push(t.uri);
 
-    if (tiers.season) {
-      var sk = 'se_' + season;
-      ensure(sk, season, '', 'season');
-      if (playlists[sk].tracks.indexOf(t.uri) === -1) playlists[sk].tracks.push(t.uri);
-    }
-
-    if (tiers.year) {
-      var yk = 'yr_' + year;
-      ensure(yk, '' + year, '', 'year');
-      if (playlists[yk].tracks.indexOf(t.uri) === -1) playlists[yk].tracks.push(t.uri);
-    }
+    var yk = 'yr_' + year;
+    ensure(yk, '' + year, '', 'year');
+    if (playlists[yk].tracks.indexOf(t.uri) === -1) playlists[yk].tracks.push(t.uri);
   }
 }
 
@@ -731,18 +570,10 @@ function buildLookupSection(targetId) {
     '<div class="lookup-sec">' +
       '<h3>Look up a track</h3>' +
       '<div class="lookup-tabs">' +
-        '<button class="lookup-tab active" id="ltab-title-' + uid + '">By title / artist</button>' +
-        '<button class="lookup-tab" id="ltab-num-' + uid + '">By number</button>' +
+        '<button class="lookup-tab active" id="ltab-num-' + uid + '">By number</button>' +
+        '<button class="lookup-tab" id="ltab-title-' + uid + '">By title</button>' +
       '</div>' +
-      '<div id="lpanel-title-' + uid + '">' +
-        '<p>Type a song title, artist, or both to find when you saved it and where it lives.</p>' +
-        '<div class="lookup-row">' +
-          '<input type="text" id="lsearch-' + uid + '" placeholder="Song title or artist..." style="flex:1">' +
-          '<button class="lookup-btn" id="lsbtn-' + uid + '">Search</button>' +
-        '</div>' +
-        '<div style="margin-bottom:24px; margin-top:4px;"><label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (optional — for age context)</label><input type="date" id="lbirthday-' + uid + '" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:\'Telegraf\',sans-serif; font-size:13px; border-radius:2px; width:180px;" onchange="saveBirthday(this.value)"></div>' +
-      '</div>' +
-      '<div id="lpanel-num-' + uid + '" style="display:none">' +
+      '<div id="lpanel-num-' + uid + '">' +
         '<p>Select a playlist and enter a track number.</p>' +
         '<div class="lookup-row">' +
           '<select id="lpl-' + uid + '">' + options.join('') + '</select>' +
@@ -750,16 +581,16 @@ function buildLookupSection(targetId) {
           '<button class="lookup-btn" id="lbtn-' + uid + '">Look up</button>' +
         '</div>' +
       '</div>' +
+      '<div id="lpanel-title-' + uid + '" style="display:none">' +
+        '<p>Type a song title to find when you saved it and where it lives.</p>' +
+        '<div class="lookup-row">' +
+          '<input type="text" id="lsearch-' + uid + '" placeholder="Song title..." style="flex:1">' +
+          '<button class="lookup-btn" id="lsbtn-' + uid + '">Search</button>' +
+        '</div>' +
+      '</div>' +
       '<div class="lookup-result" id="lres-' + uid + '"></div>' +
     '</div>';
 
-  document.getElementById('ltab-title-' + uid).addEventListener('click', (function(u){ return function() {
-    document.getElementById('lpanel-title-' + u).style.display = '';
-    document.getElementById('lpanel-num-' + u).style.display = 'none';
-    document.getElementById('ltab-title-' + u).classList.add('active');
-    document.getElementById('ltab-num-' + u).classList.remove('active');
-    document.getElementById('lres-' + u).className = 'lookup-result';
-  }; })(uid));
   document.getElementById('ltab-num-' + uid).addEventListener('click', (function(u){ return function() {
     document.getElementById('lpanel-num-' + u).style.display = '';
     document.getElementById('lpanel-title-' + u).style.display = 'none';
@@ -767,63 +598,17 @@ function buildLookupSection(targetId) {
     document.getElementById('ltab-title-' + u).classList.remove('active');
     document.getElementById('lres-' + u).className = 'lookup-result';
   }; })(uid));
+  document.getElementById('ltab-title-' + uid).addEventListener('click', (function(u){ return function() {
+    document.getElementById('lpanel-num-' + u).style.display = 'none';
+    document.getElementById('lpanel-title-' + u).style.display = '';
+    document.getElementById('ltab-title-' + u).classList.add('active');
+    document.getElementById('ltab-num-' + u).classList.remove('active');
+    document.getElementById('lres-' + u).className = 'lookup-result';
+  }; })(uid));
   document.getElementById('lbtn-' + uid).addEventListener('click', (function(u){ return function(){ window.lookupTrack(u); }; })(uid));
   document.getElementById('lnum-' + uid).addEventListener('keydown', (function(u){ return function(e){ if (e.key === 'Enter') window.lookupTrack(u); }; })(uid));
   document.getElementById('lsbtn-' + uid).addEventListener('click', (function(u){ return function(){ window.searchByTitle(u); }; })(uid));
   document.getElementById('lsearch-' + uid).addEventListener('keydown', (function(u){ return function(e){ if (e.key === 'Enter') window.searchByTitle(u); }; })(uid));
-}
-
-function saveBirthday(val) {
-  localStorage.setItem('strata_birthday', val);
-  // update all birthday inputs
-  var inputs = document.querySelectorAll('[id^="lbirthday-"]');
-  for (var i = 0; i < inputs.length; i++) inputs[i].value = val;
-}
-
-function loadBirthday(uid) {
-  var saved = localStorage.getItem('strata_birthday');
-  if (saved) {
-    var el = document.getElementById('lbirthday-' + uid);
-    if (el) el.value = saved;
-  }
-  return saved;
-}
-
-async function getTrackReleaseDate(uri) {
-  try {
-    var trackId = uri.replace('spotify:track:', '');
-    var data = await api('https://api.spotify.com/v1/tracks/' + trackId);
-    return data && data.album ? data.album.release_date : null;
-  } catch(e) { return null; }
-}
-
-function calcAgeText(birthday, releaseDate, savedDate) {
-  if (!birthday) return null;
-  var bDay = new Date(birthday);
-  var lines = [];
-
-  if (releaseDate) {
-    var relYear = parseInt(releaseDate.substring(0, 4));
-    var bYear = bDay.getFullYear();
-    var ageAtRelease = relYear - bYear;
-    if (ageAtRelease < 0) {
-      lines.push('This song was released ' + Math.abs(ageAtRelease) + ' year' + (Math.abs(ageAtRelease) === 1 ? '' : 's') + ' before you were born.');
-    } else if (ageAtRelease === 0) {
-      lines.push('You were born the same year this song was released.');
-    } else {
-      lines.push('You were ' + ageAtRelease + ' when this song was released.');
-    }
-  }
-
-  if (savedDate) {
-    var saved = new Date(savedDate);
-    var ageAtSave = saved.getFullYear() - bDay.getFullYear();
-    var m = saved.getMonth() - bDay.getMonth();
-    if (m < 0 || (m === 0 && saved.getDate() < bDay.getDate())) ageAtSave--;
-    lines.push('You were ' + ageAtSave + ' when you saved it.');
-  }
-
-  return lines.length ? lines.join(' ') : null;
 }
 
 window.searchByTitle = function searchByTitle(uid) {
@@ -840,12 +625,7 @@ window.searchByTitle = function searchByTitle(uid) {
   var uris = Object.keys(window.trackIndex);
   for (var i = 0; i < uris.length; i++) {
     var t = window.trackIndex[uris[i]];
-    var titleLower = (t.name || '').toLowerCase();
-    var artistLower = (t.artist || '').toLowerCase();
-    var combined = titleLower + ' ' + artistLower;
-    var queryParts = query.split(' ').filter(function(p) { return p.length > 0; });
-    var allMatch = queryParts.every(function(part) { return combined.indexOf(part) !== -1; });
-    if (allMatch) {
+    if (t.name && t.name.toLowerCase().indexOf(query) !== -1) {
       // Find which playlists contain this URI and at what position
       var placements = [];
       var keys = Object.keys(playlists);
@@ -871,61 +651,20 @@ window.searchByTitle = function searchByTitle(uid) {
     var hours = d.getHours(), mins = d.getMinutes(), ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12; if (hours === 0) hours = 12;
     var timeStr = hours + ':' + (mins < 10 ? '0' : '') + mins + ' ' + ampm;
-    var placementStr = r.placements.map(function(p) { return 'Track #' + p.pos + '\u00a0\u00a0in\u00a0\u00a0' + p.pl.name; }).join(' &nbsp;·&nbsp; ');
-    var birthday = localStorage.getItem('strata_birthday');
-    var ageHtml = '';
-    if (birthday) {
-      getTrackReleaseDate(r.uri).then(function(releaseDate) {
-        var ageText = calcAgeText(birthday, releaseDate, r.track.added);
-        if (ageText) {
-          var ageEl = document.getElementById('lr-age-' + r.uri.replace(/[^a-z0-9]/gi,''));
-          if (ageEl) ageEl.textContent = ageText;
-        }
-        if (releaseDate) {
-          var rd = new Date(releaseDate.length === 4 ? releaseDate + '-01-01' : releaseDate);
-          var rdDateStr = months[rd.getMonth()] + ' ' + rd.getDate() + ', ' + rd.getFullYear();
-          var rdDayStr = days[rd.getDay()];
-          var rdEl = document.getElementById('lr-released-' + r.uri.replace(/[^a-z0-9]/gi,''));
-          if (rdEl) rdEl.innerHTML =
-            '<div class="lr-context" style="margin-bottom:6px;">Released on ' + rdDayStr + '</div>' +
-            '<div class="lr-date" style="margin-bottom:4px;">' + rdDateStr + '</div>';
-        }
-      });
-    }
+    var placementStr = r.placements.map(function(p) { return 'Track #' + p.pos + ' in ' + p.pl.name; }).join(' &nbsp;·&nbsp; ');
     html += '<div class="lr-result-block">' +
-      '<div style="padding:16px 20px; border-bottom:1px solid rgba(200,169,110,0.1); text-align:center;">' +
-        '<div class="lr-track">' + r.track.name + '</div>' +
-        '<div class="lr-artist">' + (r.track.artist || 'Unknown Artist') + '<span id="lr-album-' + r.uri.replace(/[^a-z0-9]/gi,'') + '" style="color:var(--muted); font-size:15px;"></span></div>' +
-      '</div>' +
-      '<div style="border-top:1px solid rgba(200,169,110,0.1); padding-top:16px; display:flex; align-items:stretch;">' +
-        '<div id="lr-released-' + r.uri.replace(/[^a-z0-9]/gi,'') + '" style="flex:1; text-align:center;"></div>' +
-        '<div style="width:1px; background:rgba(200,169,110,0.18); margin:0 24px; flex-shrink:0;"></div>' +
-        '<div style="flex:1; text-align:center;">' +
-          '<div class="lr-context" style="margin-bottom:6px;">Saved on ' + dayStr + ' at ' + timeStr + '</div>' +
-          '<div class="lr-date" style="margin-bottom:4px;">' + dateStr + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div style="border-top:1px solid rgba(200,169,110,0.1); display:flex; flex-direction:column; justify-content:center; text-align:center; min-height:90px; padding:16px 20px;">' +
-        (birthday ? '<div class="lr-age" id="lr-age-' + r.uri.replace(/[^a-z0-9]/gi,'') + '"></div>' : '') +
-        '<div class="lr-context" style="margin-top:6px;font-size:11px;">' + placementStr + '</div>' +
-      '</div>' +
+      '<div class="lr-track">' + r.track.name + '</div>' +
+      '<div class="lr-artist">' + (r.track.artist || 'Unknown Artist') + '</div>' +
+      '<div class="lr-label">Saved on</div>' +
+      '<div class="lr-date">' + dateStr + '</div>' +
+      '<div class="lr-context">' + dayStr + ' &nbsp;·&nbsp; ' + timeStr + '</div>' +
+      '<div class="lr-context" style="margin-top:4px;font-size:11px;">' + placementStr + '</div>' +
       '</div>';
   });
   if (results.length > 5) html += '<div class="lr-context" style="margin-top:8px;">...and ' + (results.length - 5) + ' more results. Try a more specific title.</div>';
 
   res.className = 'lookup-result visible';
   res.innerHTML = html;
-  // Fetch album names for each result
-  results.slice(0,5).forEach(function(r) {
-    var trackId = r.uri.replace('spotify:track:','');
-    var elId = 'lr-album-' + r.uri.replace(/[^a-z0-9]/gi,'');
-    api('https://api.spotify.com/v1/tracks/' + trackId).then(function(data) {
-      if (data && data.album && data.album.name) {
-        var el = document.getElementById(elId);
-        if (el) el.innerHTML = '&nbsp;&nbsp;|&nbsp;&nbsp;' + data.album.name;
-      }
-    }).catch(function(){});
-  });
 };
 
 window.lookupTrack = function lookupTrack(uid) {
@@ -976,7 +715,7 @@ window.lookupTrack = function lookupTrack(uid) {
 
 function buildAllCoverGrids(tierData) {
   var sec = document.getElementById('covers-section');
-  sec.innerHTML = '<div class="covers-optional-label">✦ Optional: Add cover images to your playlists</div><p class="covers-optional-hint"><em>You don\'t need to add covers to create your playlists.</em> You can always add or change these later directly in Spotify.</p>';
+  sec.innerHTML = '';
 
   var tierDefs = [
     { key: 'phase',  label: 'Phase cover images',  hint: 'Upload a cover for each phase.' },
@@ -1086,7 +825,7 @@ function renderPreview(isDemo) {
     '<div class="stat"><div class="stat-n">' + allTracks.length.toLocaleString() + '</div><div class="stat-l">Songs</div></div>' +
     '<div class="stat"><div class="stat-n">' + newCount + '</div><div class="stat-l">New Playlists</div></div>' +
     '<div class="stat"><div class="stat-n">' + updateCount + '</div><div class="stat-l">To Update</div></div>' +
-    '<div class="stat"><div class="stat-n">' + tiers.year.length + '</div><div class="stat-l">' + (tiers.year.length === 1 ? 'Year' : 'Years') + '</div></div>';
+    '<div class="stat"><div class="stat-n">' + tiers.year.length + '</div><div class="stat-l">Years</div></div>';
 
   // Demo banner
   var bannerSlot = document.getElementById('demo-banner-slot');
@@ -1140,7 +879,6 @@ function renderPreview(isDemo) {
   }
 
   showSec('sec-preview');
-  setTimeout(function() { loadBirthday('lookupsection'); }, 100);
 }
 
 function toggleTier(key) {
@@ -1156,7 +894,6 @@ function runDemo() {
   allTracks = [];
   existing = {};
   userId = 'demo';
-  document.getElementById('sec-setup').classList.add('hidden');
   var start = new Date('2016-03-15');
   var end = new Date('2026-02-28');
   for (var i = 0; i < 6000; i++) {
@@ -1169,32 +906,31 @@ function runDemo() {
 
 // ── CREATE PLAYLISTS ──────────────────────────────────────────────────────────
 async function createAll() {
-  buildPlaylists();
   document.getElementById('btn-create').disabled = true;
   document.getElementById('log').innerHTML = '';
   document.getElementById('log').style.display = 'block';
-  addLog('Building your playlists...', 'info');
+  addLog('Starting... token: ' + (token ? token.substring(0,8) + '...' : 'MISSING') + ' userId: ' + (userId || 'MISSING'), 'info');
+  addLog('Playlists to process: ' + Object.keys(playlists).length, 'info');
   if (!token) { addLog('ERROR: No token! Please reconnect.', 'warn'); document.getElementById('btn-create').disabled = false; return; }
   if (!userId) { addLog('ERROR: No userId! Please reconnect.', 'warn'); document.getElementById('btn-create').disabled = false; return; }
   showSec('sec-load');
 
   var keys = Object.keys(playlists);
   var created = 0, updated = 0, coversSet = 0;
-  var createdList = [], updatedList = [];
 
   for (var i = 0; i < keys.length; i++) {
     var pl = playlists[keys[i]];
     setProgress(i, keys.length, 'Processing... ' + i + ' / ' + keys.length);
     try {
       var pid = existing[pl.name];
-      
+      addLog('Playlist [' + pl.name + '] pid=' + (pid || 'NOT FOUND in existing'), pid ? 'ok' : 'warn');
       if (!pid) {
         var r = await api('https://api.spotify.com/v1/me/playlists', {
           method: 'POST',
           body: '{"name":"' + pl.name.replace(/"/g,'\\"') + '","public":true,"description":"' + (pl.desc||'').replace(/"/g,'\\"') + '"}'
         });
         if (!r || !r.id) throw new Error('No playlist ID returned');
-        pid = r.id; created++; createdList.push(pl.name);
+        pid = r.id; created++;
         addLog('Created: ' + pl.name, 'ok');
         await sleep(500);
       } else if (pl.desc) {
@@ -1224,7 +960,7 @@ async function createAll() {
       if (!isNewPlaylist) {
         try {
           var turl = 'https://api.spotify.com/v1/playlists/' + pid + '/items?limit=100';
-          
+          addLog('GET ' + turl, 'info');
           while (turl) {
             var td = await api(turl);
             if (td && td.items) {
@@ -1261,23 +997,13 @@ async function createAll() {
           }
           await sleep(100);
         }
-        if (existing[pl.name] && createdList.indexOf(pl.name) === -1) { updated++; updatedList.push(pl.name + '&nbsp;&nbsp;(' + '+' + newUris.length + ')'); addLog('Updated: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else if (createdList.indexOf(pl.name) !== -1) { var ci = createdList.indexOf(pl.name); createdList[ci] = pl.name + '&nbsp;&nbsp;(' + '+' + newUris.length + ')'; addLog('Created: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else { createdList.push(pl.name + ' (+' + newUris.length + ')'); addLog('Added ' + newUris.length + ' tracks to: ' + pl.name, 'ok'); }
+        if (existing[pl.name]) { updated++; addLog('Updated: ' + pl.name + ' (+' + newUris.length + ')', 'ok'); } else { addLog('Added ' + newUris.length + ' tracks to: ' + pl.name, 'ok'); }
       } else if (existing[pl.name]) { addLog('Unchanged: ' + pl.name, 'info'); }
     } catch(e) { addLog('ERROR - ' + pl.name + ': ' + e.message, 'warn'); console.error('Playlist error:', pl.name, e); }
     await sleep(80);
   }
 
   setProgress(keys.length, keys.length, 'Complete!');
-  var listHtml = '';
-  if (createdList.length || updatedList.length) {
-    var bothPresent = createdList.length && updatedList.length;
-  listHtml = '<div style="margin-bottom:' + (bothPresent ? '20' : '4') + 'px; font-size:13px; color:var(--muted); line-height:1.8;">';
-    if (createdList.length) listHtml += '<div><strong style="color:var(--text); font-size:13px;">Playlists created:</strong>&nbsp;&nbsp;' + createdList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
-    if (updatedList.length) listHtml += '<div style="margin-top:6px;"><strong style="color:var(--text); font-size:13px;">Playlists updated:</strong>&nbsp;&nbsp;' + updatedList.join('&nbsp;&nbsp;|&nbsp;&nbsp;') + '</div>';
-    listHtml += '</div>';
-  }
-  var updatedHtml = listHtml;
-  if (listHtml) { document.getElementById('done-playlist-list').innerHTML = '<div style="border-top:1px solid var(--border); margin:24px 0 0;"></div>' + listHtml; }
   document.getElementById('done-stats').innerHTML =
     '<div class="done-stat"><div class="done-n">' + created + '</div><div class="done-l">Created</div></div>' +
     '<div class="done-stat"><div class="done-n">' + updated + '</div><div class="done-l">Updated</div></div>' +
@@ -1293,7 +1019,6 @@ function resetApp() {
   allTracks = []; playlists = {}; existing = {}; covers = {};
   var all = ['sec-auth','sec-load','sec-preview','sec-done'];
   for (var i = 0; i < all.length; i++) document.getElementById(all[i]).classList.add('hidden');
-  document.getElementById('sec-setup').classList.remove('hidden');
   document.getElementById('err-setup').classList.remove('show');
   document.getElementById('log').innerHTML = '';
   document.getElementById('prog-fill').style.width = '0%';
