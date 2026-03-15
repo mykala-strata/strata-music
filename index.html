@@ -51,8 +51,8 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 /* HERO */
 .hero { padding:72px 0 28px; border-bottom:1px solid var(--border); position:relative; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--accent2) 100%); opacity:0.5; }
-.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(62px,8vw,96px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1; letter-spacing:normal; }
-.hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(20px,4.1vw,48px); line-height:0.88; margin:28px 0; color:var(--text); letter-spacing:-.01em; }
+.eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(36px,7vw,96px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1; letter-spacing:normal; }
+.hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(18px,3.2vw,44px); line-height:0.88; margin:28px 0; color:var(--text); letter-spacing:-.01em; }
 .hero h1 em { font-family:'Cormorant Garamond',serif; font-style:italic; color:#7a9e8a; font-size:1.35em; }
 .hero p { font-size:15px; line-height:1.75; color:var(--muted); font-weight:400; }
 
@@ -148,10 +148,10 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .lookup-tab { background:none; border:1px solid rgba(200,169,110,0.3); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:6px 16px; cursor:pointer; border-radius:2px; transition:all .2s; }
 .lookup-tab.active { border-color:var(--green); color:var(--green); }
 .lookup-tab:hover { border-color:var(--green); color:var(--green); }
-.lr-result-block { border-top:1px solid rgba(200,169,110,0.15); padding-top:24px; margin-top:24px; }
-.lr-result-block:first-child { border-top:none; padding-top:0; margin-top:0; }
-.lr-age { font-family:'Telegraf',sans-serif; font-size:15px; color:#7a9e8a; font-weight:400; margin-top:10px; margin-bottom:10px; }
-.lookup-result .lr-context { font-size:13px; color:var(--muted); margin-top:10px; font-family:'Telegraf',sans-serif; }
+.lr-result-block { border-top:1px solid rgba(200,169,110,0.15); }
+.lr-result-block:first-child { border-top:none; }
+.lr-age { font-family:'Telegraf',sans-serif; font-size:15px; color:#7a9e8a; font-weight:400; margin-bottom:8px; }
+.lookup-result .lr-context { font-size:13px; color:var(--muted); margin-top:0; font-family:'Telegraf',sans-serif; }
 .cover-sec { margin-bottom:32px; }
 .cover-sec h3 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:20px; margin-bottom:8px; }
 .cover-sec p { font-size:12px; color:var(--muted); margin-bottom:18px; line-height:1.6; }
@@ -236,21 +236,21 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
   <script>
   (function() {
     var songs = [
-      { title: 'Hello', artist: 'Adele  |  25', date: 'November 25, 2025', day: 'Tuesday', time: '9:13 PM', ageRelease: 'You were 19 when this song was released.', ageSaved: 'You were 29 when you saved it.', search: 'hello', releaseDay: 'Friday', releaseDate: 'October 23, 2015', placement: 'Track #104&nbsp;&nbsp;in&nbsp;&nbsp;november III &nbsp;·&nbsp; Track #324&nbsp;&nbsp;in&nbsp;&nbsp;N O V E M B E R &nbsp;·&nbsp; Track #963&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #323&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
-      { title: 'Bad Romance', artist: 'Lady Gaga  |  The Fame Monster', date: 'March 20, 2018', day: 'Tuesday', time: '11:42 PM', ageRelease: 'You were 13 when this song was released.', ageSaved: 'You were 22 when you saved it.', search: 'bad romance', releaseDay: 'Monday', releaseDate: 'October 26, 2009', placement: 'Track #39&nbsp;&nbsp;in&nbsp;&nbsp;march II &nbsp;·&nbsp; Track #108&nbsp;&nbsp;in&nbsp;&nbsp;M A R C H &nbsp;·&nbsp; Track #270&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #77&nbsp;&nbsp;in&nbsp;&nbsp;2018' },
-      { title: 'Umbrella', artist: 'Rihanna  |  Good Girl Gone Bad', date: 'August 2, 2020', day: 'Sunday', time: '2:08 PM', ageRelease: 'You were 11 when this song was released.', ageSaved: 'You were 24 when you saved it.', search: 'rihanna', releaseDay: 'Saturday', releaseDate: 'May 5, 2007', placement: 'Track #51&nbsp;&nbsp;in&nbsp;&nbsp;august I &nbsp;·&nbsp; Track #151&nbsp;&nbsp;in&nbsp;&nbsp;A U G U S T &nbsp;·&nbsp; Track #490&nbsp;&nbsp;in&nbsp;&nbsp;S U M M E R &nbsp;·&nbsp; Track #211&nbsp;&nbsp;in&nbsp;&nbsp;2020' },
-      { title: 'Oscar Winning Tears', artist: 'RAYE  |  My 21st Century Blues', date: 'February 18, 2023', day: 'Saturday', time: '7:44 PM', ageRelease: 'You were 27 when this song was released.', ageSaved: 'You were 27 when you saved it.', search: 'tears', releaseDay: 'Friday', releaseDate: 'February 3, 2023', placement: 'Track #87&nbsp;&nbsp;in&nbsp;&nbsp;february II &nbsp;·&nbsp; Track #258&nbsp;&nbsp;in&nbsp;&nbsp;F E B R U A R Y &nbsp;·&nbsp; Track #780&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #47&nbsp;&nbsp;in&nbsp;&nbsp;2023' },
-      { title: 'Bohemian Rhapsody', artist: 'Queen  |  A Night at the Opera', date: 'June 13, 2016', day: 'Monday', time: '10:22 PM', ageRelease: 'This song was released 21 years before you were born.', ageSaved: 'You were 20 when you saved it.', search: 'bohemian', releaseDay: 'Friday', releaseDate: 'October 31, 1975', placement: 'Track #12&nbsp;&nbsp;in&nbsp;&nbsp;june II &nbsp;·&nbsp; Track #42&nbsp;&nbsp;in&nbsp;&nbsp;J U N E &nbsp;·&nbsp; Track #173&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #162&nbsp;&nbsp;in&nbsp;&nbsp;2016' },
-      { title: 'Thriller', artist: 'Michael Jackson  |  Thriller', date: 'February 12, 2022', day: 'Saturday', time: '10:31 PM', ageRelease: 'This song was released 13 years before you were born.', ageSaved: 'You were 26 when you saved it.', search: 'thriller', releaseDay: 'Wednesday', releaseDate: 'November 2, 1983', placement: 'Track #71&nbsp;&nbsp;in&nbsp;&nbsp;february II &nbsp;·&nbsp; Track #222&nbsp;&nbsp;in&nbsp;&nbsp;F E B R U A R Y &nbsp;·&nbsp; Track #684&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #41&nbsp;&nbsp;in&nbsp;&nbsp;2022' },
-      { title: 'And She Was', artist: 'Talking Heads  |  Little Creatures', date: 'January 20, 2022', day: 'Thursday', time: '3:17 PM', ageRelease: 'This song was released 11 years before you were born.', ageSaved: 'You were 26 when you saved it.', search: 'talking heads', releaseDay: 'Monday', releaseDate: 'June 10, 1985', placement: 'Track #79&nbsp;&nbsp;in&nbsp;&nbsp;january II &nbsp;·&nbsp; Track #228&nbsp;&nbsp;in&nbsp;&nbsp;J A N U A R Y &nbsp;·&nbsp; Track #660&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #19&nbsp;&nbsp;in&nbsp;&nbsp;2022' },
-      { title: 'The Morning', artist: 'The Weeknd  |  House of Balloons', date: 'February 2, 2017', day: 'Thursday', time: '1:44 AM', ageRelease: 'You were 15 when this song was released.', ageSaved: 'You were 21 when you saved it.', search: 'morning', releaseDay: 'Tuesday', releaseDate: 'March 15, 2011', placement: 'Track #21&nbsp;&nbsp;in&nbsp;&nbsp;february I &nbsp;·&nbsp; Track #61&nbsp;&nbsp;in&nbsp;&nbsp;F E B R U A R Y &nbsp;·&nbsp; Track #223&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #32&nbsp;&nbsp;in&nbsp;&nbsp;2017' },
-      { title: 'Nights', artist: 'Frank Ocean  |  Blonde', date: 'October 13, 2016', day: 'Thursday', time: '11:58 PM', ageRelease: 'You were 20 when this song was released.', ageSaved: 'You were 20 when you saved it.', search: 'nights frank ocean', releaseDay: 'Saturday', releaseDate: 'August 20, 2016', placement: 'Track #12&nbsp;&nbsp;in&nbsp;&nbsp;october II &nbsp;·&nbsp; Track #42&nbsp;&nbsp;in&nbsp;&nbsp;O C T O B E R &nbsp;·&nbsp; Track #110&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #282&nbsp;&nbsp;in&nbsp;&nbsp;2016' },
-      { title: 'Move Me', artist: 'Charli XCX  |  CRASH', date: 'June 2, 2022', day: 'Thursday', time: '4:22 PM', ageRelease: 'You were 26 when this song was released.', ageSaved: 'You were 26 when you saved it.', search: 'charli xcx', releaseDay: 'Friday', releaseDate: 'March 18, 2022', placement: 'Track #71&nbsp;&nbsp;in&nbsp;&nbsp;june I &nbsp;·&nbsp; Track #211&nbsp;&nbsp;in&nbsp;&nbsp;J U N E &nbsp;·&nbsp; Track #702&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #150&nbsp;&nbsp;in&nbsp;&nbsp;2022' },
-      { title: 'Throw Away', artist: 'Future  |  Monster', date: 'November 4, 2025', day: 'Tuesday', time: '2:00 AM', ageRelease: 'You were 20 when this song was released.', ageSaved: 'You were 29 when you saved it.', search: 'throw away future', releaseDay: 'Friday', releaseDate: 'October 7, 2016', placement: 'Track #103&nbsp;&nbsp;in&nbsp;&nbsp;november I &nbsp;·&nbsp; Track #303&nbsp;&nbsp;in&nbsp;&nbsp;N O V E M B E R &nbsp;·&nbsp; Track #942&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #303&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
-      { title: 'Cinderella (feat. Toro y Moi)', artist: 'Don Toliver  |  Lovesick', date: 'November 21, 2025', day: 'Friday', time: '8:08 PM', ageRelease: 'You were 25 when this song was released.', ageSaved: 'You were 29 when you saved it.', search: 'cinderella', releaseDay: 'Friday', releaseDate: 'January 8, 2021', placement: 'Track #100&nbsp;&nbsp;in&nbsp;&nbsp;november III &nbsp;·&nbsp; Track #320&nbsp;&nbsp;in&nbsp;&nbsp;N O V E M B E R &nbsp;·&nbsp; Track #959&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #319&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
-      { title: 'Hanging On', artist: 'Ellie Goulding  |  Halcyon', date: 'December 10, 2025', day: 'Wednesday', time: '9:45 PM', ageRelease: 'You were 16 when this song was released.', ageSaved: 'You were 29 when you saved it.', search: 'ellie goulding', releaseDay: 'Monday', releaseDate: 'October 8, 2012', placement: 'Track #109&nbsp;&nbsp;in&nbsp;&nbsp;december I &nbsp;·&nbsp; Track #309&nbsp;&nbsp;in&nbsp;&nbsp;D E C E M B E R &nbsp;·&nbsp; Track #978&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #338&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
-      { title: 'Sorry Not Sorry', artist: 'Bryson Tiller  |  Trapsoul', date: 'January 19, 2016', day: 'Tuesday', time: '12:12 AM', ageRelease: 'You were 19 when this song was released.', ageSaved: 'You were 20 when you saved it.', search: 'bryson tiller', releaseDay: 'Friday', releaseDate: 'October 2, 2015', placement: 'Track #18&nbsp;&nbsp;in&nbsp;&nbsp;january II &nbsp;·&nbsp; Track #47&nbsp;&nbsp;in&nbsp;&nbsp;J A N U A R Y &nbsp;·&nbsp; Track #119&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #18&nbsp;&nbsp;in&nbsp;&nbsp;2016' },
-      { title: 'She Wolf (Falling to Pieces)', artist: 'David Guetta ft. Sia  |  Nothing but the Beat', date: 'June 13, 2021', day: 'Sunday', time: '6:30 PM', ageRelease: 'You were 15 when this song was released.', ageSaved: 'You were 25 when you saved it.', search: 'david guetta', releaseDay: 'Tuesday', releaseDate: 'August 30, 2011', placement: 'Track #62&nbsp;&nbsp;in&nbsp;&nbsp;june II &nbsp;·&nbsp; Track #192&nbsp;&nbsp;in&nbsp;&nbsp;J U N E &nbsp;·&nbsp; Track #623&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #161&nbsp;&nbsp;in&nbsp;&nbsp;2021' }
+      { title: 'Hello', artist: 'Adele  |  25', date: 'November 25, 2025', day: 'Tuesday', time: '9:13 PM', ageRelease: 'You were 18 when this song was released. You saved it 10 years later at 29.', ageSaved: 'You were 29 when you saved it.', search: 'hello', releaseDay: 'Friday', releaseDate: 'October 23, 2015', placement: 'Track #104&nbsp;&nbsp;in&nbsp;&nbsp;november III &nbsp;·&nbsp; Track #324&nbsp;&nbsp;in&nbsp;&nbsp;N O V E M B E R &nbsp;·&nbsp; Track #963&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #323&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
+      { title: 'Bad Romance', artist: 'Lady Gaga  |  The Fame Monster', date: 'March 20, 2018', day: 'Tuesday', time: '11:42 PM', ageRelease: 'You were 12 when this song was released. You saved it 8 years later at 21.', ageSaved: 'You were 22 when you saved it.', search: 'bad romance', releaseDay: 'Monday', releaseDate: 'October 26, 2009', placement: 'Track #39&nbsp;&nbsp;in&nbsp;&nbsp;march II &nbsp;·&nbsp; Track #108&nbsp;&nbsp;in&nbsp;&nbsp;M A R C H &nbsp;·&nbsp; Track #270&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #77&nbsp;&nbsp;in&nbsp;&nbsp;2018' },
+      { title: 'Umbrella', artist: 'Rihanna  |  Good Girl Gone Bad', date: 'August 2, 2020', day: 'Sunday', time: '2:08 PM', ageRelease: 'You were 10 when this song was released. You saved it 14 years later at 23.', ageSaved: 'You were 24 when you saved it.', search: 'rihanna', releaseDay: 'Saturday', releaseDate: 'May 5, 2007', placement: 'Track #51&nbsp;&nbsp;in&nbsp;&nbsp;august I &nbsp;·&nbsp; Track #151&nbsp;&nbsp;in&nbsp;&nbsp;A U G U S T &nbsp;·&nbsp; Track #490&nbsp;&nbsp;in&nbsp;&nbsp;S U M M E R &nbsp;·&nbsp; Track #211&nbsp;&nbsp;in&nbsp;&nbsp;2020' },
+      { title: 'Oscar Winning Tears', artist: 'RAYE  |  My 21st Century Blues', date: 'February 18, 2023', day: 'Saturday', time: '7:44 PM', ageRelease: 'When you were 26, you saved this song 15 days after it was released.', ageSaved: 'You were 27 when you saved it.', search: 'tears', releaseDay: 'Friday', releaseDate: 'February 3, 2023', placement: 'Track #87&nbsp;&nbsp;in&nbsp;&nbsp;february II &nbsp;·&nbsp; Track #258&nbsp;&nbsp;in&nbsp;&nbsp;F E B R U A R Y &nbsp;·&nbsp; Track #780&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #47&nbsp;&nbsp;in&nbsp;&nbsp;2023' },
+      { title: 'Bohemian Rhapsody', artist: 'Queen  |  A Night at the Opera', date: 'June 13, 2016', day: 'Monday', time: '10:22 PM', ageRelease: 'This song was released 21 years before you were born. You saved it 41 years later at 19.', ageSaved: 'You were 20 when you saved it.', search: 'bohemian', releaseDay: 'Friday', releaseDate: 'October 31, 1975', placement: 'Track #12&nbsp;&nbsp;in&nbsp;&nbsp;june II &nbsp;·&nbsp; Track #42&nbsp;&nbsp;in&nbsp;&nbsp;J U N E &nbsp;·&nbsp; Track #173&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #162&nbsp;&nbsp;in&nbsp;&nbsp;2016' },
+      { title: 'Thriller', artist: 'Michael Jackson  |  Thriller', date: 'February 12, 2022', day: 'Saturday', time: '10:31 PM', ageRelease: 'This song was released 13 years before you were born. You saved it 39 years later at 25.', ageSaved: 'You were 26 when you saved it.', search: 'thriller', releaseDay: 'Wednesday', releaseDate: 'November 2, 1983', placement: 'Track #71&nbsp;&nbsp;in&nbsp;&nbsp;february II &nbsp;·&nbsp; Track #222&nbsp;&nbsp;in&nbsp;&nbsp;F E B R U A R Y &nbsp;·&nbsp; Track #684&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #41&nbsp;&nbsp;in&nbsp;&nbsp;2022' },
+      { title: 'And She Was', artist: 'Talking Heads  |  Little Creatures', date: 'January 20, 2022', day: 'Thursday', time: '3:17 PM', ageRelease: 'This song was released 11 years before you were born. You saved it 37 years later at 25.', ageSaved: 'You were 26 when you saved it.', search: 'talking heads', releaseDay: 'Monday', releaseDate: 'June 10, 1985', placement: 'Track #79&nbsp;&nbsp;in&nbsp;&nbsp;january II &nbsp;·&nbsp; Track #228&nbsp;&nbsp;in&nbsp;&nbsp;J A N U A R Y &nbsp;·&nbsp; Track #660&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #19&nbsp;&nbsp;in&nbsp;&nbsp;2022' },
+      { title: 'The Morning', artist: 'The Weeknd  |  House of Balloons', date: 'February 2, 2017', day: 'Thursday', time: '1:44 AM', ageRelease: 'You were 14 when this song was released. You saved it 6 years later at 20.', ageSaved: 'You were 21 when you saved it.', search: 'morning', releaseDay: 'Tuesday', releaseDate: 'March 15, 2011', placement: 'Track #21&nbsp;&nbsp;in&nbsp;&nbsp;february I &nbsp;·&nbsp; Track #61&nbsp;&nbsp;in&nbsp;&nbsp;F E B R U A R Y &nbsp;·&nbsp; Track #223&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #32&nbsp;&nbsp;in&nbsp;&nbsp;2017' },
+      { title: 'Nights', artist: 'Frank Ocean  |  Blonde', date: 'October 13, 2016', day: 'Thursday', time: '11:58 PM', ageRelease: 'When you were 19, you saved this song 2 months after it was released.', ageSaved: 'You were 20 when you saved it.', search: 'nights frank ocean', releaseDay: 'Saturday', releaseDate: 'August 20, 2016', placement: 'Track #12&nbsp;&nbsp;in&nbsp;&nbsp;october II &nbsp;·&nbsp; Track #42&nbsp;&nbsp;in&nbsp;&nbsp;O C T O B E R &nbsp;·&nbsp; Track #110&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #282&nbsp;&nbsp;in&nbsp;&nbsp;2016' },
+      { title: 'Move Me', artist: 'Charli XCX  |  CRASH', date: 'June 2, 2022', day: 'Thursday', time: '4:22 PM', ageRelease: 'When you were 25, you saved this song 3 months after it was released.', ageSaved: 'You were 26 when you saved it.', search: 'charli xcx', releaseDay: 'Friday', releaseDate: 'March 18, 2022', placement: 'Track #71&nbsp;&nbsp;in&nbsp;&nbsp;june I &nbsp;·&nbsp; Track #211&nbsp;&nbsp;in&nbsp;&nbsp;J U N E &nbsp;·&nbsp; Track #702&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #150&nbsp;&nbsp;in&nbsp;&nbsp;2022' },
+      { title: 'Throw Away', artist: 'Future  |  Monster', date: 'November 4, 2025', day: 'Tuesday', time: '2:00 AM', ageRelease: 'You were 19 when this song was released. You saved it 9 years later at 28.', ageSaved: 'You were 29 when you saved it.', search: 'throw away future', releaseDay: 'Friday', releaseDate: 'October 7, 2016', placement: 'Track #103&nbsp;&nbsp;in&nbsp;&nbsp;november I &nbsp;·&nbsp; Track #303&nbsp;&nbsp;in&nbsp;&nbsp;N O V E M B E R &nbsp;·&nbsp; Track #942&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #303&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
+      { title: 'Cinderella (feat. Toro y Moi)', artist: 'Don Toliver  |  Lovesick', date: 'November 21, 2025', day: 'Friday', time: '8:08 PM', ageRelease: 'You were 24 when this song was released. You saved it 5 years later at 29.', ageSaved: 'You were 29 when you saved it.', search: 'cinderella', releaseDay: 'Friday', releaseDate: 'January 8, 2021', placement: 'Track #100&nbsp;&nbsp;in&nbsp;&nbsp;november III &nbsp;·&nbsp; Track #320&nbsp;&nbsp;in&nbsp;&nbsp;N O V E M B E R &nbsp;·&nbsp; Track #959&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #319&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
+      { title: 'Hanging On', artist: 'Ellie Goulding  |  Halcyon', date: 'December 10, 2025', day: 'Wednesday', time: '9:45 PM', ageRelease: 'You were 15 when this song was released. You saved it 13 years later at 29.', ageSaved: 'You were 29 when you saved it.', search: 'ellie goulding', releaseDay: 'Monday', releaseDate: 'October 8, 2012', placement: 'Track #109&nbsp;&nbsp;in&nbsp;&nbsp;december I &nbsp;·&nbsp; Track #309&nbsp;&nbsp;in&nbsp;&nbsp;D E C E M B E R &nbsp;·&nbsp; Track #978&nbsp;&nbsp;in&nbsp;&nbsp;F A L L &nbsp;·&nbsp; Track #338&nbsp;&nbsp;in&nbsp;&nbsp;2025' },
+      { title: 'Sorry Not Sorry', artist: 'Bryson Tiller  |  Trapsoul', date: 'January 19, 2016', day: 'Tuesday', time: '12:12 AM', ageRelease: 'You were 18 when this song was released. You saved it 3 months later at 19.', ageSaved: 'You were 20 when you saved it.', search: 'bryson tiller', releaseDay: 'Friday', releaseDate: 'October 2, 2015', placement: 'Track #18&nbsp;&nbsp;in&nbsp;&nbsp;january II &nbsp;·&nbsp; Track #47&nbsp;&nbsp;in&nbsp;&nbsp;J A N U A R Y &nbsp;·&nbsp; Track #119&nbsp;&nbsp;in&nbsp;&nbsp;W I N T E R &nbsp;·&nbsp; Track #18&nbsp;&nbsp;in&nbsp;&nbsp;2016' },
+      { title: 'She Wolf (Falling to Pieces)', artist: 'David Guetta ft. Sia  |  Nothing but the Beat', date: 'June 13, 2021', day: 'Sunday', time: '6:30 PM', ageRelease: 'You were 14 when this song was released. You saved it 10 years later at 24.', ageSaved: 'You were 25 when you saved it.', search: 'david guetta', releaseDay: 'Tuesday', releaseDate: 'August 30, 2011', placement: 'Track #62&nbsp;&nbsp;in&nbsp;&nbsp;june II &nbsp;·&nbsp; Track #192&nbsp;&nbsp;in&nbsp;&nbsp;J U N E &nbsp;·&nbsp; Track #623&nbsp;&nbsp;in&nbsp;&nbsp;S P R I N G &nbsp;·&nbsp; Track #161&nbsp;&nbsp;in&nbsp;&nbsp;2021' }
     ];
     var s = songs[Math.floor(Math.random() * songs.length)];
     document.addEventListener('DOMContentLoaded', function() {
@@ -260,7 +260,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
       var el4 = document.getElementById('teaser-song-daytime'); if (el4) el4.textContent = 'Saved on ' + s.day + ' at ' + s.time;
       var el6 = document.getElementById('teaser-song-relday'); if (el6) el6.textContent = 'Released on ' + s.releaseDay;
       var el7 = document.getElementById('teaser-song-reldate'); if (el7) el7.textContent = s.releaseDate;
-      var el5 = document.getElementById('teaser-song-age'); if (el5) el5.textContent = s.ageRelease + ' ' + s.ageSaved;
+      var el5 = document.getElementById('teaser-song-age'); if (el5) el5.textContent = s.ageRelease;
       var el6 = document.getElementById('teaser-search-input'); if (el6) el6.value = s.search;
       var el8 = document.getElementById('teaser-song-placement'); if (el8) el8.innerHTML = s.placement;
     });
@@ -269,18 +269,17 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
   <div style="margin-bottom:-6px;">
     <div style="position:relative; opacity:0.75;">
     <h3 style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px;">Look up a track</h3>
+      <div style="margin-bottom:18px; margin-top:16px;">
+        <label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (for age context)</label>
+        <input type="date" value="1996-11-20" disabled style="background:var(--card); border:1px solid var(--border); color:var(--muted); padding:8px 12px; font-family:'Telegraf',sans-serif; font-size:13px; border-radius:2px; width:180px; opacity:0.6;">
+      </div>
       <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <button style="background:none; border:1px solid rgba(200,169,110,0.3); color:var(--green); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY TITLE / ARTIST</button>
+        <button style="background:none; border:1px solid rgba(200,169,110,0.3); color:var(--green); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY TITLE / ARTIST / ALBUM</button>
         <button style="background:none; border:1px solid rgba(200,169,110,0.15); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY NUMBER</button>
       </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6;">Type a song title, artist, or both to find when you saved it and where it lives.</p>
       <div style="display:flex; gap:12px; margin-bottom:24px;">
         <input id="teaser-search-input" type="text" value="hello" disabled style="flex:1; background:var(--card); border:1px solid var(--border); color:var(--muted); padding:10px 14px; font-family:'Telegraf',sans-serif; font-size:14px; border-radius:2px; opacity:0.6;">
         <button disabled style="background:#b5623e; color:#0f0d0a; border:none; padding:10px 22px; font-family:'Telegraf',sans-serif; font-size:13px; font-weight:700; letter-spacing:.08em; border-radius:2px; opacity:0.6;">SEARCH</button>
-      </div>
-      <div style="margin-bottom:24px; margin-top:4px;">
-        <label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (optional — for age context)</label>
-        <input type="date" value="1996-11-20" disabled style="background:var(--card); border:1px solid var(--border); color:var(--muted); padding:8px 12px; font-family:'Telegraf',sans-serif; font-size:13px; border-radius:2px; width:180px; opacity:0.6;">
       </div>
       <div style="border:1px solid var(--border); border-radius:2px; background:var(--card); overflow:hidden;">
         <div style="padding:21px 20px 14px; border-bottom:1px solid rgba(200,169,110,0.1); text-align:center;">
@@ -298,7 +297,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
             <div id="teaser-song-date" style="font-family:'Telegraf',sans-serif; font-size:26px; color:var(--text); font-weight:300;">November 20, 2019</div>
           </div>
         </div>
-        <div style="padding:16px 20px; min-height:90px; display:flex; flex-direction:column; justify-content:center; text-align:center;">
+        <div style="padding:16px 20px; display:flex; flex-direction:column; justify-content:center; text-align:center;">
           <div id="teaser-song-age" style="font-family:'Telegraf',sans-serif; font-size:15px; color:#7a9e8a; font-weight:400; margin-bottom:8px;">You were 18 when this song was released. You were 23 when you saved it.</div>
           <div id="teaser-song-placement" style="font-size:13px; color:var(--muted); font-family:'Telegraf',sans-serif;"></div>
         </div>
@@ -608,7 +607,7 @@ async function loadLibrary() {
     for (var i = 0; i < data.items.length; i++) {
       var item = data.items[i];
       if (item.added_at && item.track && item.track.uri) {
-        allTracks.push({ uri: item.track.uri, added: new Date(item.added_at), name: item.track.name || '', artist: (item.track.artists && item.track.artists[0] ? item.track.artists[0].name : '') });
+        allTracks.push({ uri: item.track.uri, added: new Date(item.added_at), name: item.track.name || '', artist: (item.track.artists && item.track.artists[0] ? item.track.artists[0].name : ''), album: (item.track.album ? item.track.album.name : '') });
       }
     }
     url = data.next;
@@ -670,7 +669,7 @@ function ensure(key, name, desc, tier) {
     var season = getSeason(d);
     var mSpaced = spacedMonth(month);
 
-    trackIndex[t.uri] = { name: t.name, artist: t.artist, added: t.added };
+    trackIndex[t.uri] = { name: t.name, artist: t.artist, album: t.album || '', added: t.added };
 
     if (tiers.phase) {
       var pk = 'ph_' + month + '_' + phase.num;
@@ -732,17 +731,16 @@ function buildLookupSection(targetId) {
   sec.innerHTML =
     '<div class="lookup-sec">' +
       '<h3>Look up a track</h3>' +
+      '<div style="margin-bottom:18px; margin-top:16px;"><label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (for age context)</label><input type="date" id="lbirthday-' + uid + '" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:\'Telegraf\',sans-serif; font-size:13px; border-radius:2px; width:180px;" onchange="saveBirthday(this.value)"></div>' +
       '<div class="lookup-tabs">' +
-        '<button class="lookup-tab active" id="ltab-title-' + uid + '">By title / artist</button>' +
+        '<button class="lookup-tab active" id="ltab-title-' + uid + '">By title / artist / album</button>' +
         '<button class="lookup-tab" id="ltab-num-' + uid + '">By number</button>' +
       '</div>' +
       '<div id="lpanel-title-' + uid + '">' +
-        '<p>Type a song title, artist, or both to find when you saved it and where it lives.</p>' +
         '<div class="lookup-row">' +
-          '<input type="text" id="lsearch-' + uid + '" placeholder="Song title or artist..." style="flex:1">' +
+          '<input type="text" id="lsearch-' + uid + '" placeholder="Song title, artist, or album..." style="flex:1">' +
           '<button class="lookup-btn" id="lsbtn-' + uid + '">Search</button>' +
         '</div>' +
-        '<div style="margin-bottom:24px; margin-top:4px;"><label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (optional — for age context)</label><input type="date" id="lbirthday-' + uid + '" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:\'Telegraf\',sans-serif; font-size:13px; border-radius:2px; width:180px;" onchange="saveBirthday(this.value)"></div>' +
       '</div>' +
       '<div id="lpanel-num-' + uid + '" style="display:none">' +
         '<p>Select a playlist and enter a track number.</p>' +
@@ -780,6 +778,14 @@ function saveBirthday(val) {
   // update all birthday inputs
   var inputs = document.querySelectorAll('[id^="lbirthday-"]');
   for (var i = 0; i < inputs.length; i++) inputs[i].value = val;
+  // re-run any active searches so age text updates immediately
+  var searchInputs = document.querySelectorAll('[id^="lsearch-"]');
+  for (var j = 0; j < searchInputs.length; j++) {
+    if (searchInputs[j].value.trim()) {
+      var uid = searchInputs[j].id.replace('lsearch-', '');
+      window.searchByTitle(uid);
+    }
+  }
 }
 
 function loadBirthday(uid) {
@@ -800,33 +806,68 @@ async function getTrackReleaseDate(uri) {
 }
 
 function calcAgeText(birthday, releaseDate, savedDate) {
-  if (!birthday) return null;
+  if (!birthday || !savedDate) return null;
   var bDay = new Date(birthday);
-  var lines = [];
+  var saved = new Date(savedDate);
+  var bYear = bDay.getFullYear();
+  var savedYear = saved.getFullYear();
 
-  if (releaseDate) {
-    var relYear = parseInt(releaseDate.substring(0, 4));
-    var bYear = bDay.getFullYear();
-    var ageAtRelease = relYear - bYear;
-    if (ageAtRelease < 0) {
-      lines.push('This song was released ' + Math.abs(ageAtRelease) + ' year' + (Math.abs(ageAtRelease) === 1 ? '' : 's') + ' before you were born.');
-    } else if (ageAtRelease === 0) {
-      lines.push('You were born the same year this song was released.');
-    } else {
-      lines.push('You were ' + ageAtRelease + ' when this song was released.');
+  // Age when saved
+  var ageAtSave = savedYear - bYear;
+  if (saved < new Date(savedYear, bDay.getMonth(), bDay.getDate())) ageAtSave--;
+
+  if (!releaseDate) return null;
+  var relYear = parseInt(releaseDate.substring(0, 4));
+  var relMonth = releaseDate.length >= 7 ? parseInt(releaseDate.substring(5, 7)) - 1 : 0;
+  var ageAtRelease = relYear - bYear;
+  // Adjust if release date is before birthday in that year
+  var relDateApprox = new Date(relYear, relMonth, 15);
+  if (relDateApprox < new Date(relYear, bDay.getMonth(), bDay.getDate())) ageAtRelease--;
+
+  // Total months between release and save
+  var totalMonths = (savedYear - relYear) * 12 + (saved.getMonth() - relMonth);
+
+  function timeStr(m) {
+    if (m <= 0) return null;
+    if (m < 12) return m + ' month' + (m === 1 ? '' : 's') + ' later';
+    if (m === 12) return '1 year later';
+    if (m === 18) return 'one and a half years later';
+    if (m < 24) {
+      var yrs = Math.floor(m / 12);
+      var mos = m % 12;
+      if (mos === 0) return yrs + ' year' + (yrs === 1 ? '' : 's') + ' later';
+      return yrs + ' year' + (yrs === 1 ? '' : 's') + ' and ' + mos + ' month' + (mos === 1 ? '' : 's') + ' later';
     }
+    var yrs = Math.round(m / 12);
+    return yrs + ' years later';
   }
 
-  if (savedDate) {
-    var saved = new Date(savedDate);
-    var ageAtSave = saved.getFullYear() - bDay.getFullYear();
-    var m = saved.getMonth() - bDay.getMonth();
-    if (m < 0 || (m === 0 && saved.getDate() < bDay.getDate())) ageAtSave--;
-    lines.push('You were ' + ageAtSave + ' when you saved it.');
+  var tStr = timeStr(totalMonths);
+
+  // Days between release and save
+  var relDateFull = new Date(releaseDate.length === 4 ? releaseDate + '-01-01' : releaseDate);
+  var daysDiff = Math.round((saved - relDateFull) / 86400000);
+  var monthsDiff = totalMonths;
+
+  function closeTimeStr(days, months) {
+    if (days === 0) return 'When you were ' + ageAtSave + ', you saved this song the same day it was released.';
+    if (days < 30) return 'When you were ' + ageAtSave + ', you saved this song ' + days + ' day' + (days === 1 ? '' : 's') + ' after it was released.';
+    return 'When you were ' + ageAtSave + ', you saved this song ' + months + ' month' + (months === 1 ? '' : 's') + ' after it was released.';
   }
 
-  return lines.length ? lines.join(' ') : null;
+  if (ageAtRelease < 0) {
+    var yearsBeforeBorn = Math.abs(ageAtRelease);
+    var yearsLater = savedYear - relYear;
+    return 'This song was released ' + yearsBeforeBorn + ' year' + (yearsBeforeBorn === 1 ? '' : 's') + ' before you were born. You saved it ' + yearsLater + ' years later at ' + ageAtSave + '.';
+  } else if (ageAtRelease === 0) {
+    return 'This song came out the year you were born. You saved it ' + tStr + ' at ' + ageAtSave + '.';
+  } else if (totalMonths < 24) {
+    return closeTimeStr(daysDiff, monthsDiff);
+  } else {
+    return 'You were ' + ageAtRelease + ' when this song was released. You saved it ' + tStr + ' at ' + ageAtSave + '.';
+  }
 }
+
 
 window.searchByTitle = function searchByTitle(uid) {
   uid = uid || 'lookupsection';
@@ -838,13 +879,14 @@ window.searchByTitle = function searchByTitle(uid) {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var results = [];
 
-  // Search trackIndex for matching titles
+  // Search trackIndex for matching titles, artists, or albums
   var uris = Object.keys(window.trackIndex);
   for (var i = 0; i < uris.length; i++) {
     var t = window.trackIndex[uris[i]];
     var titleLower = (t.name || '').toLowerCase();
     var artistLower = (t.artist || '').toLowerCase();
-    var combined = titleLower + ' ' + artistLower;
+    var albumLower = (t.album || '').toLowerCase();
+    var combined = titleLower + ' ' + artistLower + ' ' + albumLower;
     var queryParts = query.split(' ').filter(function(p) { return p.length > 0; });
     var allMatch = queryParts.every(function(part) { return combined.indexOf(part) !== -1; });
     if (allMatch) {
@@ -873,6 +915,8 @@ window.searchByTitle = function searchByTitle(uid) {
     var hours = d.getHours(), mins = d.getMinutes(), ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12; if (hours === 0) hours = 12;
     var timeStr = hours + ':' + (mins < 10 ? '0' : '') + mins + ' ' + ampm;
+    var tierOrder = { phase: 0, month: 1, season: 2, year: 3 };
+    r.placements.sort(function(a, b) { return (tierOrder[a.pl.tier] || 0) - (tierOrder[b.pl.tier] || 0); });
     var placementStr = r.placements.map(function(p) { return 'Track #' + p.pos + '\u00a0\u00a0in\u00a0\u00a0' + p.pl.name; }).join(' &nbsp;·&nbsp; ');
     var birthday = localStorage.getItem('strata_birthday');
     var ageHtml = '';
@@ -907,9 +951,9 @@ window.searchByTitle = function searchByTitle(uid) {
           '<div class="lr-date">' + dateStr + '</div>' +
         '</div>' +
       '</div>' +
-      '<div style="padding:16px 20px; min-height:90px; display:flex; flex-direction:column; justify-content:center; text-align:center;">' +
-        (birthday ? '<div class="lr-age" id="lr-age-' + r.uri.replace(/[^a-z0-9]/gi,'') + '"></div>' : '') +
-        '<div class="lr-context" style="margin-top:6px; font-size:11px;">' + placementStr + '</div>' +
+      '<div style="padding:16px 20px; display:flex; flex-direction:column; align-items:center; text-align:center;">' +
+        '<div class="lr-age" id="lr-age-' + r.uri.replace(/[^a-z0-9]/gi,'') + '" style="font-family:\'Telegraf\',sans-serif; font-size:15px; color:#7a9e8a; font-weight:400; margin-bottom:8px;"></div>' +
+        '<div style="font-size:13px; color:var(--muted); font-family:\'Telegraf\',sans-serif;">' + placementStr + '</div>' +
       '</div>' +
       '</div>';
   });
