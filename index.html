@@ -43,15 +43,15 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 @media (max-width: 600px) {
   .hero { padding-top:36px !important; }
-  .eyebrow { font-size:25vw !important; margin-bottom:12px !important; }
-  .hero h1 { font-size:7.5vw !important; }
-  .hero p:not(.hero-subtitle) { font-size:12px !important; }
-  .strata-mark { margin-bottom:12px !important; }
+  .eyebrow { font-size:25vw !important; margin-bottom:16px !important; }
+  .hero h1 { font-size:7.5vw !important; margin:10px 0 10px !important; }
+  .hero-subtitle { margin-bottom:12px !important; font-size:clamp(11px,3vw,13px) !important; }
+  .strata-mark { margin-bottom:16px !important; }
   .strata-mark .s1 { width:95px !important; }
   .strata-mark .s2 { width:85px !important; }
   .strata-mark .s3 { width:75px !important; }
-  .done-stats { display:grid !important; grid-template-columns:1fr 1fr; gap:12px !important; }
-  .stat { padding:10px 8px !important; width:100% !important; }
+  .done-stats { display:grid !important; grid-template-columns:1fr 1fr !important; gap:12px !important; width:100% !important; }
+  .stat { padding:10px 8px !important; box-sizing:border-box !important; }
   .stat-n { font-size:22px !important; }
   .tier-check { width:calc(50% - 5px); justify-content:center; }
   .pl-grid { grid-template-columns:repeat(3,1fr) !important; }
