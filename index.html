@@ -44,17 +44,17 @@
 @media (max-width: 600px) {
   .eyebrow { font-size:22vw !important; }
   .hero h1 { font-size:6.5vw !important; }
-  .strata-mark .s1 { width:80px !important; }
-  .strata-mark .s2 { width:70px !important; }
-  .strata-mark .s3 { width:60px !important; }
-  .hero p { font-size:11px !important; }
+  .strata-mark .s1 { width:95px !important; }
+  .strata-mark .s2 { width:85px !important; }
+  .strata-mark .s3 { width:75px !important; }
+  .hero p { font-size:13px !important; }
   .done-stats { display:grid !important; grid-template-columns:1fr 1fr; gap:20px !important; }
   .tier-check { width:calc(50% - 5px); justify-content:center; }
   .pl-grid { grid-template-columns:repeat(3,1fr) !important; }
   .pl-card { padding:8px 10px !important; }
   .pl-name { font-size:10px !important; }
   .pl-ct { font-size:9px !important; }
-}
+  .hero { padding-top:36px !important; }
 body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; min-height:100vh; }
 .wrap { max-width:760px; margin:0 auto; padding:0 28px; }
 
@@ -281,9 +281,9 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
         <label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (for age context)</label>
         <input type="text" value="11/20/1996" disabled style="background:var(--card); border:1px solid var(--border); color:var(--muted); padding:6px 4px 6px 10px; font-family:'Telegraf',sans-serif; font-size:11px; border-radius:2px; width:150px; opacity:0.6;">
       </div>
-      <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <button style="background:none; border:1px solid rgba(200,169,110,0.3); color:var(--green); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY TITLE / ARTIST / ALBUM</button>
-        <button style="background:none; border:1px solid rgba(200,169,110,0.15); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default;">BY NUMBER</button>
+      <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:nowrap;">
+        <button style="background:none; border:1px solid rgba(200,169,110,0.3); color:var(--green); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default; white-space:nowrap;">BY TITLE / ARTIST / ALBUM</button>
+        <button style="background:none; border:1px solid rgba(200,169,110,0.15); color:var(--muted); font-family:'Telegraf',sans-serif; font-size:12px; letter-spacing:.08em; padding:7px 18px; border-radius:2px; cursor:default; white-space:nowrap;">BY NUMBER</button>
       </div>
       <div style="display:flex; gap:12px; margin-bottom:24px;">
         <input id="teaser-search-input" type="text" value="hello" disabled style="flex:1; background:var(--card); border:1px solid var(--border); color:var(--muted); padding:10px 14px; font-family:'Telegraf',sans-serif; font-size:14px; border-radius:2px; opacity:0.6;">
