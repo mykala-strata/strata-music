@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Strata</title>
+<style>
+@font-face {
+  font-family: 'Telegraf';
+  font-weight: 200;
+  font-style: normal;
+  src: url('../Telegraf UltraLight 200.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Telegraf';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Telegraf';
+  font-weight: 800;
+  font-style: normal;
+  src: url('../Telegraf UltraBold 800.otf') format('opentype');
+}
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0f0d0a; color: #f0ebe0; font-family: 'Telegraf', sans-serif; font-size: 15px; line-height: 1.75; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 72px 28px 96px; }
+.back { font-size: 12px; letter-spacing: .08em; color: #9a9080; text-decoration: none; text-transform: uppercase; display: inline-block; margin-bottom: 16px; }
+.back:hover { color: #c8a96e; }
+.eyebrow { font-family: 'Telegraf', sans-serif; font-size: clamp(36px,7vw,96px); font-weight: 800; background: linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 8px; }
+h1 { font-size: 22px; font-weight: 300; color: #f0ebe0; margin-bottom: 4px; }
+.updated { font-size: 12px; color: #9a9080; letter-spacing: .04em; margin-bottom: 16px; }
+.strata-mark { display: flex; gap: 3px; margin-bottom: 16px; }
+.strata-mark span { display: block; height: 2px; border-radius: 1px; }
+.s1 { width: 120px; background: #c8a96e; }
+.s2 { width: 110px; background: #b5623e; opacity: .7; }
+.s3 { width: 100px; background: #7a9e8a; opacity: .5; }
+h2 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #c8a96e; margin: 40px 0 12px; }
+h2 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #c8a96e; margin: 26px 0 12px; }
+p { color: #c8c2b4; margin-bottom: 26px; }
+ul { color: #c8c2b4; padding-left: 20px; margin-bottom: 26px; }
+ul li { margin-bottom: 8px; }
+a { color: #7a9e8a; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.divider { height: 1px; background: rgba(200,169,110,0.15); margin: 26px 0; }
+.contact { background: rgba(200,169,110,0.05); border: 1px solid rgba(200,169,110,0.15); border-radius: 2px; padding: 20px 24px; margin-top: 40px; }
+.contact p { margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/" class="back">← Back to Strata</a>
+  <div class="eyebrow">Strata</div>
+  <div class="strata-mark"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: March 2026</p>
+
+  <p>Strata is a personal Spotify tool that organizes your Liked Songs into time-based playlists. This page explains what data Strata accesses, how it's used, and what we don't do with it.</p>
+
+  <div class="divider"></div>
+
+  <h2>What Strata accesses</h2>
+  <p>When you connect your Spotify account, Strata requests the following permissions:</p>
+  <ul>
+    <li><strong style="color:#f0ebe0;">user-library-read</strong> — to read your Liked Songs library</li>
+    <li><strong style="color:#f0ebe0;">playlist-read-private</strong> — to check which Strata playlists already exist in your account</li>
+    <li><strong style="color:#f0ebe0;">playlist-modify-public</strong> — to create and update your time-based playlists</li>
+    <li><strong style="color:#f0ebe0;">ugc-image-upload</strong> — to optionally set cover images on your playlists</li>
+  </ul>
+
+  <h2>How your data is used</h2>
+  <p>Strata processes your Liked Songs entirely in your browser. Your song data, listening history, and Spotify credentials are never sent to any external server operated by Strata.</p>
+  <p>The Spotify access token is stored locally in your browser session and is used only to communicate directly with Spotify's API on your behalf. It is never transmitted to any third party.</p>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>We do not store your Spotify data on any server</li>
+    <li>We do not sell, share, or monetize your data in any form</li>
+    <li>We do not track your listening habits or usage patterns</li>
+    <li>We do not modify, delete, or access any playlists other than those created by Strata</li>
+    <li>We do not retain your access token beyond your browser session</li>
+  </ul>
+
+  <h2>Third-party services</h2>
+  <p>Strata uses the <a href="https://developer.spotify.com" target="_blank">Spotify Web API</a> to read your library and manage playlists. Your use of Spotify is governed by <a href="https://www.spotify.com/legal/privacy-policy/" target="_blank">Spotify's own Privacy Policy</a>. Strata is not affiliated with or endorsed by Spotify.</p>
+
+  <h2>Cookies &amp; local storage</h2>
+  <p>Strata stores the following data in your browser's local storage:</p>
+  <ul>
+    <li>Your Spotify access token (temporary, expires automatically)</li>
+    <li>Your birthday, if entered, for age context in the track lookup feature</li>
+  </ul>
+  <p>No cookies are used. No data is stored on external servers.</p>
+
+  <h2>Children's privacy</h2>
+  <p>Strata is not directed at children under the age of 13 and does not knowingly collect information from children.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be posted at this URL with a new "Last updated" date.</p>
+
+  <div class="divider"></div>
+
+
+
+</div>
+</body>
+</html>
