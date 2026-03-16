@@ -52,7 +52,7 @@ body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-seri
 .hero { padding:72px 0 28px; border-bottom:1px solid var(--border); position:relative; }
 .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--accent2) 100%); opacity:0.5; }
 .eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(36px,7vw,96px); font-weight:800; background:linear-gradient(90deg, #b5623e, #c8a96e 50%, #7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1; letter-spacing:normal; }
-.hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(18px,3.2vw,44px); line-height:0.88; margin:14px 0; color:var(--text); letter-spacing:-.01em; }
+.hero h1 { font-family:'Telegraf',sans-serif; font-weight:400; font-size:clamp(40px,3.2vw,66px); line-height:0.88; margin:14px 0 18px; color:var(--text); letter-spacing:-.01em; }
 .hero h1 em { font-family:'Cormorant Garamond',serif; font-style:italic; color:#7a9e8a; font-size:1.35em; }
 .hero p { font-size:15px; line-height:1.75; color:var(--muted); font-weight:400; }
 
@@ -126,8 +126,8 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
 .demo-banner { background:rgba(29,185,84,.07); border:1px solid rgba(29,185,84,.2); border-radius:2px; padding:10px 16px; margin-bottom:22px; font-size:11px; letter-spacing:.08em; color:var(--green); text-align:center; }
 
 /* COVER GRID */
-.lookup-sec { margin-bottom: 32px; padding-bottom: 0; }
-.lookup-sec h3 { font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px; }
+.lookup-sec { margin-top:0; margin-bottom: 32px; padding-bottom: 0; }
+.lookup-sec h3 { font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-top:0; margin-bottom:28px; }
 .lookup-sec p { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6; }
 .lookup-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:24px; }
 .lookup-row select, .lookup-row input { background:#1a1612; border:1px solid rgba(200,169,110,0.25); color:var(--text); font-family:'Telegraf',sans-serif; font-size:14px; padding:10px 14px; border-radius:4px; outline:none; }
@@ -230,9 +230,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <button class="btn-ghost" id="btn-demo">Launch Demo →</button>
   </div>
 
-  <div style="height:1px; background:var(--border); margin:32px 0;"></div>
-
-  <!-- LOOKUP TEASER -->
+  <div style="height:1px; background:var(--border); margin:32px 0 22px;"></div>
   <script>
   (function() {
     var songs = [
@@ -268,7 +266,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
   </script>
   <div style="margin-bottom:-6px;">
     <div style="position:relative; opacity:0.75;">
-    <h3 style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:12px;">Look up a track</h3>
+    <h3 style="font-family:'Telegraf',sans-serif; font-size:28px; font-weight:300; color:var(--text); margin-top:0; margin-bottom:12px;">Look up a track</h3>
       <div style="margin-bottom:18px; margin-top:16px;">
         <label style="font-size:11px; letter-spacing:.08em; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase;">Your Birthday (for age context)</label>
         <input type="date" value="1996-11-20" disabled style="background:var(--card); border:1px solid var(--border); color:var(--muted); padding:6px 4px 6px 10px; font-family:'Telegraf',sans-serif; font-size:11px; border-radius:2px; width:150px; opacity:0.6;">
@@ -356,7 +354,7 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     <h2>Review before creating</h2>
     <div id="demo-banner-slot"></div>
     <div class="stats" id="stats"></div>
-    <div id="lookup-section" style="margin-top:32px; padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);"></div>
+    <div id="lookup-section" style="padding-top:20px; border-top:1px solid rgba(200,169,110,0.15);"></div>
     <div style="margin:32px 0 24px; padding-top:32px; border-top:1px solid rgba(200,169,110,0.15);">
       <h2 style="margin-bottom:12px;">Which playlist tiers would you like to create?</h2>
       <div style="display:flex; flex-wrap:wrap; gap:10px;">
@@ -390,11 +388,14 @@ button { font-family:'Telegraf',sans-serif; font-size:11px; letter-spacing:.15em
     </div>
     <div style="margin-top:48px" id="lookup-section-done"></div>
   </section>
+  <div style="text-align:center; padding:48px 0 24px;">
+    <a href="/privacy" style="font-size:11px; color:#9a9080; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">Privacy Policy</a>
+  </div>
 
 </div>
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
-const SCOPES = 'user-library-read playlist-read-private playlist-modify-public playlist-modify-private ugc-image-upload';
+const SCOPES = 'user-library-read playlist-read-private playlist-modify-public ugc-image-upload';
 const MONTH_NAMES = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
 
 const SEASON_DATES = {
@@ -523,7 +524,7 @@ async function generateCodeChallenge(verifier) {
 
 async function doAuth() {
   var cid = localStorage.getItem('ylip_cid');
-  var redir = 'https://mykala-strata.github.io/strata-music/';
+  var redir = 'https://strata-music.com/';
   var verifier = generateRandomString(64);
   var challenge = await generateCodeChallenge(verifier);
   localStorage.setItem('ylip_verifier', verifier);
@@ -531,7 +532,7 @@ async function doAuth() {
   p.append('client_id', cid);
   p.append('response_type', 'code');
   p.append('redirect_uri', redir);
-  p.append('scope', 'user-library-read playlist-read-private playlist-modify-public playlist-modify-private ugc-image-upload');
+  p.append('scope', 'user-library-read playlist-read-private playlist-modify-public ugc-image-upload');
   p.append('code_challenge_method', 'S256');
   p.append('code_challenge', challenge);
   p.append('show_dialog', 'true');
@@ -544,7 +545,7 @@ async function extractToken() {
   if (!code) return false;
   var cid = localStorage.getItem('ylip_cid');
   var verifier = localStorage.getItem('ylip_verifier');
-  var redir = 'https://mykala-strata.github.io/strata-music/';
+  var redir = 'https://strata-music.com/';
   history.replaceState(null, '', window.location.pathname);
   var res = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
@@ -988,16 +989,21 @@ window.searchByTitle = function searchByTitle(uid) {
 
   res.className = 'lookup-result visible';
   res.innerHTML = html;
-  // Fetch album names for each result
+  // Show album names - use stored data or fall back to API
   results.slice(0,5).forEach(function(r) {
-    var trackId = r.uri.replace('spotify:track:','');
     var elId = 'lr-album-' + r.uri.replace(/[^a-z0-9]/gi,'');
-    api('https://api.spotify.com/v1/tracks/' + trackId).then(function(data) {
-      if (data && data.album && data.album.name) {
-        var el = document.getElementById(elId);
-        if (el) el.innerHTML = '&nbsp;&nbsp;|&nbsp;&nbsp;' + data.album.name;
-      }
-    }).catch(function(){});
+    if (r.track.album) {
+      var el = document.getElementById(elId);
+      if (el) el.innerHTML = '&nbsp;&nbsp;|&nbsp;&nbsp;' + r.track.album;
+    } else {
+      var trackId = r.uri.replace('spotify:track:','');
+      api('https://api.spotify.com/v1/tracks/' + trackId).then(function(data) {
+        if (data && data.album && data.album.name) {
+          var el = document.getElementById(elId);
+          if (el) el.innerHTML = '&nbsp;&nbsp;|&nbsp;&nbsp;' + data.album.name;
+        }
+      }).catch(function(){});
+    }
   });
 };
 
