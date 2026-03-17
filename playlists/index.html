@@ -116,13 +116,15 @@ function calcAgeText(listenDateStr, releaseYear, releaseMonth) {
   var ageAtListen = listenYear - bd.year;
   if (listenMonth < bd.month || (listenMonth === bd.month && listenDay < bd.day)) ageAtListen--;
 
-  if (!releaseYear) return 'Your first listen was at age ' + ageAtListen + '.';
+  releaseYear = parseInt(releaseYear);
+  releaseMonth = parseInt(releaseMonth);
+
+  if (!releaseYear || isNaN(releaseYear)) return 'Your first listen was at age ' + ageAtListen + '.';
 
   var ageAtRelease = releaseYear - bd.year;
   if (releaseMonth < bd.month) ageAtRelease--;
 
-  // Years/months between release and listen
-  var totalMonths = (listenYear - releaseYear) * 12 + (listenMonth - releaseMonth);
+  var totalMonths = Math.max(0, (listenYear - releaseYear) * 12 + (listenMonth - releaseMonth));
   var gapYears = Math.floor(totalMonths / 12);
   var gapMonths = totalMonths % 12;
 
@@ -130,26 +132,19 @@ function calcAgeText(listenDateStr, releaseYear, releaseMonth) {
     if (y === 0 && m === 0) return 'the day it came out';
     if (y === 0) return m + ' month' + (m===1?'':'s') + ' later';
     if (y === 1 && m === 6) return 'one and a half years later';
-    if (m === 0) return y + ' year' + (y===1?'':'s') + ' later';
-    return y + ' year' + (y===1?'':'s') + ' and ' + m + ' month' + (m===1?'':'s') + ' later';
+    if (y >= 1) return y + ' year' + (y===1?'':'s') + ' later';
+    return m + ' month' + (m===1?'':'s') + ' later';
   }
 
-  // Born after release
   if (releaseYear < bd.year || (releaseYear === bd.year && releaseMonth < bd.month)) {
     var yearsBeforeBorn = bd.year - releaseYear;
     var yearsAfterRelease = listenYear - releaseYear;
     return 'This song was released ' + yearsBeforeBorn + ' year' + (yearsBeforeBorn===1?'':'s') + ' before you were born. Your first listen was ' + yearsAfterRelease + ' years after its release at age ' + ageAtListen + '.';
   }
 
-  // Same age at release and listen
-  if (ageAtRelease === ageAtListen) {
-    var gap = gapStr(gapYears, gapMonths);
-    if (gap === 'the day it came out') return 'You were ' + ageAtListen + ' when this song was released. Your first listen was the day it came out.';
-    return 'You were ' + ageAtRelease + ' when this song was released. Your first listen was ' + gap + '.';
-  }
-
   var gap = gapStr(gapYears, gapMonths);
   if (gap === 'the day it came out') return 'You were ' + ageAtListen + ' when this song was released. Your first listen was the day it came out.';
+  if (ageAtRelease === ageAtListen) return 'You were ' + ageAtRelease + ' when this song was released. Your first listen was ' + gap + '.';
   return 'You were ' + ageAtRelease + ' when this song was released. Your first listen was ' + gap + ' at age ' + ageAtListen + '.';
 }
 
