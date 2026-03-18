@@ -96,6 +96,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .ta { font-size:12px; color:var(--muted); margin-top:3px; font-weight:200; }
 .tc { font-size:11px; color:var(--accent2); margin-top:3px; font-weight:200; line-height:1.4; }
 .tn { font-size:11px; color:var(--muted); flex-shrink:0; min-width:28px; text-align:right; }
+.tplays { font-size:11px; color:var(--muted); flex-shrink:0; text-align:right; min-width:56px; }
 .icons { display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .icon-btn { width:22px; height:22px; opacity:0.18; transition:opacity .15s; cursor:pointer; flex-shrink:0; }
 .track:hover .icon-btn { opacity:0.65; }
@@ -126,7 +127,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
   <div class="drop-zone" id="drop-zone">
     <div class="drop-arrow">↑</div>
     <div class="drop-label">Drop your Spotify history files here</div>
-    <div class="drop-hint">Streaming_History_Audio_*.json or endsong_*.json · multiple files OK</div>
+    <div class="drop-hint">e.g. Streaming_History_Audio_2019_4.json · select all files at once</div>
     <input type="file" id="file-input" multiple accept=".json">
   </div>
   <div class="file-list" id="file-list"></div>
@@ -296,14 +297,15 @@ function parseHistory(allEntries) {
            e.ts;
   });
 
-  // First listen per URI
-  var first = {};
+  // First listen + play count per URI
+  var first = {}, playCounts = {};
   songs.forEach(function(e) {
     var uri = e.spotify_track_uri;
+    playCounts[uri] = (playCounts[uri] || 0) + 1;
     if (!first[uri] || e.ts < first[uri].ts) {
       first[uri] = {
         ts:      e.ts,
-        dateStr: e.ts.substring(0, 10), // works for both "YYYY-MM-DDTHH:MM:SSZ" and "YYYY-MM-DD HH:MM:SS"
+        dateStr: e.ts.substring(0, 10),
         title:   e.master_metadata_track_name,
         artist:  e.master_metadata_album_artist_name,
         album:   e.master_metadata_album_album_name || '',
@@ -342,7 +344,7 @@ function parseHistory(allEntries) {
       var d2 = new Date(t.dateStr + 'T12:00:00');
       var displayDate = MO_FULL[d2.getMonth()] + ' ' + d2.getDate() + ', ' + d2.getFullYear();
       var ytQ = (t.title + ' ' + t.artist).replace(/[^a-zA-Z0-9 ]/g,' ').trim().replace(/\s+/g,'+');
-      return { ts:t.ts, dateStr:t.dateStr, date:displayDate, title:t.title, artist:t.artist, album:t.album, uri:t.uri, ytQ:ytQ };
+      return { ts:t.ts, dateStr:t.dateStr, date:displayDate, title:t.title, artist:t.artist, album:t.album, uri:t.uri, ytQ:ytQ, plays:(playCounts[t.uri]||1) };
     });
   }
 
@@ -414,16 +416,25 @@ processBtn.addEventListener('click', function() {
   processingMsg.style.display = 'block';
   uploadError.style.display = 'none';
 
-  var allEntries = [], remaining = selectedFiles.length;
+  var fileResults = new Array(selectedFiles.length).fill(null);
+  var remaining = selectedFiles.length;
   procDetail.textContent = 'Reading ' + selectedFiles.length + ' file' + (selectedFiles.length===1?'':'s') + '…';
 
-  selectedFiles.forEach(function(file) {
+  function mergeAndFinish() {
+    var allEntries = [];
+    for (var i = 0; i < fileResults.length; i++) {
+      if (fileResults[i]) allEntries = allEntries.concat(fileResults[i]);
+    }
+    onAllRead(allEntries);
+  }
+
+  selectedFiles.forEach(function(file, idx) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      try { var d = JSON.parse(e.target.result); if (Array.isArray(d)) allEntries = allEntries.concat(d); } catch(err){}
-      if (--remaining === 0) onAllRead(allEntries);
+      try { var d = JSON.parse(e.target.result); if (Array.isArray(d)) fileResults[idx] = d; } catch(err){}
+      if (--remaining === 0) mergeAndFinish();
     };
-    reader.onerror = function() { if (--remaining === 0) onAllRead(allEntries); };
+    reader.onerror = function() { if (--remaining === 0) mergeAndFinish(); };
     reader.readAsText(file);
   });
 });
@@ -470,7 +481,7 @@ function showGridView() {
 
   var html = '';
   var tiers = [
-    { key:'phase',  label:'Phases',  fmt:function(pl){ return titleCase(pl.label); } },
+    { key:'phase',  label:'Phases',  fmt:function(pl){ return pl.label; } },
     { key:'month',  label:'Months',  fmt:function(pl){ return pl.label; } },
     { key:'season', label:'Seasons', fmt:function(pl){ return pl.label; } },
     { key:'year',   label:'Years',   fmt:function(pl){ return pl.label; } }
@@ -519,7 +530,7 @@ function openPlaylist(tier, idx) {
 
   var tierLabel = {phase:'Phase', month:'Month', season:'Season', year:'Year'}[tier];
   document.getElementById('pl-eyebrow').textContent = 'Strata · ' + tierLabel;
-  document.getElementById('pl-name').textContent    = tier==='phase' ? titleCase(pl.label) : pl.label;
+  document.getElementById('pl-name').textContent    = pl.label;
   document.getElementById('pl-meta').textContent    = pl.count.toLocaleString()+' song'+(pl.count===1?'':'s');
   document.getElementById('search').value = '';
   document.getElementById('no-results').style.display = 'none';
@@ -547,6 +558,7 @@ function openPlaylist(tier, idx) {
     html += '<div class="ta">'+escHtml(t.artist)+'</div>';
     html += '<div class="tc" data-listen="'+t.dateStr+'">…</div>';
     html += '</div>';
+    html += '<div class="tplays">'+t.plays.toLocaleString()+' play'+(t.plays===1?'':'s')+'</div>';
     html += '<div class="tn">#'+(i+1)+'</div>';
     html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
     html += '</div>';
@@ -570,24 +582,66 @@ function openPlaylist(tier, idx) {
   function fetchOne(el, track) {
     var img = el.querySelector('.art');
     var tc  = el.querySelector('.tc');
-    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(track.title+' '+track.artist)+'&media=music&entity=song&limit=1')
+
+    function applyReleaseDate(rd) {
+      if (!rd || !tc) return false;
+      tc.setAttribute('data-ry', rd.substring(0,4));
+      tc.setAttribute('data-rm', rd.substring(5,7));
+      tc.setAttribute('data-rd', rd);
+      var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
+      if (ageText) { tc.textContent = ageText; return true; }
+      return false;
+    }
+
+    function artistMatch(a, b) {
+      // loose check — both lowercase, one contains the other or share first word
+      a = a.toLowerCase().replace(/[^a-z0-9 ]/g,'');
+      b = b.toLowerCase().replace(/[^a-z0-9 ]/g,'');
+      return a === b || a.indexOf(b.split(' ')[0]) !== -1 || b.indexOf(a.split(' ')[0]) !== -1;
+    }
+
+    // Try MusicBrainz for release date (more reliable, no wrong-match risk)
+    function tryMusicBrainz() {
+      var q = encodeURIComponent('"'+track.title+'" AND artist:"'+track.artist+'"');
+      return fetch('https://musicbrainz.org/ws/2/recording?query='+q+'&limit=1&fmt=json', {
+        headers: { 'User-Agent': 'Strata/1.0 (strata-music.com)' }
+      })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.recordings && d.recordings[0] && d.recordings[0].releases && d.recordings[0].releases[0]) {
+            var rel = d.recordings[0].releases[0];
+            var rd = rel.date ? rel.date.substring(0,10) : null;
+            if (rd && rd.length >= 4) {
+              // Pad partial dates (YYYY or YYYY-MM)
+              if (rd.length === 4) rd = rd + '-01-01';
+              if (rd.length === 7) rd = rd + '-01';
+              applyReleaseDate(rd);
+            } else { setFallbackAge(tc, track.dateStr); }
+          } else { setFallbackAge(tc, track.dateStr); }
+        }).catch(function(){ setFallbackAge(tc, track.dateStr); });
+    }
+
+    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(track.title+' '+track.artist)+'&media=music&entity=song&limit=3')
       .then(function(r){ return r.json(); })
       .then(function(d){
-        if (d.results && d.results[0]) {
-          var r2 = d.results[0];
-          if (img) img.src = r2.artworkUrl100.replace('100x100bb','200x200bb');
-          if (tc) {
-            var rd = r2.releaseDate ? r2.releaseDate.substring(0,10) : null;
-            if (rd) {
-              tc.setAttribute('data-ry', rd.substring(0,4));
-              tc.setAttribute('data-rm', rd.substring(5,7));
-              tc.setAttribute('data-rd', rd);
-              var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
-              tc.textContent = ageText || ('Your first listen was at age '+ageAtDate(track.dateStr)+'.');
-            } else { setFallbackAge(tc, track.dateStr); }
+        // Find best iTunes match — verify artist loosely to avoid wrong-song release dates
+        var match = null;
+        if (d.results) {
+          for (var i = 0; i < d.results.length; i++) {
+            if (artistMatch(d.results[i].artistName || '', track.artist)) {
+              match = d.results[i]; break;
+            }
           }
+          if (!match && d.results[0]) match = d.results[0]; // fallback to first result
         }
-      }).catch(function(){ if (tc) setFallbackAge(tc, track.dateStr); });
+        if (match) {
+          if (img) img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
+          if (tc && match.releaseDate) {
+            var rd = match.releaseDate.substring(0,10);
+            if (!applyReleaseDate(rd)) tryMusicBrainz();
+          } else { return tryMusicBrainz(); }
+        } else { return tryMusicBrainz(); }
+      }).catch(function(){ if (tc) return tryMusicBrainz(); });
   }
 
   function ageAtDate(dateStr) {
