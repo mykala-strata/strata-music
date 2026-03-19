@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>your playlists — Strata</title>
+<title>explore your playlists — Strata</title>
 <style>
 @font-face { font-family:'Telegraf'; font-weight:200; font-style:normal; src:url('../Telegraf UltraLight 200.otf') format('opentype'); }
 @font-face { font-family:'Telegraf'; font-weight:400; font-style:normal; src:url('../TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype'); }
@@ -124,7 +124,9 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .ta { font-size:12px; color:var(--muted); margin-top:3px; font-weight:200; }
 .tc { font-size:11px; color:var(--accent2); margin-top:3px; font-weight:200; line-height:1.4; }
 .tn { font-size:11px; color:var(--muted); flex-shrink:0; min-width:28px; text-align:right; }
-.tplays { font-size:11px; color:var(--muted); flex-shrink:0; text-align:right; min-width:56px; }
+.track-playcount { display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; width:44px; text-align:center; padding-right:12px; border-right:1px solid rgba(200,169,110,0.12); margin-right:4px; }
+.track-playnum { font-size:18px; font-weight:300; color:var(--text); line-height:1; }
+.track-playlabel { font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
 .icons { display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .icon-btn { width:22px; height:22px; opacity:0.18; transition:opacity .15s; cursor:pointer; flex-shrink:0; }
 .track:hover .icon-btn { opacity:0.65; }
@@ -149,7 +151,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="upload-view">
   <div class="upload-head">
     <div class="eyebrow">Strata</div>
-    <div class="upload-title">your playlists</div>
+    <div class="upload-title">explore your playlists</div>
     <div class="upload-sub">Upload your Spotify Extended Streaming History to build your playlists.<br>All processing happens locally — nothing leaves your browser.</div>
   </div>
   <div class="drop-zone" id="drop-zone">
@@ -171,7 +173,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="grid-view">
   <div class="grid-head">
     <div class="grid-eyebrow">Strata</div>
-    <div class="grid-title">your playlists</div>
+    <div class="grid-title">explore your playlists</div>
     <div class="grid-meta" id="grid-meta"></div>
     <div class="bday-row">
       <span class="bday-label">Your Birthday</span>
@@ -583,6 +585,26 @@ function showGridView() {
 }
 
 // ── GLOBAL SONG SEARCH ───────────────────────────────────────────────────────
+// Date parsing helper — detects "january 12", "jan 12", "1/12", "01/12" etc
+function parseDateQuery(q) {
+  var MONTHS = {
+    january:1, jan:1, february:2, feb:2, march:3, mar:3,
+    april:4, apr:4, may:5, june:6, jun:6, july:7, jul:7,
+    august:8, aug:8, september:9, sep:9, sept:9, october:10, oct:10,
+    november:11, nov:11, december:12, dec:12
+  };
+  // "january 12" or "jan 12"
+  var m = q.match(/^([a-z]+)\s+(\d{1,2})$/);
+  if (m && MONTHS[m[1]]) return { month: MONTHS[m[1]], day: parseInt(m[2]) };
+  // "12 january" or "12 jan"
+  m = q.match(/^(\d{1,2})\s+([a-z]+)$/);
+  if (m && MONTHS[m[2]]) return { month: MONTHS[m[2]], day: parseInt(m[1]) };
+  // "1/12" or "01/12"
+  m = q.match(/^(\d{1,2})\/(\d{1,2})$/);
+  if (m) return { month: parseInt(m[1]), day: parseInt(m[2]) };
+  return null;
+}
+
 document.getElementById('grid-search').addEventListener('input', function() {
   var q = this.value.toLowerCase().trim();
   var resultsEl = document.getElementById('grid-search-results');
@@ -600,7 +622,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   resultsEl.style.display = 'block';
   contentEl.style.display = 'none';
 
-  // Build a flat index: uri -> { track, placements: [{tier, idx, plLabel, trackIdx}] }
+  // Build flat index
   var index = {};
   ['phase','month','season','year'].forEach(function(tier) {
     DATA[tier].forEach(function(pl, plIdx) {
@@ -611,7 +633,63 @@ document.getElementById('grid-search').addEventListener('input', function() {
     });
   });
 
-  // Search
+  // Check if query is a date
+  var dateQ = parseDateQuery(q);
+  if (dateQ) {
+    // Date mode — find all songs first listened on this month+day across any year
+    var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var dayMatches = [];
+    Object.values(index).forEach(function(entry) {
+      var d = new Date(entry.track.dateStr + 'T12:00:00');
+      if (d.getMonth()+1 === dateQ.month && d.getDate() === dateQ.day) {
+        dayMatches.push(entry);
+      }
+    });
+    // Sort oldest first
+    dayMatches.sort(function(a, b) { return a.track.ts < b.track.ts ? -1 : 1; });
+
+    if (!dayMatches.length) {
+      listEl.innerHTML = '';
+      noneEl.style.display = 'block';
+      return;
+    }
+    noneEl.style.display = 'none';
+
+    var tierOrder = { phase:0, month:1, season:2, year:3 };
+    // Group by year
+    var byYear = {};
+    dayMatches.forEach(function(entry) {
+      var yr = entry.track.dateStr.substring(0,4);
+      (byYear[yr] = byYear[yr] || []).push(entry);
+    });
+
+    var html = '';
+    Object.keys(byYear).sort().forEach(function(yr) {
+      html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);">'+yr+'</div>';
+      byYear[yr].forEach(function(entry) {
+        var t = entry.track;
+        var spUrl = 'https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist);
+        var ytUrl = 'https://youtube.com/results?search_query='+t.ytQ;
+        var sorted = entry.placements.slice().sort(function(a,b){ return tierOrder[a.tier]-tierOrder[b.tier]; });
+        var tags = sorted.map(function(p) {
+          return '<span class="sr-tag" onclick="openPlaylist(\'' + p.tier + '\',' + p.plIdx + ')">'+escHtml(p.plLabel)+'</span>';
+        }).join('');
+        html += '<div class="sr-row">';
+        html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
+        html += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'</div><div class="sr-artist">'+escHtml(t.artist)+'</div><div class="sr-placements">'+tags+'</div></div>';
+        html += '<div class="sr-right"><div class="sr-icons-plays">'
+          + '<svg class="icon-btn sp-icon" data-url="'+escAttr(spUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
+          + '<svg class="icon-btn yt-icon" data-url="'+escAttr(ytUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg>'
+          + '</div></div>';
+        html += '</div>';
+      });
+    });
+    html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+MO_FULL[dateQ.month-1]+' '+dateQ.day+'</div>';
+    listEl.innerHTML = html;
+    return;
+  }
+
+  // Normal song/artist search
   var matches = [];
   Object.values(index).forEach(function(entry) {
     var t = entry.track;
@@ -768,13 +846,13 @@ function openPlaylist(tier, idx) {
     var uid = escAttr(t.uri);
 
     html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'">';
+    html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
     html += '<img class="art" src="" alt="" data-sp="'+escAttr(sp)+'">';
     html += '<div class="ti">';
     html += '<div class="tt">'+escHtml(t.title)+'</div>';
     html += '<div class="ta">'+escHtml(t.artist)+'</div>';
     html += '<div class="tc" data-listen="'+t.dateStr+'">…</div>';
     html += '</div>';
-    html += '<div class="tplays">'+t.plays.toLocaleString()+' play'+(t.plays===1?'':'s')+'</div>';
     html += '<div class="tn">#'+(i+1)+'</div>';
     html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
     html += '</div>';
@@ -837,7 +915,7 @@ function openPlaylist(tier, idx) {
         }).catch(function(){ setFallbackAge(tc, track.dateStr); });
     }
 
-    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(track.title+' '+track.artist)+'&media=music&entity=song&limit=3')
+    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(track.title+' '+track.artist)+'&media=music&entity=song&limit=3', { signal: AbortSignal.timeout(8000) })
       .then(function(r){ return r.json(); })
       .then(function(d){
         // Find best iTunes match — verify artist loosely to avoid wrong-song release dates
@@ -873,10 +951,20 @@ function openPlaylist(tier, idx) {
     tc.textContent = 'Your first listen was at age ' + ageAtDate(dateStr) + '.';
   }
 
+  // Scale batch size to playlist length — bigger playlists get larger batches
+  var BATCH = pl.tracks.length > 500 ? 10 : pl.tracks.length > 100 ? 8 : 5;
+  var DELAY = pl.tracks.length > 500 ? 150 : 200;
+
   function doBatch(start) {
-    var slice = els.slice(start, start+5); if (!slice.length) return;
-    Promise.all(slice.map(function(el,j){ return fetchOne(el, pl.tracks[start+j]); }))
-      .then(function(){ setTimeout(function(){ doBatch(start+5); }, 300); });
+    var slice = els.slice(start, start+BATCH); if (!slice.length) return;
+    var promises = slice.map(function(el,j){
+      return fetchOne(el, pl.tracks[start+j]).catch(function(){});
+    });
+    Promise.all(promises).then(function(){
+      setTimeout(function(){ doBatch(start+BATCH); }, DELAY);
+    }).catch(function(){
+      setTimeout(function(){ doBatch(start+BATCH); }, DELAY);
+    });
   }
   doBatch(0);
 }
