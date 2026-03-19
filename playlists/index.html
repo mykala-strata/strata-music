@@ -63,6 +63,10 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .bday-input:focus { border-color:var(--green); }
 .reset-btn { font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-left:auto; transition:color .15s; background:none; border:none; padding:0; }
 .reset-btn:hover { color:var(--amber); }
+.grid-sublabel { font-size:11px; color:var(--muted); opacity:0.5; font-weight:400; letter-spacing:.03em; margin-top:8px; }
+.title-divider { color:var(--text); opacity:1; font-weight:200; }
+.title-sub { color:var(--accent2); font-weight:300; }
+
 .grid-search-bar { margin-top:18px; }
 .grid-search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; border-radius:2px; outline:none; transition:border-color .2s; }
 .grid-search-bar input::placeholder { color:var(--muted); opacity:.5; }
@@ -151,7 +155,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="upload-view">
   <div class="upload-head">
     <div class="eyebrow">Strata</div>
-    <div class="upload-title">explore your playlists</div>
+    <div class="upload-title">explore your playlists <span class="title-divider">|</span> <span class="title-sub">organized by the date you first listened</span></div>
     <div class="upload-sub">Upload your Spotify Extended Streaming History to build your playlists.<br>All processing happens locally — nothing leaves your browser.</div>
   </div>
   <div class="drop-zone" id="drop-zone">
@@ -173,7 +177,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="grid-view">
   <div class="grid-head">
     <div class="grid-eyebrow">Strata</div>
-    <div class="grid-title">explore your playlists</div>
+    <div class="grid-title">explore your playlists <span class="title-divider">|</span> <span class="title-sub">organized by the date you first listened</span></div>
     <div class="grid-meta" id="grid-meta"></div>
     <div class="bday-row">
       <span class="bday-label">Your Birthday</span>
@@ -181,11 +185,14 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       <button class="reset-btn" id="reset-btn">↺ upload new files</button>
     </div>
     <div class="grid-search-bar">
-      <input type="text" id="grid-search" placeholder="search any song or artist…">
+      <input type="text" id="grid-search" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)…">
     </div>
   </div>
   <div id="grid-search-results" style="display:none;">
-    <div class="tier-label" style="margin-top:24px;">Search Results</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:24px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+      <div class="tier-label" style="margin-top:0; padding-bottom:0; border-bottom:none;">Search Results</div>
+      <button class="dl-btn" id="dl-search-csv" style="display:none;">↓ Download CSV</button>
+    </div>
     <div id="grid-search-list"></div>
     <div id="grid-search-none" style="display:none; font-size:13px; color:var(--muted); padding:16px 0;">No songs found.</div>
   </div>
@@ -616,6 +623,8 @@ document.getElementById('grid-search').addEventListener('input', function() {
   if (!q) {
     resultsEl.style.display = 'none';
     contentEl.style.display = 'block';
+    document.getElementById('dl-search-csv').style.display = 'none';
+    window._searchResults = [];
     return;
   }
 
@@ -686,6 +695,9 @@ document.getElementById('grid-search').addEventListener('input', function() {
     });
     html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+MO_FULL[dateQ.month-1]+' '+dateQ.day+'</div>';
     listEl.innerHTML = html;
+    window._searchResults = dayMatches;
+    window._searchLabel = MO_FULL[dateQ.month-1] + ' ' + dateQ.day;
+    document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
     return;
   }
 
@@ -693,7 +705,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   var matches = [];
   Object.values(index).forEach(function(entry) {
     var t = entry.track;
-    if (t.title.toLowerCase().indexOf(q) !== -1 || t.artist.toLowerCase().indexOf(q) !== -1) {
+    if (t.title.toLowerCase().indexOf(q) !== -1 || t.artist.toLowerCase().indexOf(q) !== -1 || (t.album||'').toLowerCase().indexOf(q) !== -1) {
       matches.push(entry);
     }
   });
@@ -764,6 +776,10 @@ document.getElementById('grid-search').addEventListener('input', function() {
     if (yt) { e.stopPropagation(); window.open(yt.getAttribute('data-url'),'_blank'); }
   });
 
+  window._searchResults = matches;
+  window._searchLabel = q;
+  document.getElementById('dl-search-csv').style.display = matches.length ? '' : 'none';
+
   window._srGoPage = function(page) {
     currentPage = page;
     renderPage(page);
@@ -783,6 +799,28 @@ function showGrid() {
 function titleCase(str) { return str.replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
 
 document.getElementById('back-btn').addEventListener('click', showGrid);
+
+document.getElementById('dl-search-csv').addEventListener('click', function() {
+  var results = window._searchResults || [];
+  var label = (window._searchLabel || 'search').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+  if (!results.length) return;
+  var rows = ['"Spotify URI","Track Name","Artist","Album","First Listen","Plays"'];
+  results.forEach(function(entry) {
+    var t = entry.track;
+    function q(s){ return '"' + String(s).replace(/"/g,'""') + '"'; }
+    rows.push([q(t.uri), q(t.title), q(t.artist), q(t.album), q(t.dateStr), t.plays].join(','));
+  });
+  var csv = rows.join('\n');
+  var blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'strata-search-' + label + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
 
 document.getElementById('dl-csv').addEventListener('click', function() {
   var name = document.getElementById('pl-name').textContent;
@@ -845,7 +883,7 @@ function openPlaylist(tier, idx) {
     var yt  = 'https://youtube.com/results?search_query='+t.ytQ;
     var uid = escAttr(t.uri);
 
-    html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'">';
+    html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'">';
     html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
     html += '<img class="art" src="" alt="" data-sp="'+escAttr(sp)+'">';
     html += '<div class="ti">';
@@ -932,6 +970,10 @@ function openPlaylist(tier, idx) {
           if (img) img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
           if (tc && match.releaseDate) {
             var rd = match.releaseDate.substring(0,10);
+            // Reject release dates after the listen date — iTunes placeholder dates (e.g. 2020-12-31)
+            if (rd > track.dateStr) {
+              return tryMusicBrainz();
+            }
             if (!applyReleaseDate(rd)) tryMusicBrainz();
           } else { return tryMusicBrainz(); }
         } else { return tryMusicBrainz(); }
@@ -975,7 +1017,7 @@ document.getElementById('search').addEventListener('input', function() {
   var tracks = document.querySelectorAll('#pl-tracks .track');
   var visible = 0;
   tracks.forEach(function(t) {
-    var m = !q || t.getAttribute('data-title').includes(q) || t.getAttribute('data-artist').includes(q);
+    var m = !q || t.getAttribute('data-title').includes(q) || t.getAttribute('data-artist').includes(q) || (t.getAttribute('data-album')||'').includes(q);
     t.style.display = m ? '' : 'none'; if (m) visible++;
   });
   document.querySelectorAll('#pl-tracks .day-hdr').forEach(function(h) {
