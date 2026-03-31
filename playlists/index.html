@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>explore your playlists — Strata</title>
+<title>explore playlists — Strata</title>
 <style>
 @font-face { font-family:'Telegraf'; font-weight:200; font-style:normal; src:url('../Telegraf UltraLight 200.otf') format('opentype'); }
 @font-face { font-family:'Telegraf'; font-weight:400; font-style:normal; src:url('../TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype'); }
@@ -64,6 +64,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .reset-btn { font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-left:auto; transition:color .15s; background:none; border:none; padding:0; }
 .reset-btn:hover { color:var(--amber); }
 .grid-sublabel { font-size:11px; color:var(--muted); opacity:0.5; font-weight:400; letter-spacing:.03em; margin-top:8px; }
+.grid-explainer { font-size:11px; color:var(--muted); opacity:0.6; line-height:1.6; margin-top:8px; font-weight:400; }
 .title-divider { color:var(--text); opacity:1; font-weight:200; }
 .title-sub { color:var(--accent2); font-weight:300; }
 
@@ -155,8 +156,8 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="upload-view">
   <div class="upload-head">
     <div class="eyebrow">Strata</div>
-    <div class="upload-title">explore your playlists <span class="title-divider">|</span> <span class="title-sub">organized by the date you first listened</span></div>
-    <div class="upload-sub">Upload your Spotify Extended Streaming History to build your playlists.<br>All processing happens locally — nothing leaves your browser.</div>
+    <div class="upload-title">explore playlists</div>
+    <div class="upload-sub">Upload your Spotify Extended Streaming History to build playlists organized by the date you first listened to each song. All processing happens locally in your browser, nothing is uploaded anywhere.<br><br><a href="https://support.spotify.com/us/article/understanding-my-data/" target="_blank" style="color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(122,158,138,0.4); font-size:12px; letter-spacing:.03em;">How to request your Extended Streaming History from Spotify →</a></div>
   </div>
   <div class="drop-zone" id="drop-zone">
     <div class="drop-arrow">↑</div>
@@ -177,8 +178,9 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="grid-view">
   <div class="grid-head">
     <div class="grid-eyebrow">Strata</div>
-    <div class="grid-title">explore your playlists <span class="title-divider">|</span> <span class="title-sub">organized by the date you first listened</span></div>
+    <div class="grid-title">explore playlists</div>
     <div class="grid-meta" id="grid-meta"></div>
+    <div class="grid-explainer">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it. Play counts reflect listens over 1 minute.</div>
     <div class="bday-row">
       <span class="bday-label">Your Birthday</span>
       <input class="bday-input" type="date" id="bday-input">
@@ -206,6 +208,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     <div class="pl-eyebrow" id="pl-eyebrow">Strata</div>
     <div class="pl-name" id="pl-name"></div>
     <div class="pl-meta" id="pl-meta"></div>
+    <div class="grid-explainer" id="pl-explainer"></div>
     <div class="search-bar"><input type="text" id="search" placeholder="search songs or artists…"></div>
   </div>
   <div class="pl-actions">
@@ -249,6 +252,26 @@ var MONTH_ORDER   = MONTH_NAMES.map(function(m){ return m.split('').join(' '); }
 var SEASON_ORDER  = ['S P R I N G','S U M M E R','F A L L','W I N T E R'];
 var PHASE_MONTH   = ['january','february','march','april','may','june','july','august','september','october','november','december'];
 var ROMAN         = {'I':1,'II':2,'III':3};
+
+// Open Spotify in app if installed, fall back to web player
+function openSpotify(uri) {
+  var trackId = uri.replace('spotify:track:', '');
+  var appUrl = uri; // spotify:track:XXXX — opens desktop/mobile app
+  var webUrl = 'https://open.spotify.com/track/' + trackId;
+  // Try app URI first; if page stays visible after 800ms, open web fallback
+  var hidden = false;
+  var fallback = setTimeout(function() {
+    if (!hidden) window.open(webUrl, '_blank');
+  }, 800);
+  document.addEventListener('visibilitychange', function onVis() {
+    if (document.hidden) {
+      hidden = true;
+      clearTimeout(fallback);
+      document.removeEventListener('visibilitychange', onVis);
+    }
+  });
+  window.location = appUrl;
+}
 
 var SP_SVG = '<svg class="icon-btn sp-icon" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>';
 var YT_SVG  = '<svg class="icon-btn yt-icon" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg>';
@@ -302,7 +325,7 @@ function calcAgeText(birthday, releaseDate, listenDateStr) {
   var ageAtListen = lYear - bYear;
   if (lMonth < bMonth || (lMonth === bMonth && lDay < bDayNum)) ageAtListen--;
 
-  if (!releaseDate) return 'Your first listen was at age ' + ageAtListen + '.';
+  if (!releaseDate) return 'You were ' + ageAtListen + ' when you first played this.';
 
   var relFull  = new Date(releaseDate.length === 4 ? releaseDate + '-01-01' : releaseDate + (releaseDate.length === 7 ? '-01' : ''));
   var relYear  = relFull.getFullYear();
@@ -323,17 +346,17 @@ function calcAgeText(birthday, releaseDate, listenDateStr) {
     return Math.round(m/12) + ' years later';
   }
   function closeStr(days, months) {
-    if (days === 0) return 'When you were ' + ageAtListen + ', you first listened to this song the same day it was released.';
-    if (days < 30)  return 'When you were ' + ageAtListen + ', you first listened to this song ' + days + ' day' + (days===1?'':'s') + ' after it was released.';
-    return 'When you were ' + ageAtListen + ', you first listened to this song ' + timeStr(months) + '.';
+    if (days === 0) return 'When you were ' + ageAtListen + ', you played this the same day it came out.';
+    if (days < 30)  return 'When you were ' + ageAtListen + ', you played this ' + days + ' day' + (days===1?'':'s') + ' after it came out.';
+    return 'When you were ' + ageAtListen + ', you played this ' + timeStr(months) + '.';
   }
 
   if (ageAtRelease < 0) {
     var ybb = Math.abs(ageAtRelease), yal = lYear - relYear;
-    return 'This song was released ' + ybb + ' year' + (ybb===1?'':'s') + ' before you were born. Your first listen was ' + yal + ' years after its release at age ' + ageAtListen + '.';
+    return 'This came out ' + ybb + ' year' + (ybb===1?'':'s') + ' before you were born. You played it ' + yal + ' years later at ' + ageAtListen + '.';
   }
   if (totalMonths < 24) return closeStr(daysDiff, totalMonths);
-  return 'You were ' + ageAtRelease + ' when this song was released. Your first listen was ' + timeStr(totalMonths) + ' at age ' + ageAtListen + '.';
+  return 'You were ' + ageAtRelease + ' when this came out. You played it ' + timeStr(totalMonths) + ' at ' + ageAtListen + '.';
 }
 
 // ── PARSER ───────────────────────────────────────────────────────────────────
@@ -654,9 +677,6 @@ document.getElementById('grid-search').addEventListener('input', function() {
         dayMatches.push(entry);
       }
     });
-    // Sort oldest first
-    dayMatches.sort(function(a, b) { return a.track.ts < b.track.ts ? -1 : 1; });
-
     if (!dayMatches.length) {
       listEl.innerHTML = '';
       noneEl.style.display = 'block';
@@ -665,47 +685,67 @@ document.getElementById('grid-search').addEventListener('input', function() {
     noneEl.style.display = 'none';
 
     var tierOrder = { phase:0, month:1, season:2, year:3 };
-    // Group by year
+    var dateLabel = MO_FULL[dateQ.month-1] + ' ' + dateQ.day;
+
+    function buildDayRow(entry) {
+      var t = entry.track;
+      var ytUrl = 'https://youtube.com/results?search_query='+t.ytQ;
+      var sorted = entry.placements.slice().sort(function(a,b){ return tierOrder[a.tier]-tierOrder[b.tier]; });
+      var tags = sorted.map(function(p) {
+        return '<span class="sr-tag" onclick="openPlaylist(\'' + p.tier + '\',' + p.plIdx + ')">'+escHtml(p.plLabel)+'</span>';
+      }).join('');
+      var row = '<div class="sr-row">';
+      row += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
+      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'</div><div class="sr-artist">'+escHtml(t.artist)+'</div><div class="sr-placements">'+tags+'</div></div>';
+      row += '<div class="sr-right"><div class="sr-icons-plays">'
+        + '<svg class="icon-btn sp-icon" data-url="'+escAttr(t.uri)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
+        + '<svg class="icon-btn yt-icon" data-url="'+escAttr(ytUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg>'
+        + '</div></div>';
+      row += '</div>';
+      return row;
+    }
+
+    var html = '';
+
+    // ── SECTION 1: Top 15 by play count ──────────────────────────────────────
+    var top15 = dayMatches.slice().sort(function(a,b){ return b.track.plays - a.track.plays; }).slice(0, 15);
+    // Only show top 15 section if there are songs with more than 1 play, or if there are enough songs
+    if (dayMatches.length >= 2) {
+      html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;">Most played · ' + dateLabel + '</div>';
+      top15.forEach(function(entry) { html += buildDayRow(entry); });
+    }
+
+    // ── SECTION 2: All songs chronological, grouped by year ───────────────────
+    var chronoLabel = dayMatches.length >= 2 ? 'All songs · ' + dateLabel + ' · chronological' : dateLabel;
+    html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:24px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;">' + chronoLabel + '</div>';
+
+    // Sort chronologically and group by year
+    var chronoMatches = dayMatches.slice().sort(function(a,b){ return a.track.ts < b.track.ts ? -1 : 1; });
     var byYear = {};
-    dayMatches.forEach(function(entry) {
+    chronoMatches.forEach(function(entry) {
       var yr = entry.track.dateStr.substring(0,4);
       (byYear[yr] = byYear[yr] || []).push(entry);
     });
-
-    var html = '';
     Object.keys(byYear).sort().forEach(function(yr) {
-      html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);">'+yr+'</div>';
-      byYear[yr].forEach(function(entry) {
-        var t = entry.track;
-        var spUrl = 'https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist);
-        var ytUrl = 'https://youtube.com/results?search_query='+t.ytQ;
-        var sorted = entry.placements.slice().sort(function(a,b){ return tierOrder[a.tier]-tierOrder[b.tier]; });
-        var tags = sorted.map(function(p) {
-          return '<span class="sr-tag" onclick="openPlaylist(\'' + p.tier + '\',' + p.plIdx + ')">'+escHtml(p.plLabel)+'</span>';
-        }).join('');
-        html += '<div class="sr-row">';
-        html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
-        html += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'</div><div class="sr-artist">'+escHtml(t.artist)+'</div><div class="sr-placements">'+tags+'</div></div>';
-        html += '<div class="sr-right"><div class="sr-icons-plays">'
-          + '<svg class="icon-btn sp-icon" data-url="'+escAttr(spUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
-          + '<svg class="icon-btn yt-icon" data-url="'+escAttr(ytUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg>'
-          + '</div></div>';
-        html += '</div>';
-      });
+      html += '<div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:12px 0 6px;">'+yr+'</div>';
+      byYear[yr].forEach(function(entry) { html += buildDayRow(entry); });
     });
-    html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+MO_FULL[dateQ.month-1]+' '+dateQ.day+'</div>';
+
+    html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+dateLabel+'</div>';
     listEl.innerHTML = html;
-    window._searchResults = dayMatches;
-    window._searchLabel = MO_FULL[dateQ.month-1] + ' ' + dateQ.day;
+    window._searchResults = chronoMatches;
+    window._searchLabel = dateLabel;
     document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
     return;
   }
 
-  // Normal song/artist search
+  // Normal song/artist/album search — split into words so "calvin harris summer" works
+  var words = q.split(/\s+/).filter(function(w){ return w.length > 0; });
   var matches = [];
   Object.values(index).forEach(function(entry) {
     var t = entry.track;
-    if (t.title.toLowerCase().indexOf(q) !== -1 || t.artist.toLowerCase().indexOf(q) !== -1 || (t.album||'').toLowerCase().indexOf(q) !== -1) {
+    var haystack = (t.title + ' ' + t.artist + ' ' + (t.album||'')).toLowerCase();
+    if (words.every(function(w){ return haystack.indexOf(w) !== -1; })) {
       matches.push(entry);
     }
   });
@@ -746,7 +786,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       html += '<div class="sr-placements">'+tags+'</div>';
       html += '</div>';
       html += '<div class="sr-right"><div class="sr-icons-plays">'
-        + '<svg class="icon-btn sp-icon" data-url="'+escAttr(spUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
+        + '<svg class="icon-btn sp-icon" data-url="'+escAttr(t.uri)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
         + '<svg class="icon-btn yt-icon" data-url="'+escAttr(ytUrl)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg>'
         + '</div></div>';
       html += '</div>';
@@ -772,7 +812,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   listEl.addEventListener('click', function(e) {
     var sp = e.target.closest('.sp-icon');
     var yt = e.target.closest('.yt-icon');
-    if (sp) { e.stopPropagation(); window.open(sp.getAttribute('data-url'),'_blank'); }
+    if (sp) { e.stopPropagation(); openSpotify(sp.getAttribute('data-url')); }
     if (yt) { e.stopPropagation(); window.open(yt.getAttribute('data-url'),'_blank'); }
   });
 
@@ -864,6 +904,7 @@ function openPlaylist(tier, idx) {
   document.getElementById('pl-eyebrow').textContent = 'Strata · ' + tierLabel;
   document.getElementById('pl-name').textContent    = pl.label;
   document.getElementById('pl-meta').textContent    = pl.count.toLocaleString()+' song'+(pl.count===1?'':'s')+' · play counts = listens over 1 minute';
+  document.getElementById('pl-explainer').textContent = 'Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it. Play counts reflect listens over 1 minute.';
   document.getElementById('search').value = '';
   document.getElementById('no-results').style.display = 'none';
 
@@ -883,7 +924,7 @@ function openPlaylist(tier, idx) {
     var yt  = 'https://youtube.com/results?search_query='+t.ytQ;
     var uid = escAttr(t.uri);
 
-    html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'">';
+    html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'" data-uri="'+escAttr(t.uri)+'">';
     html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
     html += '<img class="art" src="" alt="" data-sp="'+escAttr(sp)+'">';
     html += '<div class="ti">';
@@ -901,11 +942,12 @@ function openPlaylist(tier, idx) {
   // Wire icon clicks
   document.querySelectorAll('#pl-tracks .track').forEach(function(el) {
     var icons = el.querySelector('.icons');
-    var sp = icons.getAttribute('data-sp'), yt = icons.getAttribute('data-yt');
+    var uri = el.getAttribute('data-uri');
+    var yt = icons.getAttribute('data-yt');
     var art = el.querySelector('.art');
-    el.querySelector('.sp-icon').addEventListener('click', function(e){ e.stopPropagation(); window.open(sp,'_blank'); });
+    el.querySelector('.sp-icon').addEventListener('click', function(e){ e.stopPropagation(); openSpotify(uri); });
     el.querySelector('.yt-icon').addEventListener('click', function(e){ e.stopPropagation(); window.open(yt,'_blank'); });
-    art.addEventListener('click', function(e){ e.stopPropagation(); window.open(sp,'_blank'); });
+    art.addEventListener('click', function(e){ e.stopPropagation(); openSpotify(uri); });
   });
 
   // iTunes batch fetch — art + release date → age text
@@ -990,25 +1032,37 @@ function openPlaylist(tier, idx) {
 
   function setFallbackAge(tc, dateStr) {
     tc.setAttribute('data-ry',''); tc.setAttribute('data-rm',''); tc.setAttribute('data-rd','');
-    tc.textContent = 'Your first listen was at age ' + ageAtDate(dateStr) + '.';
+    tc.textContent = 'You were ' + ageAtDate(dateStr) + ' when you first played this.';
   }
 
   // Scale batch size to playlist length — bigger playlists get larger batches
-  var BATCH = pl.tracks.length > 500 ? 10 : pl.tracks.length > 100 ? 8 : 5;
-  var DELAY = pl.tracks.length > 500 ? 150 : 200;
+  var BATCH = pl.tracks.length > 500 ? 8 : pl.tracks.length > 100 ? 6 : 4;
+  var DELAY = pl.tracks.length > 500 ? 200 : 250;
+
+  // Cancel any previous batch still running
+  window._batchId = (window._batchId || 0) + 1;
+  var myBatchId = window._batchId;
 
   function doBatch(start) {
+    // Stop if a new playlist was opened
+    if (window._batchId !== myBatchId) return;
     var slice = els.slice(start, start+BATCH); if (!slice.length) return;
     var promises = slice.map(function(el,j){
       return fetchOne(el, pl.tracks[start+j]).catch(function(){});
     });
     Promise.all(promises).then(function(){
+      if (window._batchId !== myBatchId) return;
       setTimeout(function(){ doBatch(start+BATCH); }, DELAY);
     }).catch(function(){
+      if (window._batchId !== myBatchId) return;
       setTimeout(function(){ doBatch(start+BATCH); }, DELAY);
     });
   }
-  doBatch(0);
+
+  // Small initial delay so iTunes recovers if switching playlists quickly
+  var startDelay = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 2000 ? 800 : 0;
+  setTimeout(function(){ doBatch(0); }, startDelay);
+  window._lastBatchEnd = Date.now();
 }
 
 // ── SEARCH ───────────────────────────────────────────────────────────────────
@@ -1017,7 +1071,9 @@ document.getElementById('search').addEventListener('input', function() {
   var tracks = document.querySelectorAll('#pl-tracks .track');
   var visible = 0;
   tracks.forEach(function(t) {
-    var m = !q || t.getAttribute('data-title').includes(q) || t.getAttribute('data-artist').includes(q) || (t.getAttribute('data-album')||'').includes(q);
+    var pWords = q.split(/\s+/).filter(function(w){ return w.length > 0; });
+    var haystack = ((t.getAttribute('data-title')||'') + ' ' + (t.getAttribute('data-artist')||'') + ' ' + (t.getAttribute('data-album')||''));
+    var m = !q || pWords.every(function(w){ return haystack.includes(w); });
     t.style.display = m ? '' : 'none'; if (m) visible++;
   });
   document.querySelectorAll('#pl-tracks .day-hdr').forEach(function(h) {
@@ -1040,9 +1096,9 @@ bdayInput.addEventListener('change', function() {
     if (!listen) return;
     if (rd) {
       var text = calcAgeText(BIRTHDAY, rd, listen);
-      tc.textContent = text || ('Your first listen was at age ' + ageAtDate2(listen) + '.');
+      tc.textContent = text || ('You were ' + ageAtDate2(listen) + ' when you first played this.');
     } else {
-      tc.textContent = 'Your first listen was at age ' + ageAtDate2(listen) + '.';
+      tc.textContent = 'You were ' + ageAtDate2(listen) + ' when you first played this.';
     }
   });
 });
