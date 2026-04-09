@@ -1169,6 +1169,7 @@ function openPlaylist(tier, idx) {
       html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
       html += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
+      html += '<div class="tn">#'+(i+1)+'</div>';
       html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
       html += '</div>';
     });
