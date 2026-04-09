@@ -122,7 +122,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .dl-btn { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid rgba(200,169,110,0.2); border-radius:2px; padding:6px 12px; font-family:'Telegraf',sans-serif; cursor:pointer; transition:all .15s; }
 .dl-btn:hover { border-color:rgba(200,169,110,0.5); color:var(--gold); }
 .dl-hint { font-size:11px; color:var(--muted); opacity:0.6; }
-.day-hdr { font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--text); font-weight:400; padding:32px 0 4px; border-bottom:1px solid rgba(200,169,110,0.08); text-align:center; }
+.day-hdr { font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--text); font-weight:400; padding:32px 0 12px; border-bottom:1px solid rgba(200,169,110,0.08); text-align:center; }
 .day-hdr.bday-day { color:var(--green); }
 .track { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.035); }
 .track:hover { background:rgba(200,169,110,0.04); margin:0 -12px; padding:14px 12px; }
@@ -230,7 +230,10 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     <div class="search-bar"><input type="text" id="search" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)"></div>
   </div>
   <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-bottom:10px; border-bottom:1px solid var(--border);">
-    <button class="back-btn" id="back-btn" style="margin-bottom:0;">← all playlists</button>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="back-btn" id="back-btn" style="margin-bottom:0;">← all playlists</button>
+      <button class="dl-btn" id="pl-sort-btn" title="reverse order">↑↓</button>
+    </div>
     <div style="display:flex; gap:8px;">
       <button class="dl-btn" id="dl-csv-plays">↓ CSV (most played)</button>
       <button class="dl-btn" id="dl-csv">↓ CSV (chronological)</button>
@@ -1126,48 +1129,68 @@ function openPlaylist(tier, idx) {
   document.getElementById('no-results').style.display = 'none';
 
   var bd = getBdayParts();
-  var html = '', lastDate = '';
+  window._plReversed = false;
 
-  pl.tracks.forEach(function(t, i) {
-    var d = new Date(t.dateStr + 'T12:00:00');
-    var isBday = (d.getMonth()+1 === bd.month && d.getDate() === bd.day);
+  function renderPlaylistTracks() {
+    var sorted = window._plReversed ? pl.tracks.slice().reverse() : pl.tracks.slice();
+    var html = '', lastDate = '';
+    sorted.forEach(function(t, i) {
+      var d = new Date(t.dateStr + 'T12:00:00');
+      var isBday = (d.getMonth()+1 === bd.month && d.getDate() === bd.day);
+      if (t.date !== lastDate) {
+        html += '<div class="day-hdr'+(isBday?' bday-day':'')+'">'+t.date+(isBday?' · your birthday 🎂':'')+'</div>';
+        lastDate = t.date;
+      }
+      var sp  = 'https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist);
+      var yt  = 'https://youtube.com/results?search_query='+t.ytQ;
+      html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'" data-date="'+escAttr(t.date.toLowerCase())+'" data-datestr="'+escAttr(t.dateStr)+'" data-uri="'+escAttr(t.uri)+'">';
+      html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
+      html += '<div class="art-wrap"><img class="art" src="" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;" onerror="if(this.src)this.style.display=\'none\'"><span class="art-placeholder">loading...</span></div>';
+      html += '<div class="ti">';
+      html += '<div class="tt">'+escHtml(t.title)+'</div>';
+      html += '<div class="ta">'+escHtml(t.artist)+'</div>';
+      html += '<div class="tc" data-listen="'+t.dateStr+'">…</div>';
+      html += '</div>';
+      html += '<div class="tn">#'+(i+1)+'</div>';
+      html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
+      html += '</div>';
+    });
+    document.getElementById('pl-tracks').innerHTML = html;
+  }
 
-    if (t.date !== lastDate) {
-      html += '<div class="day-hdr'+(isBday?' bday-day':'')+'">'+t.date+(isBday?' · your birthday 🎂':'')+'</div>';
-      lastDate = t.date;
-    }
+  function wireAndFetch() {
+    // Wire icon clicks
+    document.querySelectorAll('#pl-tracks .track').forEach(function(el) {
+      var icons = el.querySelector('.icons');
+      var uri = el.getAttribute('data-uri');
+      var yt = icons.getAttribute('data-yt');
+      var art = el.querySelector('.art');
+      el.querySelector('.sp-icon').addEventListener('click', function(e){ e.stopPropagation(); openSpotify(uri); });
+      el.querySelector('.yt-icon').addEventListener('click', function(e){ e.stopPropagation(); window.open(yt,'_blank'); });
+      art.addEventListener('click', function(e){ e.stopPropagation(); openSpotify(uri); });
+    });
+    // Reset iTunes batch
+    window._batchId = (window._batchId || 0) + 1;
+    myBatchId = window._batchId;
+    els = Array.from(document.querySelectorAll('#pl-tracks .track'));
+    var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 2000 ? 800 : 0;
+    setTimeout(function(){ doBatch(0); }, startDelay2);
+    window._lastBatchEnd = Date.now();
+  }
 
-    var sp  = 'https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist);
-    var yt  = 'https://youtube.com/results?search_query='+t.ytQ;
-    var uid = escAttr(t.uri);
+  renderPlaylistTracks();
 
-    html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'" data-uri="'+escAttr(t.uri)+'">';
-    html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
-    html += '<div class="art-wrap"><img class="art" src="" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;" onerror="if(this.src)this.style.display=\'none\'"><span class="art-placeholder">loading...</span></div>';
-    html += '<div class="ti">';
-    var plYr = parseInt(t.dateStr.substring(0,4));
-    var plDiff = new Date().getFullYear() - plYr;
-    html += '<div class="tt">'+escHtml(t.title)+'</div>';
-    html += '<div class="ta">'+escHtml(t.artist)+'</div>';
-    html += '<div class="tc" data-listen="'+t.dateStr+'">…</div>';
-    html += '</div>';
-    html += '<div class="tn">#'+(i+1)+'</div>';
-    html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
-    html += '</div>';
-  });
+  // Initial wire + fetch
+  wireAndFetch();
 
-  document.getElementById('pl-tracks').innerHTML = html;
-
-  // Wire icon clicks
-  document.querySelectorAll('#pl-tracks .track').forEach(function(el) {
-    var icons = el.querySelector('.icons');
-    var uri = el.getAttribute('data-uri');
-    var yt = icons.getAttribute('data-yt');
-    var art = el.querySelector('.art');
-    el.querySelector('.sp-icon').addEventListener('click', function(e){ e.stopPropagation(); openSpotify(uri); });
-    el.querySelector('.yt-icon').addEventListener('click', function(e){ e.stopPropagation(); window.open(yt,'_blank'); });
-    art.addEventListener('click', function(e){ e.stopPropagation(); openSpotify(uri); });
-  });
+  // Wire sort toggle
+  document.getElementById('pl-sort-btn').onclick = function() {
+    window._plReversed = !window._plReversed;
+    document.getElementById('search').value = '';
+    document.getElementById('no-results').style.display = 'none';
+    renderPlaylistTracks();
+    wireAndFetch();
+  };
 
   // iTunes batch fetch — art + release date → age text
   var els = Array.from(document.querySelectorAll('#pl-tracks .track'));
@@ -1258,16 +1281,18 @@ function openPlaylist(tier, idx) {
   var BATCH = pl.tracks.length > 500 ? 8 : pl.tracks.length > 100 ? 6 : 4;
   var DELAY = pl.tracks.length > 500 ? 200 : 250;
 
-  // Cancel any previous batch still running
-  window._batchId = (window._batchId || 0) + 1;
   var myBatchId = window._batchId;
 
+  function getSortedTracks() {
+    return window._plReversed ? pl.tracks.slice().reverse() : pl.tracks.slice();
+  }
+
   function doBatch(start) {
-    // Stop if a new playlist was opened
     if (window._batchId !== myBatchId) return;
+    var sorted = getSortedTracks();
     var slice = els.slice(start, start+BATCH); if (!slice.length) return;
     var promises = slice.map(function(el,j){
-      return fetchOne(el, pl.tracks[start+j]).catch(function(){});
+      return fetchOne(el, sorted[start+j]).catch(function(){});
     });
     Promise.all(promises).then(function(){
       if (window._batchId !== myBatchId) return;
@@ -1278,10 +1303,7 @@ function openPlaylist(tier, idx) {
     });
   }
 
-  // Small initial delay so iTunes recovers if switching playlists quickly
-  var startDelay = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 2000 ? 800 : 0;
-  setTimeout(function(){ doBatch(0); }, startDelay);
-  window._lastBatchEnd = Date.now();
+  // Initial fetch kicked off by wireAndFetch below
 }
 
 // ── SEARCH ───────────────────────────────────────────────────────────────────
@@ -1289,10 +1311,28 @@ document.getElementById('search').addEventListener('input', function() {
   var q = this.value.toLowerCase().trim();
   var tracks = document.querySelectorAll('#pl-tracks .track');
   var visible = 0;
+
+  // Check if query is a date
+  var dateQ = parseDateQuery(q);
+
   tracks.forEach(function(t) {
-    var pWords = q.split(/\s+/).filter(function(w){ return w.length > 0; });
-    var haystack = ((t.getAttribute('data-title')||'') + ' ' + (t.getAttribute('data-artist')||'') + ' ' + (t.getAttribute('data-album')||''));
-    var m = !q || pWords.every(function(w){ return haystack.includes(w); });
+    var m;
+    if (!q) {
+      m = true;
+    } else if (dateQ) {
+      // Match by month+day across any year
+      var ds = t.getAttribute('data-datestr') || '';
+      if (ds) {
+        var d = new Date(ds + 'T12:00:00');
+        m = (d.getMonth()+1 === dateQ.month && d.getDate() === dateQ.day);
+      } else {
+        m = false;
+      }
+    } else {
+      var pWords = q.split(/\s+/).filter(function(w){ return w.length > 0; });
+      var haystack = ((t.getAttribute('data-title')||'') + ' ' + (t.getAttribute('data-artist')||'') + ' ' + (t.getAttribute('data-album')||'') + ' ' + (t.getAttribute('data-date')||''));
+      m = pWords.every(function(w){ return haystack.includes(w); });
+    }
     t.style.display = m ? '' : 'none'; if (m) visible++;
   });
   document.querySelectorAll('#pl-tracks .day-hdr').forEach(function(h) {
