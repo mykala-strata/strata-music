@@ -804,7 +804,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+(diff)+' yr'+(diff===1?'':'s')+' ago</span>'+(ageNum!==''?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 4px 1px 6px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       row += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       row += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr('https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist))+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
-      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;"><span style="display:inline-block;width:1px;height:12px;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 6px 0;"></span>First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
+      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 6px;flex-shrink:0;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
       if (rowNum !== undefined) row += '<div class="tn">#'+rowNum+'</div>';
       row += '<div class="sr-right"><div class="sr-icons-plays">'
         + '<svg class="icon-btn sp-icon" data-url="'+escAttr(t.uri)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
@@ -942,8 +942,8 @@ document.getElementById('grid-search').addEventListener('input', function() {
       html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(spUrl)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="sr-info">';
-      html += '<div class="sr-title" style="display:flex;align-items:baseline;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:45%;">'+escHtml(t.title)+'</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;"><span style="display:inline-block;width:1px;height:12px;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 6px 0;"></span>First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+t.date+'</span></div>';
-      html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
+      html += '<div class="sr-title" style="display:flex;align-items:baseline;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:45%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 6px;flex-shrink:0;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+t.date+'</span></div>';
+      html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
       html += '<div class="sr-placements">'+tags+'</div>';
       html += '</div>';
       html += '<div class="tn">#'+(i+1)+'</div>';
@@ -1152,7 +1152,7 @@ function openPlaylist(tier, idx) {
     }
     h += '<div class="ti">';
     h += '<div class="tt"><span>'+escHtml(t.title)+'</span><span class="tt-reldate"></span></div>';
-    h += '<div class="ta" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
+    h += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
     h += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
     h += '</div>';
     h += '<div class="tn">#'+(i+1)+'</div>';
@@ -1264,14 +1264,11 @@ function openPlaylist(tier, idx) {
     if (searchEl.value.trim()) {
       // Re-sort existing search results
       if (window._plSearchMatches) {
-        var mp2 = window._plSearchMatches.filter(function(t){ return t.plays >= 2; });
-        var sp2 = window._plSearchMatches.filter(function(t){ return t.plays < 2; });
-        function reSort(arr) {
-          if (window._plMode === 'plays') arr.sort(function(a,b){ return b.plays - a.plays; });
-          else arr.sort(function(a,b){ return a.ts < b.ts ? -1 : 1; });
+        if (window._plMode === 'plays') {
+          window._plSearchMatches.sort(function(a,b){ return b.plays - a.plays; });
+        } else {
+          window._plSearchMatches.sort(function(a,b){ return a.ts < b.ts ? -1 : 1; });
         }
-        reSort(mp2); reSort(sp2);
-        window._plSearchMatches = mp2.concat(sp2);
       }
       searchEl.dispatchEvent(new Event('input'));
     } else {
@@ -1288,13 +1285,7 @@ function openPlaylist(tier, idx) {
     if (searchEl.value.trim()) {
       // Re-sort existing search results chronologically reversed
       if (window._plSearchMatches) {
-        var mp3 = window._plSearchMatches.filter(function(t){ return t.plays >= 2; });
-        var sp3 = window._plSearchMatches.filter(function(t){ return t.plays < 2; });
-        function reSort2(arr) {
-          arr.sort(function(a,b){ return window._plReversed ? (a.ts < b.ts ? 1 : -1) : (a.ts < b.ts ? -1 : 1); });
-        }
-        reSort2(mp3); reSort2(sp3);
-        window._plSearchMatches = mp3.concat(sp3);
+        window._plSearchMatches.sort(function(a,b){ return window._plReversed ? (a.ts < b.ts ? 1 : -1) : (a.ts < b.ts ? -1 : 1); });
       }
       searchEl.dispatchEvent(new Event('input'));
     } else {
@@ -1321,7 +1312,7 @@ function openPlaylist(tier, idx) {
         var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
         var relD = new Date(rd + 'T12:00:00');
         var relStr = MO_FULL[relD.getMonth()] + ' ' + relD.getDate() + ', ' + relD.getFullYear();
-        relSpan.innerHTML = '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;"><span style="display:inline-block;width:1px;height:12px;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 6px 0;"></span>Released on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;"> '+relStr+'</span>';
+        relSpan.innerHTML = '<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 6px;flex-shrink:0;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;"> '+relStr+'</span>';
       }
       var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
       if (ageText) { tc.textContent = ageText; return true; }
@@ -1474,25 +1465,13 @@ document.getElementById('search').addEventListener('input', function() {
   document.getElementById('no-results').style.display = matches.length ? 'none' : 'block';
   if (!matches.length) { document.getElementById('pl-tracks').innerHTML = ''; return; }
 
-  // Sort: 2+ plays first (sorted by current mode), then 1-play tracks after
-  var multiPlay = matches.filter(function(t){ return t.plays >= 2; });
-  var singlePlay = matches.filter(function(t){ return t.plays < 2; });
-
-  function sortGroup(arr) {
-    if (window._plMode === 'plays') {
-      arr.sort(function(a,b){ return b.plays - a.plays; });
-    } else {
-      arr.sort(function(a,b){ return window._plReversed ? (a.ts < b.ts ? 1 : -1) : (a.ts < b.ts ? -1 : 1); });
-    }
-    return arr;
+  // Sort based on current mode
+  if (window._plMode === 'plays') {
+    matches.sort(function(a,b){ return b.plays - a.plays; });
+  } else {
+    matches.sort(function(a,b){ return window._plReversed ? (a.ts < b.ts ? 1 : -1) : (a.ts < b.ts ? -1 : 1); });
   }
-
-  sortGroup(multiPlay);
-  sortGroup(singlePlay);
-
-  // Page 1 = up to 25 from multiPlay; subsequent pages continue multiPlay then singlePlay
-  var orderedMatches = multiPlay.concat(singlePlay);
-  window._plSearchMatches = orderedMatches;
+  window._plSearchMatches = matches;
 
   function renderSearchPage(page) {
     var PAGE = 25;
@@ -1527,7 +1506,7 @@ document.getElementById('search').addEventListener('input', function() {
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="ti">';
       html += '<div class="tt">'+escHtml(t.title)+'<span class="tt-reldate"></span></div>';
-      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
+      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
       html += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
       html += '<div class="tn">#'+(start+i+1)+'</div>';
