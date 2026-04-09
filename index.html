@@ -711,6 +711,41 @@ function fetchSearchArt(container) {
   var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]')).slice(0, 25);
   if (!artWraps.length) return;
   var idx = 0;
+  function tryFetch(title, artist, album, img, dateSpan, dateStr, retried) {
+    var q = (!retried && album) ? title+' '+artist+' '+album : title+' '+artist;
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=song&limit=10')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var match = null;
+        if (d.results && d.results.length) {
+          for (var i = 0; i < d.results.length; i++) {
+            var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
+            var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
+            if (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1) { match = d.results[i]; break; }
+          }
+        }
+        if (!match && !retried && album) {
+          // Retry without album
+          setTimeout(function(){ tryFetch(title, artist, '', img, dateSpan, dateStr, true); }, 400);
+          return;
+        }
+        if (match && img && match.artworkUrl100) {
+          img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
+          img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
+        }
+        if (match && match.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
+          var rd = match.releaseDate.substring(0,10);
+          if (rd <= dateStr && rd.substring(5) !== '01-01') {
+            var gapText = calcGapText(rd, dateStr);
+            if (gapText) {
+              dateSpan.setAttribute('data-gap-set', '1');
+              dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
+            }
+          }
+        }
+        setTimeout(fetchNext, 600);
+      }).catch(function(){ setTimeout(fetchNext, 600); });
+  }
   function fetchNext() {
     if (idx >= artWraps.length) return;
     var wrap = artWraps[idx++];
@@ -719,39 +754,10 @@ function fetchSearchArt(container) {
     var title  = wrap.getAttribute('data-title');
     var artist = wrap.getAttribute('data-artist');
     var album  = wrap.getAttribute('data-album') || '';
-    var itunesQ = album ? title+' '+artist+' '+album : title+' '+artist;
-    // Find date span for appending gap text
     var row = wrap.closest('.sr-row') || wrap.closest('.track');
     var dateSpan = row ? row.querySelector('.sr-listen-date') : null;
     var dateStr = dateSpan ? dateSpan.getAttribute('data-listen') : null;
-    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(itunesQ)+'&entity=song&limit=5')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if (d.results && d.results.length) {
-          var match = null;
-          for (var i = 0; i < d.results.length; i++) {
-            var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
-            var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
-            if (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1) { match = d.results[i]; break; }
-          }
-          // No fallback to wrong artist — only use confirmed matches
-          if (match && match.artworkUrl100) {
-            img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
-            img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
-          }
-          if (match && match.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
-            var rd = match.releaseDate.substring(0,10);
-            if (rd <= dateStr && rd.substring(5) !== '01-01') {
-              var gapText = calcGapText(rd, dateStr);
-              if (gapText) {
-                dateSpan.setAttribute('data-gap-set', '1');
-                dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
-              }
-            }
-          }
-        }
-        setTimeout(fetchNext, 600);
-      }).catch(function(){ setTimeout(fetchNext, 600); });
+    tryFetch(title, artist, album, img, dateSpan, dateStr, false);
   }
   fetchNext();
 }
@@ -841,7 +847,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+(diff)+' yr'+(diff===1?'':'s')+' ago</span>'+(ageNum!==''?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 4px 1px 6px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       row += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       row += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr('https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist))+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
-      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'"> '+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
+      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
       if (rowNum !== undefined) row += '<div class="tn">#'+rowNum+'</div>';
       row += '<div class="sr-right"><div class="sr-icons-plays">'
         + '<svg class="icon-btn sp-icon" data-url="'+escAttr(t.uri)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
@@ -981,7 +987,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(spUrl)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="sr-info">';
-      html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'"> '+t.date+'</span></div>';
+      html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
       html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
       html += '<div class="sr-placements">'+tags+'</div>';
       html += '</div>';
