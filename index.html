@@ -122,7 +122,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .dl-btn { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid rgba(200,169,110,0.2); border-radius:2px; padding:6px 12px; font-family:'Telegraf',sans-serif; cursor:pointer; transition:all .15s; }
 .dl-btn:hover { border-color:rgba(200,169,110,0.5); color:var(--gold); }
 .dl-hint { font-size:11px; color:var(--muted); opacity:0.6; }
-.day-hdr { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); padding:20px 0 10px; border-bottom:1px solid rgba(200,169,110,0.08); }
+.day-hdr { font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--text); font-weight:400; padding:32px 0 4px; border-bottom:1px solid rgba(200,169,110,0.08); text-align:center; }
 .day-hdr.bday-day { color:var(--green); }
 .track { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.035); }
 .track:hover { background:rgba(200,169,110,0.04); margin:0 -12px; padding:14px 12px; }
@@ -887,7 +887,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
 
     html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+dateLabel+'</div>';
     listEl.innerHTML = html;
-    fetchSearchArt(listEl);
+    setTimeout(function(){ fetchSearchArt(listEl); }, 50);
     window._searchResults = chronoMatches;
     window._searchLabel = dateLabel;
     document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
@@ -977,7 +977,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     }
 
     listEl.innerHTML = html;
-    fetchSearchArt(listEl);
+    setTimeout(function(){ fetchSearchArt(listEl); }, 50);
   }
 
   // Icon click delegation for search results
@@ -997,6 +997,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   window._srGoPage = function(page) {
     currentPage = page;
     renderPage(page);
+    setTimeout(function(){ fetchSearchArt(listEl); }, 50);
     document.getElementById('grid-search-results').scrollIntoView({ behavior:'smooth', block:'start' });
   };
 
