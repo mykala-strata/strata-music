@@ -739,7 +739,6 @@ document.getElementById('grid-search').addEventListener('input', function() {
 
   // Cancel any in-progress art fetch immediately on new keystroke
   clearTimeout(window._searchArtTimer);
-  window._searchBatchId = (window._searchBatchId || 0) + 1;
 
   currentPage = 0;
   var belowHead = document.getElementById('below-head');
@@ -1192,7 +1191,7 @@ function openPlaylist(tier, idx) {
     window._batchId = (window._batchId || 0) + 1;
     var thisBatchId = window._batchId;
     els = Array.from(document.querySelectorAll('#pl-tracks .track'));
-    var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 2000 ? 800 : 0;
+    var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 3000 ? 2000 : 0;
     setTimeout(function(){ doBatch(0, thisBatchId); }, startDelay2);
     window._lastBatchEnd = Date.now();
   }
