@@ -1170,6 +1170,7 @@ function openPlaylist(tier, idx) {
     document.getElementById('pl-tracks').innerHTML = html;
   }
 
+  var els = [];
   function wireAndFetch() {
     // Wire icon clicks
     document.querySelectorAll('#pl-tracks .track').forEach(function(el) {
@@ -1218,7 +1219,6 @@ function openPlaylist(tier, idx) {
   };
 
   // iTunes batch fetch — art + release date → age text
-  var els = Array.from(document.querySelectorAll('#pl-tracks .track'));
 
   function fetchOne(el, track) {
     var img = el.querySelector('.art');
