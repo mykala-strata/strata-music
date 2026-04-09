@@ -686,11 +686,11 @@ function parseDateQuery(q) {
 
 // ── SEARCH ART FETCH ─────────────────────────────────────────────────────────
 function fetchSearchArt(container) {
-  var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]'));
+  var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]')).slice(0, 20);
   if (!artWraps.length) return;
   window._searchBatchId = (window._searchBatchId || 0) + 1;
   var myId = window._searchBatchId;
-  var BATCH = 4, DELAY = 250;
+  var BATCH = 2, DELAY = 500;
 
   function doOne(wrap) {
     var img = wrap.querySelector('.art');
@@ -1191,7 +1191,7 @@ function openPlaylist(tier, idx) {
     window._batchId = (window._batchId || 0) + 1;
     var thisBatchId = window._batchId;
     els = Array.from(document.querySelectorAll('#pl-tracks .track'));
-    var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 3000 ? 2000 : 0;
+    var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 5000 ? 3000 : 0;
     setTimeout(function(){ doBatch(0, thisBatchId); }, startDelay2);
     window._lastBatchEnd = Date.now();
   }
@@ -1315,9 +1315,9 @@ function openPlaylist(tier, idx) {
     tc.textContent = '';
   }
 
-  // Scale batch size to playlist length — bigger playlists get larger batches
-  var BATCH = pl.tracks.length > 500 ? 8 : pl.tracks.length > 100 ? 6 : 4;
-  var DELAY = pl.tracks.length > 500 ? 200 : 250;
+  // Conservative batch size to avoid iTunes rate limiting
+  var BATCH = 2;
+  var DELAY = 500;
 
   function getSortedTracks() {
     if (window._plMode === 'plays') return pl.tracks.slice().sort(function(a,b){ return b.plays - a.plays; });
