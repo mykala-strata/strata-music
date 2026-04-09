@@ -19,7 +19,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; min-height:100vh; color-scheme:dark; }
 input[type="date"] { color-scheme:dark; }
-.wrap { max-width:760px; margin:0 auto; padding:48px 28px 96px; }
+.wrap { max-width:1140px; margin:0 auto; padding:48px 28px 96px; }
 
 /* ── UPLOAD ─────────────────────────────────────────────────────── */
 #upload-view { display:block; }
@@ -196,7 +196,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     </div>
   </div>
   <div id="below-head">
-  <div class="grid-explainer" style="padding:10px 0 6px;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.<br><em style="font-weight:200; font-style:italic; font-size:12px;">Play counts reflect listens over 1 minute.</em></div>
+  <div class="grid-explainer" style="padding:10px 0 6px;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.<br><em style="font-weight:200; font-style:italic; font-size:12px;">play counts = listens over 1 minute.</em></div>
   <div class="bday-row" style="padding:6px 0 16px;">
     <span class="bday-label">Your Birthday</span>
     <input class="bday-input" type="date" id="bday-input">
@@ -717,11 +717,13 @@ function fetchSearchArt(container) {
     if (!img) { setTimeout(fetchNext, 100); return; }
     var title  = wrap.getAttribute('data-title');
     var artist = wrap.getAttribute('data-artist');
+    var album  = wrap.getAttribute('data-album') || '';
+    var itunesQ = album ? title+' '+artist+' '+album : title+' '+artist;
     // Find date span for appending gap text
     var row = wrap.closest('.sr-row') || wrap.closest('.track');
     var dateSpan = row ? row.querySelector('.sr-listen-date') : null;
     var dateStr = dateSpan ? dateSpan.getAttribute('data-listen') : null;
-    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(title+' '+artist)+'&entity=song&limit=5')
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(itunesQ)+'&entity=song&limit=5')
       .then(function(r){ return r.json(); })
       .then(function(d){
         if (d.results && d.results.length) {
@@ -836,7 +838,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       }
       var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+(diff)+' yr'+(diff===1?'':'s')+' ago</span>'+(ageNum!==''?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 4px 1px 6px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       row += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
-      row += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr('https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist))+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
+      row += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr('https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist))+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
       if (rowNum !== undefined) row += '<div class="tn">#'+rowNum+'</div>';
       row += '<div class="sr-right"><div class="sr-icons-plays">'
@@ -975,7 +977,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       }
       var yrsAgoN = diffN > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+(diffN)+' yr'+(diffN===1?'':'s')+' ago</span>'+(ageNumN!==''?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 4px 1px 6px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNumN+'</span>':'') : '';
       html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
-      html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(spUrl)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
+      html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(spUrl)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="sr-info">';
       html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:45%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
       html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
@@ -1200,7 +1202,7 @@ function openPlaylist(tier, idx) {
     var h = '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'" data-date="'+escAttr(t.date.toLowerCase())+'" data-datestr="'+escAttr(t.dateStr)+'" data-uri="'+escAttr(t.uri)+'">';
     h += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
     if (showArt) {
-      h += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
+      h += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
     }
     h += '<div class="ti">';
     h += '<div class="tt"><span>'+escHtml(t.title)+'</span><span class="tt-reldate"></span></div>';
@@ -1559,9 +1561,9 @@ document.getElementById('search').addEventListener('input', function() {
       var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+diff+' yr'+(diff===1?'':'s')+' ago</span>'+(ageNum!==''?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'" data-date="'+escAttr(t.date.toLowerCase())+'" data-datestr="'+escAttr(t.dateStr)+'" data-uri="'+escAttr(t.uri)+'">';
       html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
-      html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
+      html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="ti">';
-      html += '<div class="tt">'+escHtml(t.title)+'<span class="tt-reldate"></span></div>';
+      html += '<div class="tt"><span>'+escHtml(t.title)+'</span><span class="tt-reldate"></span></div>';
       html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
       html += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
