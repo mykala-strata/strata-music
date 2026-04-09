@@ -347,16 +347,11 @@ function getBdayParts() {
 
 // Adapted from index.html calcAgeText — birthday & releaseDate are YYYY-MM-DD strings, listenDate is YYYY-MM-DD
 function calcAgeText(birthday, releaseDate, listenDateStr) {
-  if (!birthday || !listenDateStr) return null;
+  if (!birthday || !listenDateStr || !releaseDate) return null;
   var bDay    = new Date(birthday + 'T00:00:00');
   var listen  = new Date(listenDateStr + 'T12:00:00');
   var bYear   = bDay.getFullYear(), bMonth = bDay.getMonth()+1, bDayNum = bDay.getDate();
   var lYear   = listen.getFullYear(), lMonth = listen.getMonth()+1, lDay = listen.getDate();
-
-  var ageAtListen = lYear - bYear;
-  if (lMonth < bMonth || (lMonth === bMonth && lDay < bDayNum)) ageAtListen--;
-
-  if (!releaseDate) return 'You were ' + ageAtListen + ' when you first played this.';
 
   var relFull  = new Date(releaseDate.length === 4 ? releaseDate + '-01-01' : releaseDate + (releaseDate.length === 7 ? '-01' : ''));
   var relYear  = relFull.getFullYear();
@@ -367,27 +362,23 @@ function calcAgeText(birthday, releaseDate, listenDateStr) {
   if (relDateApprox < new Date(relYear, bMonth-1, bDayNum)) ageAtRelease--;
 
   var totalMonths = (lYear - relYear) * 12 + (listen.getMonth() - relMonth);
-  var daysDiff = Math.round((listen - relFull) / 86400000);
+  var daysDiff = Math.max(0, Math.round((listen - relFull) / 86400000));
 
   function timeStr(m) {
-    if (m < 12) return m + ' month' + (m===1?'':'s') + ' later';
-    if (m === 12) return '1 year later';
-    if (m === 18) return 'one and a half years later';
-    if (m < 24) { var y=Math.floor(m/12),mo=m%12; return mo===0 ? y+' year'+(y===1?'':'s')+' later' : y+' year'+(y===1?'':'s')+' and '+mo+' month'+(mo===1?'':'s')+' later'; }
-    return Math.round(m/12) + ' years later';
-  }
-  function closeStr(days, months) {
-    if (days === 0) return 'When you were ' + ageAtListen + ', you played this the same day it came out.';
-    if (days < 30)  return 'When you were ' + ageAtListen + ', you played this ' + days + ' day' + (days===1?'':'s') + ' after it came out.';
-    return 'When you were ' + ageAtListen + ', you played this ' + timeStr(months) + '.';
+    if (m < 12) return m + ' month' + (m===1?'':'s') + ' after it came out';
+    if (m === 12) return '1 year after it was released';
+    if (m === 18) return 'one and a half years after it was released';
+    if (m < 24) { var y=Math.floor(m/12),mo=m%12; return mo===0 ? y+' year'+(y===1?'':'s')+' after it was released' : y+' year'+(y===1?'':'s')+' and '+mo+' month'+(mo===1?'':'s')+' after it came out'; }
+    return Math.round(m/12) + ' year' + (Math.round(m/12)===1?'':'s') + ' after it was released';
   }
 
   if (ageAtRelease < 0) {
     var ybb = Math.abs(ageAtRelease), yal = lYear - relYear;
-    return 'This came out ' + ybb + ' year' + (ybb===1?'':'s') + ' before you were born. You played it ' + yal + ' years later at ' + ageAtListen + '.';
+    return 'This song came out ' + ybb + ' year' + (ybb===1?'':'s') + ' before you were born. You played it ' + yal + ' year' + (yal===1?'':'s') + ' later.';
   }
-  if (totalMonths < 24) return closeStr(daysDiff, totalMonths);
-  return 'You were ' + ageAtRelease + ' when this came out. You played it ' + timeStr(totalMonths) + ' at ' + ageAtListen + '.';
+  if (daysDiff === 0) return 'You played this song the same day it came out.';
+  if (daysDiff < 30)  return 'You played this song ' + daysDiff + ' day' + (daysDiff===1?'':'s') + ' after it was released.';
+  return 'You played this song ' + timeStr(totalMonths) + '.';
 }
 
 // ── PARSER ───────────────────────────────────────────────────────────────────
@@ -891,7 +882,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
 
     html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+dateLabel+'</div>';
     listEl.innerHTML = html;
-    setTimeout(function(){ fetchSearchArt(listEl); }, 50);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 600);
     window._searchResults = chronoMatches;
     window._searchLabel = dateLabel;
     document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
@@ -981,7 +972,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     }
 
     listEl.innerHTML = html;
-    setTimeout(function(){ fetchSearchArt(listEl); }, 50);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 600);
   }
 
   // Icon click delegation for search results
@@ -1001,7 +992,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   window._srGoPage = function(page) {
     currentPage = page;
     renderPage(page);
-    setTimeout(function(){ fetchSearchArt(listEl); }, 50);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 600);
     document.getElementById('grid-search-results').scrollIntoView({ behavior:'smooth', block:'start' });
   };
 
@@ -1155,15 +1146,26 @@ function openPlaylist(tier, idx) {
       }
       var sp  = 'https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist);
       var yt  = 'https://youtube.com/results?search_query='+t.ytQ;
+      var listenYr = parseInt(t.dateStr.substring(0,4));
+      var diff = new Date().getFullYear() - listenYr;
+      var ageNum = '';
+      var bdp = getBdayParts();
+      if (bdp) {
+        var a = listenYr - bdp.year;
+        var ld2 = new Date(t.dateStr + 'T12:00:00');
+        if ((ld2.getMonth()+1) < bdp.month || ((ld2.getMonth()+1)===bdp.month && ld2.getDate()<bdp.day)) a--;
+        ageNum = a;
+      }
+      var pipe = '<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>';
+      var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">('+diff+' yr'+(diff===1?'':'s')+' ago)</span>'+(ageNum!==''?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       html += '<div class="track" data-title="'+escAttr(t.title.toLowerCase())+'" data-artist="'+escAttr(t.artist.toLowerCase())+'" data-album="'+escAttr((t.album||'').toLowerCase())+'" data-date="'+escAttr(t.date.toLowerCase())+'" data-datestr="'+escAttr(t.dateStr)+'" data-uri="'+escAttr(t.uri)+'">';
       html += '<div class="track-playcount"><span class="track-playnum">'+t.plays.toLocaleString()+'</span><span class="track-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
-      html += '<div class="art-wrap"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;" onerror="this.style.display=\'none\'"><span class="art-placeholder">loading...</span></div>';
+      html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;" onerror="this.style.display=\'none\'"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="ti">';
       html += '<div class="tt">'+escHtml(t.title)+'</div>';
-      html += '<div class="ta">'+escHtml(t.artist)+'</div>';
-      html += '<div class="tc" data-listen="'+t.dateStr+'">…</div>';
+      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
+      html += '<div class="tc" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
-      html += '<div class="tn">#'+(i+1)+'</div>';
       html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
       html += '</div>';
     });
@@ -1299,7 +1301,7 @@ function openPlaylist(tier, idx) {
 
   function setFallbackAge(tc, dateStr) {
     tc.setAttribute('data-ry',''); tc.setAttribute('data-rm',''); tc.setAttribute('data-rd','');
-    tc.textContent = 'You were ' + ageAtDate(dateStr) + ' when you first played this.';
+    tc.textContent = '';
   }
 
   // Scale batch size to playlist length — bigger playlists get larger batches
@@ -1379,9 +1381,9 @@ bdayInput.addEventListener('change', function() {
     if (!listen) return;
     if (rd) {
       var text = calcAgeText(BIRTHDAY, rd, listen);
-      tc.textContent = text || ('You were ' + ageAtDate2(listen) + ' when you first played this.');
+      tc.textContent = text || '';
     } else {
-      tc.textContent = 'You were ' + ageAtDate2(listen) + ' when you first played this.';
+      tc.textContent = '';
     }
   });
 });
