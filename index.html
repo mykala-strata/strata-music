@@ -133,7 +133,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .ti { flex:1; min-width:0; }
 .tt { font-size:15px; font-weight:400; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .ta { font-size:12px; color:var(--muted); margin-top:3px; font-weight:200; }
-.tc { font-size:9px; color:var(--text); margin-top:3px; font-weight:400; line-height:1.4; letter-spacing:.1em; text-transform:uppercase; }
+.tc { font-size:9px; color:var(--muted); margin-top:3px; font-weight:400; line-height:1.4; letter-spacing:.1em; text-transform:uppercase; }
 .tn { font-size:11px; color:var(--muted); flex-shrink:0; min-width:28px; text-align:right; }
 .track-playcount { display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; width:44px; text-align:center; padding-right:12px; border-right:1px solid rgba(200,169,110,0.12); margin-right:4px; }
 .track-playnum { font-size:18px; font-weight:300; color:var(--text); line-height:1; }
@@ -882,7 +882,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
 
     html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+dateLabel+'</div>';
     listEl.innerHTML = html;
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 600);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
     window._searchResults = chronoMatches;
     window._searchLabel = dateLabel;
     document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
@@ -972,7 +972,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     }
 
     listEl.innerHTML = html;
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 600);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
   }
 
   // Icon click delegation for search results
@@ -992,7 +992,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   window._srGoPage = function(page) {
     currentPage = page;
     renderPage(page);
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 600);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
     document.getElementById('grid-search-results').scrollIntoView({ behavior:'smooth', block:'start' });
   };
 
@@ -1163,8 +1163,8 @@ function openPlaylist(tier, idx) {
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="ti">';
       html += '<div class="tt">'+escHtml(t.title)+'<span class="tt-reldate"></span></div>';
-      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
-      html += '<div class="tc" data-listen="'+t.dateStr+'"></div>';
+      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;min-width:0;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
+      html += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
       html += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
       html += '</div>';
