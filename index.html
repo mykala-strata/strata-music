@@ -19,7 +19,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; min-height:100vh; color-scheme:dark; }
 input[type="date"] { color-scheme:dark; }
-.wrap { max-width:1140px; margin:0 auto; padding:48px 28px 96px; }
+.wrap { max-width:912px; margin:0 auto; padding:48px 28px 96px; }
 
 /* ── UPLOAD ─────────────────────────────────────────────────────── */
 #upload-view { display:block; }
@@ -133,6 +133,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .ti { flex:1; min-width:0; }
 .tt { font-size:15px; font-weight:400; color:var(--text); display:flex; align-items:center; min-width:0; overflow:hidden; }
 .tt > span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex-shrink:1; min-width:0; max-width:45%; }
+.tt-reldate { display:flex; align-items:center; flex-shrink:0; white-space:nowrap; }
 .ta { font-size:12px; color:var(--muted); margin-top:3px; font-weight:200; }
 .tc { font-size:9px; color:var(--muted); margin-top:3px; font-weight:400; line-height:1.4; letter-spacing:.1em; text-transform:uppercase; }
 .tn { font-size:11px; color:var(--muted); flex-shrink:0; min-width:28px; text-align:right; }
@@ -1167,7 +1168,7 @@ function openPlaylist(tier, idx) {
   document.getElementById('pl-eyebrow').textContent = 'Strata · ' + tierLabel;
   document.getElementById('pl-name').textContent    = pl.label;
   document.getElementById('pl-meta').textContent    = pl.count.toLocaleString()+' song'+(pl.count===1?'':'s');
-  document.getElementById('pl-explainer').innerHTML = 'Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.<br><em style="font-weight:200;font-style:italic;font-size:12px;">Play counts reflect listens over 1 minute.</em>';
+  document.getElementById('pl-explainer').innerHTML = 'Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.<br><em style="font-weight:200;font-style:italic;font-size:12px;">play counts = listens over 1 minute.</em>';
   document.getElementById('search').value = '';
   document.getElementById('no-results').style.display = 'none';
 
@@ -1235,6 +1236,7 @@ function openPlaylist(tier, idx) {
       var pageTracks = eligible.slice(start, start + PL_PAGE_SIZE);
       pageTracks.forEach(function(t, i) { html += buildTrackHtml(t, start + i, true); });
       // Pagination
+      html += '<div style="font-size:11px;color:var(--muted);padding:10px 0;opacity:0.5;">play counts = listens over 1 minute</div>';
       if (totalPages > 1) {
         html += '<div class="sr-pagination">';
         html += '<span class="sr-page-info">'+eligible.length.toLocaleString()+' songs · page '+(page+1)+' of '+totalPages+'</span>';
@@ -1261,6 +1263,7 @@ function openPlaylist(tier, idx) {
         }
         html += buildTrackHtml(t, startCh + i, false);
       });
+      html += '<div style="font-size:11px;color:var(--muted);padding:10px 0;opacity:0.5;">play counts = listens over 1 minute</div>';
       if (totalPagesCh > 1) {
         html += '<div class="sr-pagination">';
         html += '<span class="sr-page-info">'+sorted.length.toLocaleString()+' songs · page '+(pageCh+1)+' of '+totalPagesCh+'</span>';
