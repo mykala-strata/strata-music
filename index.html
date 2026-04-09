@@ -1190,7 +1190,7 @@ function openPlaylist(tier, idx) {
     // Reset iTunes batch
     window._batchId = (window._batchId || 0) + 1;
     var thisBatchId = window._batchId;
-    els = Array.from(document.querySelectorAll('#pl-tracks .track'));
+    els = Array.from(document.querySelectorAll('#pl-tracks .track')).slice(0, 50);
     var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 5000 ? 3000 : 0;
     setTimeout(function(){ doBatch(0, thisBatchId); }, startDelay2);
     window._lastBatchEnd = Date.now();
@@ -1378,40 +1378,68 @@ document.getElementById('search').addEventListener('input', function() {
     h.style.display = has ? '' : 'none';
   });
   document.getElementById('no-results').style.display = visible ? 'none' : 'block';
-  // Re-trigger art fetch for any visible tracks that haven't loaded yet
+  // Re-trigger art fetch for visible search results
   clearTimeout(window._plSearchArtTimer);
   if (q && visible) {
     window._plSearchArtTimer = setTimeout(function() {
+      // Cancel the initial batch so search results take priority
+      window._batchId = (window._batchId || 0) + 1;
+      var batchId = window._batchId;
+
       var container = document.getElementById('pl-tracks');
-      var wraps = Array.from(container.querySelectorAll('.art-wrap[data-title]'));
-      var visibleWraps = wraps.filter(function(w) {
-        var track = w.closest('.track');
-        return track && track.style.display !== 'none';
-      });
-      if (!visibleWraps.length) return;
-      // Only fetch for ones that haven't loaded yet
-      visibleWraps.forEach(function(wrap) {
-        var img = wrap.querySelector('.art');
-        if (!img || img.classList.contains('loaded') || img.src) return;
+      var visibleTracks = Array.from(container.querySelectorAll('.track')).filter(function(t) {
+        return t.style.display !== 'none';
+      }).slice(0, 20);
+      if (!visibleTracks.length) return;
+
+      var idx = 0;
+      function fetchNext() {
+        if (window._batchId !== batchId) return;
+        if (idx >= visibleTracks.length) return;
+        var trackEl = visibleTracks[idx++];
+        var wrap = trackEl.querySelector('.art-wrap');
+        var img = wrap ? trackEl.querySelector('.art') : null;
+        var tc = trackEl.querySelector('.tc');
+        if (!wrap) { setTimeout(fetchNext, 500); return; }
         var title = wrap.getAttribute('data-title');
         var artist = wrap.getAttribute('data-artist');
-        fetch('https://itunes.apple.com/search?term='+encodeURIComponent(title+' '+artist)+'&entity=song&limit=5')
+        var dateStr = trackEl.getAttribute('data-datestr');
+        fetch('https://itunes.apple.com/search?term='+encodeURIComponent(title+' '+artist)+'&media=music&entity=song&limit=3')
           .then(function(r){ return r.json(); })
           .then(function(d){
-            if (!d.results || !d.results.length) return;
+            if (!d.results) { setTimeout(fetchNext, 500); return; }
             var match = null;
             for (var i = 0; i < d.results.length; i++) {
               var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
               var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
               if (a === b || a.indexOf(b.split(' ')[0]) !== -1 || b.indexOf(a.split(' ')[0]) !== -1) { match = d.results[i]; break; }
             }
-            if (!match) match = d.results[0];
-            if (match && match.artworkUrl100) {
-              img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
-              img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
+            if (!match && d.results[0]) match = d.results[0];
+            if (match) {
+              if (img && !img.classList.contains('loaded')) {
+                img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
+                img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
+              }
+              if (tc && match.releaseDate) {
+                var rd = match.releaseDate.substring(0,10);
+                if (rd <= dateStr) {
+                  tc.setAttribute('data-rd', rd);
+                  var ageText = calcAgeText(BIRTHDAY, rd, dateStr);
+                  if (ageText) tc.textContent = ageText;
+                  // Update title release date span
+                  var relSpan = trackEl.querySelector('.tt-reldate');
+                  if (relSpan) {
+                    var MO = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                    var relD = new Date(rd + 'T12:00:00');
+                    relSpan.innerHTML = '<span style="color:var(--muted);font-weight:300;">&nbsp;&nbsp;–&nbsp;&nbsp;'+MO[relD.getMonth()]+' '+relD.getDate()+', '+relD.getFullYear()+'</span>';
+                  }
+                }
+              }
             }
-          }).catch(function(){});
-      });
+            setTimeout(fetchNext, 500);
+          }).catch(function(){ setTimeout(fetchNext, 500); });
+      }
+      fetchNext();
     }, 2000);
   }
 });
