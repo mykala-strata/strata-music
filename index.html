@@ -1006,6 +1006,7 @@ function showGrid() {
   document.getElementById('grid-view').style.display = 'block';
   document.getElementById('pl-view').style.display   = 'none';
   document.getElementById('search').value = '';
+  if (window._plScrollHandler) { window.removeEventListener('scroll', window._plScrollHandler); window._plScrollHandler = null; }
   // keep grid search state intact so user can keep browsing results
 }
 
@@ -1126,6 +1127,8 @@ function openPlaylist(tier, idx) {
   var bd = getBdayParts();
   window._plReversed = false;
   window._plMode = 'chrono';
+  window._plFetchedUpTo = 25;
+  if (window._plScrollHandler) { window.removeEventListener('scroll', window._plScrollHandler); window._plScrollHandler = null; }
   // Reset mode button label and show sort btn
   var modeBtn = document.getElementById('pl-mode-btn');
   var sortBtn = document.getElementById('pl-sort-btn');
@@ -1191,7 +1194,7 @@ function openPlaylist(tier, idx) {
     // Reset iTunes batch
     window._batchId = (window._batchId || 0) + 1;
     var thisBatchId = window._batchId;
-    els = Array.from(document.querySelectorAll('#pl-tracks .track')).slice(0, 50);
+    els = Array.from(document.querySelectorAll('#pl-tracks .track')).slice(0, 25);
     var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 5000 ? 3000 : 0;
     setTimeout(function(){ doBatch(0, thisBatchId); }, startDelay2);
     window._lastBatchEnd = Date.now();
@@ -1202,16 +1205,57 @@ function openPlaylist(tier, idx) {
   // Initial wire + fetch
   wireAndFetch();
 
+  // Lazy load — as user scrolls, fetch next 25 when near bottom of loaded tracks
+  window._plFetchedUpTo = 25;
+  function setupLazyLoad() {
+    if (window._plScrollHandler) window.removeEventListener('scroll', window._plScrollHandler);
+    window._plScrollHandler = function() {
+      // Stop lazy loading if a search is active
+      if (document.getElementById('search').value.trim()) return;
+      var allTracks = Array.from(document.querySelectorAll('#pl-tracks .track'));
+      var fetched = window._plFetchedUpTo;
+      if (fetched >= allTracks.length) return;
+      // Check if user has scrolled near the last loaded track
+      var lastLoaded = allTracks[fetched - 1];
+      if (!lastLoaded) return;
+      var rect = lastLoaded.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 400) {
+        // Load next 25
+        var nextEls = allTracks.slice(fetched, fetched + 25);
+        if (!nextEls.length) return;
+        window._plFetchedUpTo = fetched + 25;
+        window._batchId = (window._batchId || 0) + 1;
+        var lazyBatchId = window._batchId;
+        var lazyIdx = 0;
+        var sortedAll = getSortedTracks ? getSortedTracks() : pl.tracks.slice();
+        function lazyFetchNext() {
+          if (window._batchId !== lazyBatchId) return;
+          if (lazyIdx >= nextEls.length) return;
+          var el = nextEls[lazyIdx];
+          var trackIdx = fetched + lazyIdx;
+          lazyIdx++;
+          fetchOne(el, sortedAll[trackIdx]).catch(function(){}).then(function(){
+            setTimeout(lazyFetchNext, 500);
+          });
+        }
+        setTimeout(lazyFetchNext, 300);
+      }
+    };
+    window.addEventListener('scroll', window._plScrollHandler);
+  }
+  setupLazyLoad();
+
   // Wire sort toggle
   window._plMode = 'chrono'; // 'chrono' or 'plays'
 
   document.getElementById('pl-mode-btn').onclick = function() {
     window._plMode = window._plMode === 'chrono' ? 'plays' : 'chrono';
     this.textContent = window._plMode === 'chrono' ? 'sort: chronological' : 'sort: most played';
-    // Hide/show the reverse button — only makes sense in chrono mode
     document.getElementById('pl-sort-btn').style.display = window._plMode === 'chrono' ? '' : 'none';
     renderPlaylistTracks();
+    window._plFetchedUpTo = 25;
     wireAndFetch();
+    setupLazyLoad();
     var searchEl = document.getElementById('search');
     if (searchEl.value.trim()) searchEl.dispatchEvent(new Event('input'));
   };
@@ -1219,7 +1263,9 @@ function openPlaylist(tier, idx) {
   document.getElementById('pl-sort-btn').onclick = function() {
     window._plReversed = !window._plReversed;
     renderPlaylistTracks();
+    window._plFetchedUpTo = 25;
     wireAndFetch();
+    setupLazyLoad();
     var searchEl = document.getElementById('search');
     if (searchEl.value.trim()) searchEl.dispatchEvent(new Event('input'));
   };
