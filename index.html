@@ -727,16 +727,16 @@ function fetchSearchArt(container) {
       }).catch(function(){});
   }
 
-  function doBatch(start) {
-    if (window._searchBatchId !== myId) return;
+  function doBatch(start, batchId) {
+    if (window._searchBatchId !== batchId) return;
     var slice = artWraps.slice(start, start + BATCH);
     if (!slice.length) return;
     Promise.all(slice.map(doOne)).then(function(){
-      if (window._searchBatchId !== myId) return;
-      setTimeout(function(){ doBatch(start + BATCH); }, DELAY);
+      if (window._searchBatchId !== batchId) return;
+      setTimeout(function(){ doBatch(start + BATCH, batchId); }, DELAY);
     });
   }
-  doBatch(0);
+  doBatch(0, window._searchBatchId);
 }
 
 document.getElementById('grid-search').addEventListener('input', function() {
