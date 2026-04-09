@@ -686,7 +686,26 @@ function parseDateQuery(q) {
 }
 
 
-// ── SEARCH ART FETCH ─────────────────────────────────────────────────────────
+// ── GAP TEXT (release → first listen, no age) ────────────────────────────────
+function calcGapText(releaseDate, listenDateStr) {
+  if (!releaseDate || !listenDateStr) return null;
+  var relFull = new Date(releaseDate + 'T12:00:00');
+  var listen  = new Date(listenDateStr + 'T12:00:00');
+  var daysDiff = Math.max(0, Math.round((listen - relFull) / 86400000));
+  var totalMonths = (listen.getFullYear() - relFull.getFullYear()) * 12 + (listen.getMonth() - relFull.getMonth());
+  if (daysDiff === 0) return 'the day it was released';
+  if (daysDiff < 30)  return daysDiff + ' day' + (daysDiff===1?'':'s') + ' after its release';
+  if (totalMonths < 12) return totalMonths + ' month' + (totalMonths===1?'':'s') + ' after its release';
+  if (totalMonths === 12) return '1 year after its release';
+  if (totalMonths < 24) {
+    var y = Math.floor(totalMonths/12), mo = totalMonths%12;
+    return mo === 0 ? y+' year'+(y===1?'':'s')+' after its release' : y+' year'+(y===1?'':'s')+' and '+mo+' month'+(mo===1?'':'s')+' after its release';
+  }
+  var yrs = Math.round(totalMonths/12);
+  return yrs + ' year' + (yrs===1?'':'s') + ' after its release';
+}
+
+
 function fetchSearchArt(container) {
   var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]')).slice(0, 20);
   if (!artWraps.length) return;
@@ -698,10 +717,10 @@ function fetchSearchArt(container) {
     if (!img) { setTimeout(fetchNext, 100); return; }
     var title  = wrap.getAttribute('data-title');
     var artist = wrap.getAttribute('data-artist');
-    // Find tc sibling for age context
+    // Find date span for appending gap text
     var row = wrap.closest('.sr-row') || wrap.closest('.track');
-    var tc = row ? row.querySelector('.tc') : null;
-    var dateStr = tc ? tc.getAttribute('data-listen') : null;
+    var dateSpan = row ? row.querySelector('.sr-listen-date') : null;
+    var dateStr = dateSpan ? dateSpan.getAttribute('data-listen') : null;
     fetch('https://itunes.apple.com/search?term='+encodeURIComponent(title+' '+artist)+'&entity=song&limit=5')
       .then(function(r){ return r.json(); })
       .then(function(d){
@@ -717,11 +736,13 @@ function fetchSearchArt(container) {
             img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
             img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
           }
-          if (match && match.releaseDate && tc && dateStr) {
+          if (match && match.releaseDate && dateSpan && dateStr) {
             var rd = match.releaseDate.substring(0,10);
             if (rd <= dateStr && rd.substring(5) !== '01-01') {
-              var ageText = calcAgeText(BIRTHDAY, rd, dateStr);
-              if (ageText) tc.innerHTML = ageText;
+              var gapText = calcGapText(rd, dateStr);
+              if (gapText) {
+                dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
+              }
             }
           }
         }
@@ -816,7 +837,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+(diff)+' yr'+(diff===1?'':'s')+' ago</span>'+(ageNum!==''?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 4px 1px 6px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       row += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       row += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr('https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist))+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
-      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div><div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div></div>';
+      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
       if (rowNum !== undefined) row += '<div class="tn">#'+rowNum+'</div>';
       row += '<div class="sr-right"><div class="sr-icons-plays">'
         + '<svg class="icon-btn sp-icon" data-url="'+escAttr(t.uri)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
@@ -889,7 +910,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
 
     html += '<div style="font-size:11px;color:var(--muted);padding:12px 0;opacity:0.5;">'+dayMatches.length+' song'+(dayMatches.length===1?'':'s')+' first heard on '+dateLabel+'</div>';
     listEl.innerHTML = html;
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
     window._searchResults = chronoMatches;
     window._searchLabel = dateLabel;
     document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
@@ -956,10 +977,9 @@ document.getElementById('grid-search').addEventListener('input', function() {
       html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(spUrl)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="sr-info">';
-      html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:45%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+t.date+'</span></div>';
+      html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:45%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
       html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
       html += '<div class="sr-placements">'+tags+'</div>';
-      html += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
       html += '<div class="tn">#'+(i+1)+'</div>';
       html += '<div class="sr-right"><div class="sr-icons-plays">'
@@ -983,7 +1003,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     }
 
     listEl.innerHTML = html;
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
   }
 
   // Icon click delegation for search results
@@ -1014,13 +1034,13 @@ document.getElementById('grid-search').addEventListener('input', function() {
     }
     currentPage = 0;
     renderPage(0);
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
   };
 
   window._srGoPage = function(page) {
     currentPage = page;
     renderPage(page);
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 2000);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
     document.getElementById('grid-search-results').scrollIntoView({ behavior:'smooth', block:'start' });
   };
 
@@ -1368,7 +1388,7 @@ function openPlaylist(tier, idx) {
     // Try MusicBrainz for release date — use earliest across all releases
     function tryMusicBrainz() {
       var q = encodeURIComponent('"'+track.title+'" AND artist:"'+track.artist+'"');
-      return fetch('https://musicbrainz.org/ws/2/recording?query='+q+'&limit=5&fmt=json', {
+      return fetch('https://musicbrainz.org/ws/2/recording?query='+q+'&limit=10&fmt=json', {
         headers: { 'User-Agent': 'Strata/1.0 (strata-music.com)' }
       })
         .then(function(r){ return r.json(); })
@@ -1382,7 +1402,10 @@ function openPlaylist(tier, idx) {
               var rd = rel.date.substring(0,10);
               if (rd.length === 4) rd = rd + '-01-01';
               if (rd.length === 7) rd = rd + '-01';
-              if (rd <= track.dateStr) allDates.push(rd);
+              // Reject Jan 1 placeholder dates unless year is very old (pre-1950 recordings genuinely use Jan 1)
+              var isJan1 = rd.substring(5) === '01-01';
+              var year = parseInt(rd.substring(0,4));
+              if (rd <= track.dateStr && (!isJan1 || year < 1950)) allDates.push(rd);
             });
           });
           if (!allDates.length) { setFallbackAge(tc, track.dateStr); return; }
