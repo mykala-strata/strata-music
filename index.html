@@ -1184,10 +1184,10 @@ function openPlaylist(tier, idx) {
     });
     // Reset iTunes batch
     window._batchId = (window._batchId || 0) + 1;
-    myBatchId = window._batchId;
+    var thisBatchId = window._batchId;
     els = Array.from(document.querySelectorAll('#pl-tracks .track'));
     var startDelay2 = window._lastBatchEnd && (Date.now() - window._lastBatchEnd) < 2000 ? 800 : 0;
-    setTimeout(function(){ doBatch(0); }, startDelay2);
+    setTimeout(function(){ doBatch(0, thisBatchId); }, startDelay2);
     window._lastBatchEnd = Date.now();
   }
 
@@ -1262,7 +1262,7 @@ function openPlaylist(tier, idx) {
         }).catch(function(){ setFallbackAge(tc, track.dateStr); });
     }
 
-    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(track.title+' '+track.artist)+'&media=music&entity=song&limit=3', { signal: AbortSignal.timeout(8000) })
+    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(track.title+' '+track.artist)+'&media=music&entity=song&limit=3')
       .then(function(r){ return r.json(); })
       .then(function(d){
         // Find best iTunes match — verify artist loosely to avoid wrong-song release dates
@@ -1306,26 +1306,24 @@ function openPlaylist(tier, idx) {
   var BATCH = pl.tracks.length > 500 ? 8 : pl.tracks.length > 100 ? 6 : 4;
   var DELAY = pl.tracks.length > 500 ? 200 : 250;
 
-  var myBatchId = 0;
-
   function getSortedTracks() {
     if (window._plMode === 'plays') return pl.tracks.slice().sort(function(a,b){ return b.plays - a.plays; });
     return window._plReversed ? pl.tracks.slice().reverse() : pl.tracks.slice();
   }
 
-  function doBatch(start) {
-    if (window._batchId !== myBatchId) return;
+  function doBatch(start, batchId) {
+    if (window._batchId !== batchId) return;
     var sorted = getSortedTracks();
     var slice = els.slice(start, start+BATCH); if (!slice.length) return;
     var promises = slice.map(function(el,j){
       return fetchOne(el, sorted[start+j]).catch(function(){});
     });
     Promise.all(promises).then(function(){
-      if (window._batchId !== myBatchId) return;
-      setTimeout(function(){ doBatch(start+BATCH); }, DELAY);
+      if (window._batchId !== batchId) return;
+      setTimeout(function(){ doBatch(start+BATCH, batchId); }, DELAY);
     }).catch(function(){
-      if (window._batchId !== myBatchId) return;
-      setTimeout(function(){ doBatch(start+BATCH); }, DELAY);
+      if (window._batchId !== batchId) return;
+      setTimeout(function(){ doBatch(start+BATCH, batchId); }, DELAY);
     });
   }
 
