@@ -737,6 +737,10 @@ document.getElementById('grid-search').addEventListener('input', function() {
   var noneEl    = document.getElementById('grid-search-none');
   var contentEl = document.getElementById('grid-content');
 
+  // Cancel any in-progress art fetch immediately on new keystroke
+  clearTimeout(window._searchArtTimer);
+  window._searchBatchId = (window._searchBatchId || 0) + 1;
+
   currentPage = 0;
   var belowHead = document.getElementById('below-head');
   if (!q) {
@@ -1375,6 +1379,42 @@ document.getElementById('search').addEventListener('input', function() {
     h.style.display = has ? '' : 'none';
   });
   document.getElementById('no-results').style.display = visible ? 'none' : 'block';
+  // Re-trigger art fetch for any visible tracks that haven't loaded yet
+  clearTimeout(window._plSearchArtTimer);
+  if (q && visible) {
+    window._plSearchArtTimer = setTimeout(function() {
+      var container = document.getElementById('pl-tracks');
+      var wraps = Array.from(container.querySelectorAll('.art-wrap[data-title]'));
+      var visibleWraps = wraps.filter(function(w) {
+        var track = w.closest('.track');
+        return track && track.style.display !== 'none';
+      });
+      if (!visibleWraps.length) return;
+      // Only fetch for ones that haven't loaded yet
+      visibleWraps.forEach(function(wrap) {
+        var img = wrap.querySelector('.art');
+        if (!img || img.classList.contains('loaded') || img.src) return;
+        var title = wrap.getAttribute('data-title');
+        var artist = wrap.getAttribute('data-artist');
+        fetch('https://itunes.apple.com/search?term='+encodeURIComponent(title+' '+artist)+'&entity=song&limit=5')
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if (!d.results || !d.results.length) return;
+            var match = null;
+            for (var i = 0; i < d.results.length; i++) {
+              var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
+              var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
+              if (a === b || a.indexOf(b.split(' ')[0]) !== -1 || b.indexOf(a.split(' ')[0]) !== -1) { match = d.results[i]; break; }
+            }
+            if (!match) match = d.results[0];
+            if (match && match.artworkUrl100) {
+              img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
+              img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
+            }
+          }).catch(function(){});
+      });
+    }, 2000);
+  }
 });
 
 // ── BIRTHDAY ─────────────────────────────────────────────────────────────────
