@@ -132,7 +132,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .art.loaded + .art-placeholder { display:none; }
 .ti { flex:1; min-width:0; }
 .tt { font-size:15px; font-weight:400; color:var(--text); display:flex; align-items:center; min-width:0; overflow:hidden; }
-.tt > span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex-shrink:1; min-width:0; max-width:45%; }
+.tt > span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex-shrink:1; min-width:0; max-width:55%; }
 .tt-reldate { display:flex; align-items:center; flex-shrink:0; white-space:nowrap; }
 .ta { font-size:12px; color:var(--muted); margin-top:3px; font-weight:200; }
 .tc { font-size:9px; color:var(--muted); margin-top:3px; font-weight:400; line-height:1.4; letter-spacing:.1em; text-transform:uppercase; }
@@ -708,7 +708,7 @@ function calcGapText(releaseDate, listenDateStr) {
 
 
 function fetchSearchArt(container) {
-  var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]')).slice(0, 20);
+  var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]')).slice(0, 25);
   if (!artWraps.length) return;
   var idx = 0;
   function fetchNext() {
@@ -739,11 +739,12 @@ function fetchSearchArt(container) {
             img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
             img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
           }
-          if (match && match.releaseDate && dateSpan && dateStr) {
+          if (match && match.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
             var rd = match.releaseDate.substring(0,10);
             if (rd <= dateStr && rd.substring(5) !== '01-01') {
               var gapText = calcGapText(rd, dateStr);
               if (gapText) {
+                dateSpan.setAttribute('data-gap-set', '1');
                 dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
               }
             }
@@ -840,7 +841,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       var yrsAgo = diff > 0 ? '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+(diff)+' yr'+(diff===1?'':'s')+' ago</span>'+(ageNum!==''?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 4px 1px 6px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:400;vertical-align:middle;">'+ageNum+'</span>':'') : '';
       row += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       row += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr('https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist))+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
-      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
+      row += '<div class="sr-info"><div class="sr-title">'+escHtml(t.title)+'<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'"> '+t.date+'</span></div><div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgo:'')+'</div><div class="sr-placements">'+tags+'</div></div>';
       if (rowNum !== undefined) row += '<div class="tn">#'+rowNum+'</div>';
       row += '<div class="sr-right"><div class="sr-icons-plays">'
         + '<svg class="icon-btn sp-icon" data-url="'+escAttr(t.uri)+'" viewBox="0 0 24 24" fill="#f0ebe0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
@@ -980,8 +981,8 @@ document.getElementById('grid-search').addEventListener('input', function() {
       html += '<div class="sr-playcount"><span class="sr-playnum">'+t.plays.toLocaleString()+'</span><span class="sr-playlabel">play'+(t.plays===1?'':'s')+'</span></div>';
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(spUrl)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="sr-info">';
-      html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:45%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
-      html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
+      html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'"> '+t.date+'</span></div>';
+      html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+escHtml(t.artist)+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
       html += '<div class="sr-placements">'+tags+'</div>';
       html += '</div>';
       html += '<div class="tn">#'+(i+1)+'</div>';
@@ -1001,9 +1002,8 @@ document.getElementById('grid-search').addEventListener('input', function() {
       if (page > 0) html += '<button class="sr-page-btn" onclick="window._srGoPage('+( page-1)+')">← prev</button>';
       if (page < totalPages-1) html += '<button class="sr-page-btn" onclick="window._srGoPage('+(page+1)+')">next →</button>';
       html += '</div></div>';
-    } else {
-      html += '<div style="font-size:11px;color:var(--muted);padding:10px 0;opacity:0.5;">'+matches.length.toLocaleString()+' result'+(matches.length===1?'':'s')+' · play counts = listens over 1 minute</div>';
     }
+    html += '<div style="font-size:11px;color:var(--muted);padding:10px 0;opacity:0.5;">play counts = listens over 1 minute</div>';
 
     listEl.innerHTML = html;
     clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
@@ -1207,7 +1207,7 @@ function openPlaylist(tier, idx) {
     }
     h += '<div class="ti">';
     h += '<div class="tt"><span>'+escHtml(t.title)+'</span><span class="tt-reldate"></span></div>';
-    h += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
+    h += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
     h += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
     h += '</div>';
     h += '<div class="tn">#'+(i+1)+'</div>';
@@ -1369,7 +1369,7 @@ function openPlaylist(tier, idx) {
         var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
         var relD = new Date(rd + 'T12:00:00');
         var relStr = MO_FULL[relD.getMonth()] + ' ' + relD.getDate() + ', ' + relD.getFullYear();
-        relSpan.innerHTML = '<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;"> '+relStr+'</span>';
+        relSpan.innerHTML = '<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+relStr+'</span>';
       }
       var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
       if (ageText) { tc.innerHTML = ageText; return true; }
@@ -1567,7 +1567,7 @@ document.getElementById('search').addEventListener('input', function() {
       html += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
       html += '<div class="ti">';
       html += '<div class="tt"><span>'+escHtml(t.title)+'</span><span class="tt-reldate"></span></div>';
-      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,30vw,400px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
+      html += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+escHtml(t.artist)+(t.album?pipe+'<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
       html += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
       html += '</div>';
       html += '<div class="tn">#'+(start+i+1)+'</div>';
