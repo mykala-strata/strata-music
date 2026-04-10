@@ -1359,8 +1359,8 @@ function openPlaylist(tier, idx) {
     var html = '';
 
     if (window._plMode === 'plays') {
-      // Most played: only tracks with 2+ plays, paginated 25 at a time, with art
-      var eligible = pl.tracks.slice().sort(function(a,b){ return b.plays - a.plays; }).filter(function(t){ return t.plays >= 2; });
+      // Most played: all tracks sorted by plays, paginated 25 at a time, with art
+      var eligible = pl.tracks.slice().sort(function(a,b){ return b.plays - a.plays; });
       var totalPages = Math.ceil(eligible.length / PL_PAGE_SIZE);
       var page = Math.min(window._plPage, Math.max(0, totalPages - 1));
       window._plPage = page;
