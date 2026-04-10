@@ -1386,9 +1386,9 @@ function openPlaylist(tier, idx) {
       h += '<div class="art-wrap" data-title="'+escAttr(t.title)+'" data-artist="'+escAttr(t.artist)+'" data-album="'+escAttr(t.album||'')+'" style="flex-shrink:0;margin-right:4px;"><img class="art" alt="" data-sp="'+escAttr(sp)+'" style="opacity:0;"><span class="art-placeholder">loading...</span></div>';
     }
     h += '<div class="ti">';
-    h += '<div class="tt" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span class="tt-reldate"></span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
+    h += '<div class="tt" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
     h += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+'<span class="artist-link" data-artist="'+escAttr(t.artist)+'" style="cursor:pointer;" title="search '+escAttr(t.artist)+'">'+escHtml(t.artist)+'</span>'+(t.album?pipe+'<span class="album-link" data-album="'+escAttr(t.album)+'" style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;cursor:pointer;" title="search '+escAttr(t.album)+'">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
-    h += '<div class="tc" style="color:var(--muted);" data-listen="'+t.dateStr+'"></div>';
+    h += '<div class="tc" style="color:var(--muted);display:flex;align-items:center;gap:0;flex-wrap:nowrap;min-width:0;" data-listen="'+t.dateStr+'"><span class="tt-reldate"></span></div>';
     h += '</div>';
     h += '<div class="tn">#'+(i+1)+'</div>';
     h += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
@@ -1544,7 +1544,17 @@ function openPlaylist(tier, idx) {
         relSpan.innerHTML = '<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+relStr+'</span>';
       }
       var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
-      if (ageText) { tc.innerHTML = ageText; return true; }
+      if (ageText) {
+        var relSpan2 = tc.querySelector('.tt-reldate');
+        if (relSpan2) {
+          // Age text goes after the reldate span
+          var existing = tc.innerHTML;
+          tc.innerHTML = existing + '<span style="font-size:11px;color:var(--muted);white-space:nowrap;"> ' + ageText + '</span>';
+        } else {
+          tc.innerHTML = ageText;
+        }
+        return true;
+      }
       return false;
     }
 
