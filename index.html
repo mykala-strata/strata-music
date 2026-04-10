@@ -169,7 +169,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="upload-view">
   <div class="upload-head">
     <div class="grid-eyebrow" style="display:inline-block; margin-bottom:4px;">Strata</div>
-    <div class="upload-sub"><span style="font-size:16px;line-height:1.4;display:block;padding-top:5px;"><b>Upload your Spotify Extended Streaming History and search any date to rediscover every song you heard for the first time on that day — <i>across every year, stacked layer by layer.</i></b></span><div style="height:14px;"></div><div style="height:1px;background:rgba(154,144,128,0.15);margin:0;"></div><div style="height:16px;"></div>Embrace nostalgia. Let the music help you remember and reconnect with past versions of yourself. Explore your own personal music timeline. Sort results by number of plays or listen chronologically. For every song, Strata calculates how long ago you first heard it, how old you were, and how soon after its release you streamed it. <div style="height:10px;"></div>Strata also automatically groups your listening history into playlists for every phase, month, season, and year you've been streaming. Any playlist or search can be downloaded as a CSV file and imported into Spotify via Soundiiz. All processing happens locally in your browser — nothing is uploaded anywhere.<br><span style="display:inline-block; margin-top:10px;"><a href="https://support.spotify.com/us/article/understanding-my-data/" target="_blank" style="color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(122,158,138,0.4); font-size:11px;">How to request your Extended Streaming History from Spotify →</a></span></div>
+    <div class="upload-sub"><span style="font-size:16px;line-height:1.4;display:block;padding-top:5px;"><b>Upload your Spotify Extended Streaming History and search any date to rediscover every song you heard for the first time on that day — <i>across every year, stacked layer by layer.</i></b></span><div style="height:14px;"></div><div style="height:1px;background:rgba(154,144,128,0.15);margin:0;"></div><div style="height:16px;"></div>Embrace nostalgia. Let the music help you remember and reconnect with past versions of yourself. Explore your own personal music timeline. Sort results by number of plays or listen chronologically. For every song, Strata calculates how long ago you first heard it, how old you were, and how soon after its release you streamed it. <div style="height:10px;"></div>Strata also automatically groups your listening history into playlists for every phase, month, season, and year you've been streaming. Any playlist or search can be downloaded as a CSV file and imported into Spotify via Soundiiz. All processing happens locally in your browser — nothing is uploaded anywhere.<br><span style="display:inline-block; margin-top:10px;"><a href="/extended-streaming-history" target="_blank" style="color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(122,158,138,0.4); font-size:11px;">How to request your Extended Streaming History from Spotify →</a></span></div>
   </div>
   <div class="drop-zone" id="drop-zone">
     <div class="drop-arrow">↑</div>
@@ -303,8 +303,8 @@ var SEASON_DATES = {
   2026:{spring:[2,20],summer:[5,21],fall:[8,23],winter:[11,21]}
 };
 
-var MONTH_ORDER   = MONTH_NAMES.map(function(m){ return m.split('').join(' '); });
-var SEASON_ORDER  = ['S P R I N G','S U M M E R','F A L L','W I N T E R'];
+var MONTH_ORDER   = MONTH_NAMES.slice();
+var SEASON_ORDER  = ['SPRING','SUMMER','FALL','WINTER'];
 var PHASE_MONTH   = ['january','february','march','april','may','june','july','august','september','october','november','december'];
 var ROMAN         = {'I':1,'II':2,'III':3};
 
@@ -337,7 +337,7 @@ var DATA = { phase:[], month:[], season:[], year:[] };
 var selectedFiles = [];
 
 // ── SEASON / PHASE helpers (exact copies from index.html) ────────────────────
-function spacedMonth(i) { return MONTH_NAMES[i].split('').join(' '); }
+function spacedMonth(i) { return MONTH_NAMES[i]; }
 
 function getSeason(date) {
   var year = date.getFullYear();
@@ -346,10 +346,10 @@ function getSeason(date) {
   var summer = new Date(year, sd.summer[0], sd.summer[1]);
   var fall   = new Date(year, sd.fall[0],   sd.fall[1]);
   var winter = new Date(year, sd.winter[0], sd.winter[1]);
-  if (date >= winter || date < spring) return 'W I N T E R';
-  if (date >= spring && date < summer) return 'S P R I N G';
-  if (date >= summer && date < fall)   return 'S U M M E R';
-  return 'F A L L';
+  if (date >= winter || date < spring) return 'WINTER';
+  if (date >= spring && date < summer) return 'SPRING';
+  if (date >= summer && date < fall)   return 'SUMMER';
+  return 'FALL';
 }
 
 function getPhase(date) {
@@ -912,7 +912,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       var end = Math.min(start + MP_PAGE_SIZE, mostPlayed.length);
       var totalPages = Math.ceil(mostPlayed.length / MP_PAGE_SIZE);
       var h = '';
-      h += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;"><span>Most played · ' + dateLabel + (totalPages > 1 ? ' · page '+(page+1)+' of '+totalPages : '') + '</span><button onclick="var el=document.getElementById(\'chrono-section\');if(el){var top=el.getBoundingClientRect().top+window.scrollY-114;window.scrollTo({top:top,behavior:\'smooth\'});}" style="font-size:10px;background:none;border:none;color:var(--text);padding:0;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">jump to chronological ↓</button></div>';
+      h += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;"><span>Most played · ' + dateLabel + (totalPages > 1 ? ' · page '+(page+1)+' of '+totalPages : '') + '</span><button onclick="var el=document.getElementById(\'chrono-section\');if(el){var top=el.getBoundingClientRect().top+window.scrollY-100;window.scrollTo({top:top,behavior:\'smooth\'});}" style="font-size:10px;background:none;border:none;color:var(--text);padding:0;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">jump to chronological ↓</button></div>';
       mostPlayed.slice(start, end).forEach(function(entry, i) { h += buildDayRow(entry, start+i+1); });
       if (totalPages > 1) {
         h += '<div class="sr-pagination">';
@@ -944,7 +944,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     window._chronoReversed = window._chronoReversed || false;
     window._chronoFilter = window._chronoFilter || false;
     var filterCheckHtml = '<button onclick="window._chronoFilter=!window._chronoFilter;this.style.color=window._chronoFilter?\'var(--green)\':\'var(--muted)\';this.style.borderColor=window._chronoFilter?\'rgba(200,169,110,0.4)\':\'rgba(200,169,110,0.2)\';window._reloadDateSearch();" style="font-size:10px;background:none;border:1px solid rgba(200,169,110,0.2);color:'+(window._chronoFilter?'var(--green)':'var(--muted)')+';padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:Telegraf,sans-serif;transition:all .15s;">2+ plays</button>';
-    html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:12px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;align-items:center;gap:8px;">' + chronoLabel + '<button onclick="window._toggleChrono()" style="font-size:10px;background:none;border:1px solid rgba(200,169,110,0.2);color:var(--muted);padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:Telegraf,sans-serif;transition:all .15s;" title="reverse order">↑↓</button>'+filterCheckHtml+'</span><button onclick="var el=document.getElementById(\'mp-section\');if(el){var top=el.getBoundingClientRect().top+window.scrollY-114;window.scrollTo({top:top,behavior:\'smooth\'});}" style="font-size:10px;background:none;border:none;color:var(--text);padding:0;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">jump to most played ↑</button></div>';
+    html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:12px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;align-items:center;gap:8px;">' + chronoLabel + '<button onclick="window._toggleChrono()" style="font-size:10px;background:none;border:1px solid rgba(200,169,110,0.2);color:var(--muted);padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:Telegraf,sans-serif;transition:all .15s;" title="reverse order">↑↓</button>'+filterCheckHtml+'</span><button onclick="var el=document.getElementById(\'mp-section\');if(el){var top=el.getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:top,behavior:\'smooth\'});}" style="font-size:10px;background:none;border:none;color:var(--text);padding:0;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">jump to most played ↑</button></div>';
 
     // Sort chronologically and group by year
     var chronoMatches = dayMatches.slice().sort(function(a,b){ return window._chronoReversed ? (a.track.ts < b.track.ts ? 1 : -1) : (a.track.ts < b.track.ts ? -1 : 1); });
