@@ -101,8 +101,8 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .sr-page-btn { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); background:none; border:1px solid rgba(200,169,110,0.25); border-radius:2px; padding:5px 12px; font-family:'Telegraf',sans-serif; cursor:pointer; transition:all .15s; }
 .sr-page-btn:hover { background:rgba(200,169,110,0.08); border-color:rgba(200,169,110,0.5); }
 
-.tier-section { margin-bottom:48px; margin-top:16px; }
-.tier-label { font-size:13px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border); text-align:center; }
+.tier-section { margin-bottom:48px; margin-top:8px; }
+.tier-label { font-size:13px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:12px; padding-bottom:7px; border-bottom:1px solid var(--border); text-align:center; }
 .pl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:7px; }
 .pl-card { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:10px 13px; cursor:pointer; transition:background .15s, border-color .15s; text-align:center; }
 .pl-card:hover { background:rgba(200,169,110,0.1); border-color:rgba(200,169,110,0.35); }
@@ -127,7 +127,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .dl-btn { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid rgba(200,169,110,0.2); border-radius:2px; padding:6px 12px; font-family:'Telegraf',sans-serif; cursor:pointer; transition:all .15s; }
 .dl-btn:hover { border-color:rgba(200,169,110,0.5); color:var(--gold); }
 .dl-hint { font-size:11px; color:var(--muted); opacity:0.6; }
-.day-hdr { font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--text); font-weight:400; padding:32px 0 12px; border-bottom:1px solid rgba(200,169,110,0.08); text-align:center; }
+.day-hdr { font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--text); font-weight:400; padding:16px 0 8px; border-bottom:1px solid rgba(200,169,110,0.08); text-align:center; }
 .day-hdr.bday-day { color:var(--green); }
 .track { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.035); }
 .track:hover { background:rgba(200,169,110,0.04); margin:0 -12px; padding:14px 12px; }
@@ -212,9 +212,8 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       <div style="display:flex; align-items:center; gap:10px; padding-top:4px;">
         <button class="back-btn" id="search-back-btn" style="margin-bottom:0;">← back</button>
         <button class="dl-btn" id="main-search-sort-btn" style="display:none;">sort: most played</button>
-        <button class="dl-btn" id="main-search-rev-btn" style="display:none;" title="reverse order">↑↓</button>
+        <button class="dl-btn" id="main-search-rev-btn" style="display:none;color:var(--muted);" title="reverse order">↑↓</button>
         <button class="dl-btn" id="main-search-filter-btn" style="display:none;color:var(--muted);border-color:rgba(154,144,128,0.25);">2+ plays</button>
-        <button class="dl-btn" id="jump-chrono-btn" style="display:none;" onclick="var el=document.getElementById('chrono-section');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});">↓ chronological</button>
       </div>
       <div style="display:flex; gap:8px;">
         <button class="dl-btn" id="dl-search-csv-plays" style="display:none;">↓ CSV (most played)</button>
@@ -227,7 +226,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     <div id="grid-search-list"></div>
     <div id="grid-search-none" style="display:none; font-size:13px; color:var(--muted); padding:16px 0;">No songs found.</div>
   </div>
-  <div id="grid-content" style="margin-top:52px;"></div>
+  <div id="grid-content" style="margin-top:32px;"></div>
 </div>
 
 <!-- PLAYLIST VIEW -->
@@ -253,12 +252,12 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       </div>
     </div>
   </div>
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-bottom:10px; border-bottom:1px solid var(--border);">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-bottom:7px; border-bottom:1px solid var(--border);">
     <div style="display:flex; align-items:center; gap:10px;">
       <button class="back-btn" id="back-btn" style="margin-bottom:0;">← all playlists</button>
       <button class="dl-btn" id="pl-mode-btn">sort: chronological</button>
-      <button class="dl-btn" id="pl-sort-btn" title="reverse order">↑↓</button>
-      <button id="pl-filter-btn" style="display:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid rgba(154,144,128,0.25);border-radius:2px;padding:5px 10px;cursor:pointer;font-family:'Telegraf',sans-serif;transition:all .15s;" onclick="window._plFilter=!window._plFilter;this.style.color=window._plFilter?'var(--green)':'var(--muted)';this.style.borderColor=window._plFilter?'rgba(200,169,110,0.4)':'rgba(154,144,128,0.25)';window._plPage=0;if(window._plRenderFn){window._plRenderFn();window._plWireAndFetchFn();}">2+ plays</button>
+      <button class="dl-btn" id="pl-sort-btn" style="color:var(--muted);" title="reverse order">↑↓</button>
+      <button id="pl-filter-btn" class="dl-btn" style="display:none;color:var(--muted);" onclick="window._plFilter=!window._plFilter;this.style.color=window._plFilter?'var(--green)':'var(--muted)';this.style.borderColor=window._plFilter?'rgba(200,169,110,0.4)':'rgba(154,144,128,0.25)';window._plPage=0;if(window._plRenderFn){window._plRenderFn();window._plWireAndFetchFn();}">2+ plays</button>
     </div>
     <div style="display:flex; gap:8px;">
       <button class="dl-btn" id="dl-csv-plays">↓ CSV (most played)</button>
@@ -819,7 +818,6 @@ document.getElementById('grid-search').addEventListener('input', function() {
     document.getElementById('main-search-sort-btn').style.display = 'none';
     document.getElementById('main-search-rev-btn').style.display = 'none';
     document.getElementById('main-search-filter-btn').style.display = 'none';
-    document.getElementById('jump-chrono-btn').style.display = 'none';
     return;
   }
 
@@ -845,7 +843,6 @@ document.getElementById('grid-search').addEventListener('input', function() {
     document.getElementById('main-search-sort-btn').style.display = 'none';
     document.getElementById('main-search-rev-btn').style.display = 'none';
     document.getElementById('main-search-filter-btn').style.display = 'none';
-    document.getElementById('jump-chrono-btn').style.display = '';
     // Date mode — find all songs first listened on this month+day across any year
     var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var dayMatches = [];
@@ -915,7 +912,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       var end = Math.min(start + MP_PAGE_SIZE, mostPlayed.length);
       var totalPages = Math.ceil(mostPlayed.length / MP_PAGE_SIZE);
       var h = '';
-      h += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;">Most played · ' + dateLabel + (totalPages > 1 ? ' · page '+(page+1)+' of '+totalPages : '') + '</div>';
+      h += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;"><span>Most played · ' + dateLabel + (totalPages > 1 ? ' · page '+(page+1)+' of '+totalPages : '') + '</span><button onclick="var el=document.getElementById(\'chrono-section\');if(el){var top=el.getBoundingClientRect().top+window.scrollY-114;window.scrollTo({top:top,behavior:\'smooth\'});}" style="font-size:10px;background:none;border:none;color:var(--text);padding:0;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">jump to chronological ↓</button></div>';
       mostPlayed.slice(start, end).forEach(function(entry, i) { h += buildDayRow(entry, start+i+1); });
       if (totalPages > 1) {
         h += '<div class="sr-pagination">';
@@ -946,14 +943,14 @@ document.getElementById('grid-search').addEventListener('input', function() {
     }
     window._chronoReversed = window._chronoReversed || false;
     window._chronoFilter = window._chronoFilter || false;
-    var filterCheckHtml = '<button onclick="window._chronoFilter=!window._chronoFilter;this.style.color=window._chronoFilter?\"var(--green)\":\"var(--gold)\";this.style.borderColor=window._chronoFilter?\"rgba(200,169,110,0.4)\":\"rgba(200,169,110,0.25)\";window._reloadDateSearch();" style="font-size:11px;background:none;border:1px solid rgba(200,169,110,0.25);color:'+(window._chronoFilter?'var(--green)':'var(--gold)')+';padding:2px 8px;border-radius:2px;cursor:pointer;letter-spacing:0;text-transform:none;font-family:Telegraf,sans-serif;">2+ plays</button>';
-    html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:12px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;">' + chronoLabel + '<div style="display:flex;align-items:center;gap:10px;">'+filterCheckHtml+'<button onclick="var el=document.getElementById(\'mp-section\');if(el)el.scrollIntoView({behavior:\'smooth\',block:\'start\'});" style="font-size:11px;background:none;border:1px solid rgba(200,169,110,0.25);color:var(--gold);padding:2px 8px;border-radius:2px;cursor:pointer;letter-spacing:0;text-transform:none;" title="scroll to most played">↑ most played</button><button onclick="window._toggleChrono()" style="font-size:11px;background:none;border:1px solid rgba(200,169,110,0.25);color:var(--gold);padding:2px 8px;border-radius:2px;cursor:pointer;letter-spacing:0;text-transform:none;" title="reverse order">↑↓</button></div></div>';
+    var filterCheckHtml = '<button onclick="window._chronoFilter=!window._chronoFilter;this.style.color=window._chronoFilter?\'var(--green)\':\'var(--muted)\';this.style.borderColor=window._chronoFilter?\'rgba(200,169,110,0.4)\':\'rgba(200,169,110,0.2)\';window._reloadDateSearch();" style="font-size:10px;background:none;border:1px solid rgba(200,169,110,0.2);color:'+(window._chronoFilter?'var(--green)':'var(--muted)')+';padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:Telegraf,sans-serif;transition:all .15s;">2+ plays</button>';
+    html += '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:12px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;align-items:center;gap:8px;">' + chronoLabel + '<button onclick="window._toggleChrono()" style="font-size:10px;background:none;border:1px solid rgba(200,169,110,0.2);color:var(--muted);padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:Telegraf,sans-serif;transition:all .15s;" title="reverse order">↑↓</button>'+filterCheckHtml+'</span><button onclick="var el=document.getElementById(\'mp-section\');if(el){var top=el.getBoundingClientRect().top+window.scrollY-114;window.scrollTo({top:top,behavior:\'smooth\'});}" style="font-size:10px;background:none;border:none;color:var(--text);padding:0;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">jump to most played ↑</button></div>';
 
     // Sort chronologically and group by year
     var chronoMatches = dayMatches.slice().sort(function(a,b){ return window._chronoReversed ? (a.track.ts < b.track.ts ? 1 : -1) : (a.track.ts < b.track.ts ? -1 : 1); });
     if (window._chronoFilter) chronoMatches = chronoMatches.filter(function(e){ return e.track.plays >= 2; });
 
-    var CHRONO_PAGE_SIZE = 25;
+    var CHRONO_PAGE_SIZE = 15;
     var chronoPage = 0;
 
     function renderChronoPage(page) {
@@ -989,13 +986,18 @@ document.getElementById('grid-search').addEventListener('input', function() {
     window._chronoGoPage = function(page) {
       chronoPage = page;
       var container = document.getElementById('chrono-section');
-      if (container) container.innerHTML = renderChronoPage(page);
+      if (container) {
+        container.innerHTML = renderChronoPage(page);
+        clearTimeout(window._searchArtTimer);
+        window._searchArtTimer = setTimeout(function(){ fetchSearchArt(container); }, 1000);
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     html += '<div id="chrono-section">' + renderChronoPage(0) + '</div>';
     listEl.innerHTML = html;
-    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(document.getElementById('mp-section') || listEl); }, 1000);
+    setTimeout(function(){ fetchSearchArt(document.getElementById('chrono-section') || listEl); }, 3000);
     window._searchResults = chronoMatches;
     window._searchLabel = dateLabel;
     document.getElementById('dl-search-csv').style.display = dayMatches.length ? '' : 'none';
@@ -1124,7 +1126,6 @@ document.getElementById('grid-search').addEventListener('input', function() {
   document.getElementById('main-search-sort-btn').textContent = 'sort: most played';
   document.getElementById('main-search-rev-btn').style.display = 'none';
   document.getElementById('main-search-filter-btn').style.display = 'none';
-  document.getElementById('jump-chrono-btn').style.display = 'none';
   window._mainSearchChrono = false;
   window._mainSearchReversed = false;
   window._mainSearchFilter = false;
@@ -1136,7 +1137,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     document.getElementById('main-search-rev-btn').style.display = window._mainSearchChrono ? '' : 'none';
     var filterBtn = document.getElementById('main-search-filter-btn');
     filterBtn.style.display = window._mainSearchChrono ? '' : 'none';
-    if (!window._mainSearchChrono) { window._mainSearchFilter = false; filterBtn.style.color='var(--muted)'; filterBtn.style.borderColor='rgba(154,144,128,0.25)'; }
+    if (!window._mainSearchChrono) { window._mainSearchFilter = false; filterBtn.style.color='var(--muted)'; filterBtn.style.borderColor='rgba(200,169,110,0.2)'; }
     var m = window._mainSearchMatches;
     if (window._mainSearchChrono) {
       m.sort(function(a,b){ return a.track.ts < b.track.ts ? -1 : 1; });
@@ -1151,7 +1152,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
   document.getElementById('main-search-filter-btn').onclick = function() {
     window._mainSearchFilter = !window._mainSearchFilter;
     this.style.color = window._mainSearchFilter ? 'var(--green)' : 'var(--muted)';
-    this.style.borderColor = window._mainSearchFilter ? 'rgba(200,169,110,0.4)' : 'rgba(154,144,128,0.25)';
+    this.style.borderColor = window._mainSearchFilter ? 'rgba(200,169,110,0.4)' : 'rgba(200,169,110,0.2)';
     currentPage = 0;
     renderPage(0);
     clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
@@ -1446,7 +1447,7 @@ function openPlaylist(tier, idx) {
     this.textContent = window._plMode === 'chrono' ? 'sort: chronological' : 'sort: most played';
     document.getElementById('pl-sort-btn').style.display = window._plMode === 'chrono' ? '' : 'none';
     var filterBtn = document.getElementById('pl-filter-btn');
-    if (filterBtn) { filterBtn.style.display = window._plMode === 'chrono' ? '' : 'none'; if (window._plMode !== 'chrono') { window._plFilter = false; filterBtn.style.color='var(--muted)'; filterBtn.style.borderColor='rgba(154,144,128,0.25)'; } }
+    if (filterBtn) { filterBtn.style.display = window._plMode === 'chrono' ? '' : 'none'; if (window._plMode !== 'chrono') { window._plFilter = false; filterBtn.style.color='var(--muted)'; filterBtn.style.borderColor='rgba(200,169,110,0.2)'; } }
     var searchEl = document.getElementById('search');
     if (searchEl.value.trim()) {
       // Re-sort existing search results
