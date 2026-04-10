@@ -839,6 +839,10 @@ document.getElementById('grid-search').addEventListener('input', function() {
   // Check if query is a date
   var dateQ = parseDateQuery(q);
   if (dateQ) {
+    // Hide keyword search buttons — date path has its own controls
+    document.getElementById('main-search-sort-btn').style.display = 'none';
+    document.getElementById('main-search-rev-btn').style.display = 'none';
+    document.getElementById('main-search-filter-btn').style.display = 'none';
     // Date mode — find all songs first listened on this month+day across any year
     var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var dayMatches = [];
