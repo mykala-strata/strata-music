@@ -102,7 +102,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .tier-section { margin-bottom:48px; margin-top:16px; }
 .tier-label { font-size:13px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border); text-align:center; }
 .pl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:7px; }
-.pl-card { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:16px 16px; cursor:pointer; transition:background .15s, border-color .15s; text-align:center; }
+.pl-card { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:10px 13px; cursor:pointer; transition:background .15s, border-color .15s; text-align:center; }
 .pl-card:hover { background:rgba(200,169,110,0.1); border-color:rgba(200,169,110,0.35); }
 .pl-card-label { font-size:14px; font-weight:400; color:var(--text); margin-bottom:4px; }
 .pl-card-count { font-size:12px; color:var(--muted); }
@@ -116,9 +116,9 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .pl-eyebrow { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--green); margin-bottom:6px; }
 .pl-name { font-size:clamp(28px,5vw,40px); font-weight:300; margin-bottom:0; line-height:1; text-transform:uppercase; letter-spacing:.02em; }
 .pl-meta { font-size:15px; color:var(--text); font-weight:300; margin-top:8px; }
-.search-bar { margin-top:16px; }
-.search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; border-radius:2px; outline:none; transition:border-color .2s; }
-.search-bar input::placeholder { color:var(--muted); opacity:.5; }
+.search-bar { margin-top:8px; }
+.search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; padding-right:220px; border-radius:2px; outline:none; transition:border-color .2s; box-sizing:border-box; }
+.search-bar input::placeholder { color:var(--text); opacity:.8; }
 .search-bar input:focus { border-color:var(--green); }
 .no-results { font-size:13px; color:var(--muted); padding:24px 0; display:none; }
 .pl-actions { display:flex; align-items:center; gap:10px; margin-top:14px; flex-wrap:wrap; }
@@ -194,7 +194,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0;">
       <div class="grid-meta" id="grid-meta" style="margin-bottom:0;"></div>
     </div>
-    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);padding:42px 0 1px;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.</div>
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);padding:28px 0 1px;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.</div>
     <div style="position:relative;margin-top:16px;">
       <input type="text" id="grid-search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
       <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;">
@@ -235,13 +235,19 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     </div>
     <div class="grid-meta" id="pl-meta-stats" style="margin-bottom:0;margin-top:0;"></div>
     <div class="pl-eyebrow" id="pl-eyebrow" style="display:none;"></div>
-    <div style="margin-top:42px;display:flex;align-items:center;gap:0;">
+    <div style="margin-top:32px;display:flex;align-items:center;gap:0;">
       <div class="pl-name" id="pl-name" style="color:var(--accent2);font-size:clamp(20px,3vw,28px);text-transform:uppercase;"></div>
       <span style="display:inline-block;width:1px;height:2em;background:rgba(154,144,128,0.35);margin:0 12px;flex-shrink:0;align-self:center;"></span>
       <div class="pl-meta" id="pl-meta" style="margin-top:0;font-size:clamp(20px,3vw,28px);color:var(--muted);font-weight:300;font-family:'Telegraf',sans-serif;text-transform:uppercase;"></div>
     </div>
-    <div id="pl-explainer" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);margin-top:8px;margin-bottom:1px;"></div>
-    <div class="search-bar"><input type="text" id="search" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)"></div>
+    <div id="pl-explainer" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);margin-top:20px;margin-bottom:1px;"></div>
+    <div style="position:relative;margin-top:16px;">
+      <input type="text" id="search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
+      <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;">
+        <span class="bday-label">Birthday</span>
+        <input class="bday-input" type="date" id="bday-input-pl" style="border:none;border-bottom:1px solid rgba(154,144,128,0.2);background:transparent;">
+      </div>
+    </div>
   </div>
   <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-bottom:10px; border-bottom:1px solid var(--border);">
     <div style="display:flex; align-items:center; gap:10px;">
@@ -1032,6 +1038,8 @@ document.getElementById('grid-search').addEventListener('input', function() {
       if (page > 0) html += '<button class="sr-page-btn" onclick="window._srGoPage('+( page-1)+')">← prev</button>';
       if (page < totalPages-1) html += '<button class="sr-page-btn" onclick="window._srGoPage('+(page+1)+')">next →</button>';
       html += '</div></div>';
+    } else {
+      html += '<div style="display:flex;justify-content:center;padding:10px 0;"><span style="font-size:11px;color:var(--muted);opacity:0.5;letter-spacing:.03em;">play counts = listens over 1 minute</span></div>';
     }
 
     listEl.innerHTML = html;
@@ -1651,10 +1659,14 @@ document.getElementById('search').addEventListener('input', function() {
 
 // ── BIRTHDAY ─────────────────────────────────────────────────────────────────
 var bdayInput = document.getElementById('bday-input');
+var bdayInputPl = document.getElementById('bday-input-pl');
 bdayInput.value = BIRTHDAY;
-bdayInput.addEventListener('change', function() {
-  saveBirthday(this.value);
-  // Re-render age lines for any open playlist
+if (bdayInputPl) bdayInputPl.value = BIRTHDAY;
+
+function syncBday(val) {
+  saveBirthday(val);
+  if (bdayInput.value !== val) bdayInput.value = val;
+  if (bdayInputPl && bdayInputPl.value !== val) bdayInputPl.value = val;
   document.querySelectorAll('#pl-tracks .tc').forEach(function(tc) {
     var listen = tc.getAttribute('data-listen');
     var rd     = tc.getAttribute('data-rd');
@@ -1666,7 +1678,10 @@ bdayInput.addEventListener('change', function() {
       tc.textContent = '';
     }
   });
-});
+}
+
+bdayInput.addEventListener('change', function() { syncBday(this.value); });
+if (bdayInputPl) bdayInputPl.addEventListener('change', function() { syncBday(this.value); });
 
 function ageAtDate2(dateStr) {
   var bd = getBdayParts();
