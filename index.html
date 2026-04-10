@@ -54,7 +54,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 
 /* ── GRID ────────────────────────────────────────────────────────── */
 #grid-view { display:none; }
-.grid-head { padding-bottom:20px; border-bottom:none; margin-bottom:0; position:relative; }
+.grid-head { padding-bottom:11px; border-bottom:none; margin-bottom:0; position:relative; }
 .grid-head::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green) 0%,var(--amber) 50%,var(--accent2) 100%); opacity:0.5; }
 
 .grid-eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(36px,10vw,96px); font-weight:800; background:linear-gradient(90deg,#b5623e,#c8a96e 50%,#7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; margin-bottom:6px; }
@@ -72,8 +72,9 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .title-sub { color:var(--accent2); font-weight:300; }
 
 .grid-search-bar { margin-top:18px; }
-.grid-search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; border-radius:2px; outline:none; transition:border-color .2s; }
-.grid-search-bar input::placeholder { color:var(--muted); opacity:.5; }
+.grid-search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; border-radius:2px; outline:none; transition:border-color .2s; box-sizing:border-box; }
+.grid-search-bar input::placeholder { color:var(--text); opacity:.8; }
+#grid-search::placeholder { color:var(--text); opacity:.8; }
 .grid-search-bar input:focus { border-color:var(--green); }
 .sr-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.035); cursor:pointer; transition:background .15s; }
 .sr-row:hover { background:rgba(200,169,110,0.04); margin:0 -12px; padding:12px 12px; }
@@ -98,22 +99,22 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .sr-page-btn { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); background:none; border:1px solid rgba(200,169,110,0.25); border-radius:2px; padding:5px 12px; font-family:'Telegraf',sans-serif; cursor:pointer; transition:all .15s; }
 .sr-page-btn:hover { background:rgba(200,169,110,0.08); border-color:rgba(200,169,110,0.5); }
 
-.tier-section { margin-bottom:32px; margin-top:16px; }
-.tier-label { font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.tier-section { margin-bottom:48px; margin-top:16px; }
+.tier-label { font-size:13px; letter-spacing:.35em; text-transform:uppercase; color:var(--green); margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border); text-align:center; }
 .pl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:7px; }
-.pl-card { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:11px 13px; cursor:pointer; transition:background .15s, border-color .15s; }
+.pl-card { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:16px 16px; cursor:pointer; transition:background .15s, border-color .15s; text-align:center; }
 .pl-card:hover { background:rgba(200,169,110,0.1); border-color:rgba(200,169,110,0.35); }
-.pl-card-label { font-size:12px; font-weight:400; color:var(--text); margin-bottom:3px; }
-.pl-card-count { font-size:11px; color:var(--muted); }
+.pl-card-label { font-size:14px; font-weight:400; color:var(--text); margin-bottom:4px; }
+.pl-card-count { font-size:12px; color:var(--muted); }
 
 /* ── PLAYLIST VIEW ───────────────────────────────────────────────── */
 #pl-view { display:none; }
 .back-btn { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:18px; display:inline-flex; align-items:center; gap:6px; transition:color .15s; background:none; border:none; padding:0; }
 .back-btn:hover { color:var(--green); }
-.pl-head { padding-bottom:20px; border-bottom:1px solid var(--border); margin-bottom:0; position:relative; }
+.pl-head { padding-bottom:20px; border-bottom:1px solid var(--border); margin-bottom:40px; position:relative; }
 .pl-head::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green) 0%,var(--amber) 50%,var(--accent2) 100%); opacity:0.5; }
 .pl-eyebrow { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--green); margin-bottom:6px; }
-.pl-name { font-size:clamp(28px,5vw,40px); font-weight:300; margin-bottom:6px; line-height:1; }
+.pl-name { font-size:clamp(28px,5vw,40px); font-weight:300; margin-bottom:0; line-height:1; text-transform:uppercase; letter-spacing:.02em; }
 .pl-meta { font-size:15px; color:var(--text); font-weight:300; margin-top:8px; }
 .search-bar { margin-top:16px; }
 .search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; border-radius:2px; outline:none; transition:border-color .2s; }
@@ -154,8 +155,8 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 @media (max-width:600px) {
   .pl-grid { grid-template-columns:repeat(3,1fr) !important; }
   .pl-card { padding:8px 10px !important; }
-  .pl-card-label { font-size:10px !important; }
-  .pl-card-count { font-size:9px !important; }
+  .pl-card-label { font-size:12px !important; }
+  .pl-card-count { font-size:10px !important; }
 }
 </style>
 </head>
@@ -187,50 +188,58 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 <div id="grid-view">
   <div class="grid-head">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div class="grid-eyebrow">Strata</div>
+      <div class="grid-eyebrow" style="cursor:pointer;margin-bottom:-2px;" onclick="var btn=document.getElementById('search-back-btn'); if(btn && document.getElementById('grid-search-results').style.display!=='none') btn.click();">Strata</div>
       <a href="https://ko-fi.com/stratamusic" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:none; border:1px solid rgba(200,169,110,0.2); color:var(--muted); text-decoration:none; font-family:'Telegraf',sans-serif; font-size:10px; letter-spacing:.1em; text-transform:uppercase; padding:7px 13px; border-radius:2px; transition:all .2s; flex-shrink:0;" onmouseover="this.style.borderColor='rgba(200,169,110,0.5)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(200,169,110,0.2)';this.style.color='var(--muted)'">support strata</a>
     </div>
     <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0;">
       <div class="grid-meta" id="grid-meta" style="margin-bottom:0;"></div>
-      <button class="reset-btn" id="reset-btn">↺ upload new files</button>
     </div>
-    <div class="grid-search-bar">
-      <input type="text" id="grid-search" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
+    <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);padding:42px 0 10px;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.</div>
+    <div style="position:relative;">
+      <input type="text" id="grid-search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
+      <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;">
+        <span class="bday-label">Birthday</span>
+        <input class="bday-input" type="date" id="bday-input" style="border:none;border-bottom:1px solid rgba(154,144,128,0.2);background:transparent;">
+      </div>
     </div>
   </div>
   <div id="below-head">
-  <div class="grid-explainer" style="padding:6px 0 4px;text-align:center;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.</div>
-  <div class="bday-row" style="padding:4px 0 10px;justify-content:center;">
-    <span class="bday-label">Your Birthday</span>
-    <input class="bday-input" type="date" id="bday-input">
-  </div>
   </div>
   <div id="grid-search-results" style="display:none;">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-top:24px; padding-bottom:8px; border-bottom:1px solid var(--border);">
       <div style="display:flex; align-items:center; gap:10px; padding-top:4px;">
         <button class="back-btn" id="search-back-btn" style="margin-bottom:0;">← back</button>
         <button class="dl-btn" id="main-search-sort-btn" style="display:none;">sort: most played</button>
+        <button class="dl-btn" id="main-search-rev-btn" style="display:none;" title="reverse order">↑↓</button>
       </div>
       <div style="display:flex; gap:8px;">
         <button class="dl-btn" id="dl-search-csv-plays" style="display:none;">↓ CSV (most played)</button>
         <button class="dl-btn" id="dl-search-csv" style="display:none;">↓ CSV (chronological)</button>
       </div>
     </div>
-    <div id="search-csv-note" style="display:none; font-size:11px; color:var(--muted); margin-top:14px; margin-bottom:16px;">
+    <div id="search-csv-note" style="display:none; font-size:11px; color:var(--muted); margin-top:14px; margin-bottom:24px;">
       <span style="display:flex;align-items:center;justify-content:space-between;width:100%;"><span>Import CSV to <a href="https://soundiiz.com" target="_blank" style="color:var(--muted);text-underline-offset:3px;">Soundiiz</a> to create this playlist in Spotify</span><a href="/soundiiz" target="_blank" style="color:var(--muted);text-decoration:none;white-space:nowrap;margin-left:16px;">Click here for instructions</a></span>
     </div>
     <div id="grid-search-list"></div>
     <div id="grid-search-none" style="display:none; font-size:13px; color:var(--muted); padding:16px 0;">No songs found.</div>
   </div>
-  <div id="grid-content"></div>
+  <div id="grid-content" style="margin-top:52px;"></div>
 </div>
 
 <!-- PLAYLIST VIEW -->
 <div id="pl-view">
   <div class="pl-head">
-    <div class="pl-eyebrow" id="pl-eyebrow">Strata</div>
-    <div class="pl-name" id="pl-name"></div>
-    <div class="pl-meta" id="pl-meta"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="grid-eyebrow" style="cursor:pointer;margin-bottom:0;" onclick="showGrid();">Strata</div>
+      <a href="https://ko-fi.com/stratamusic" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:none; border:1px solid rgba(200,169,110,0.2); color:var(--muted); text-decoration:none; font-family:'Telegraf',sans-serif; font-size:10px; letter-spacing:.1em; text-transform:uppercase; padding:7px 13px; border-radius:2px; transition:all .2s; flex-shrink:0;" onmouseover="this.style.borderColor='rgba(200,169,110,0.5)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(200,169,110,0.2)';this.style.color='var(--muted)'">support strata</a>
+    </div>
+    <div class="grid-meta" id="pl-meta-stats" style="margin-bottom:0;margin-top:0;"></div>
+    <div class="pl-eyebrow" id="pl-eyebrow" style="display:none;"></div>
+    <div style="margin-top:42px;display:flex;align-items:center;gap:0;">
+      <div class="pl-name" id="pl-name" style="color:var(--accent2);font-size:clamp(20px,3vw,28px);text-transform:uppercase;"></div>
+      <span style="display:inline-block;width:1px;height:2em;background:rgba(154,144,128,0.35);margin:0 12px;flex-shrink:0;align-self:center;"></span>
+      <div class="pl-meta" id="pl-meta" style="margin-top:0;font-size:clamp(20px,3vw,28px);color:var(--muted);font-weight:300;font-family:'Telegraf',sans-serif;text-transform:uppercase;"></div>
+    </div>
     <div class="grid-explainer" id="pl-explainer"></div>
     <div class="search-bar"><input type="text" id="search" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)"></div>
   </div>
@@ -245,7 +254,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       <button class="dl-btn" id="dl-csv">↓ CSV (chronological)</button>
     </div>
   </div>
-  <div class="dl-hint" style="margin-top:10px; margin-bottom:4px;"><span style="display:flex;align-items:center;justify-content:space-between;width:100%;"><span>Import CSV to <a href="https://soundiiz.com" target="_blank" style="color:var(--muted);text-underline-offset:3px;">Soundiiz</a> to create this playlist in Spotify</span><a href="/soundiiz" target="_blank" style="color:var(--muted);text-decoration:none;white-space:nowrap;margin-left:16px;">Click here for instructions</a></span></div>
+  <div class="dl-hint" style="margin-top:10px; margin-bottom:16px;"><span style="display:flex;align-items:center;justify-content:space-between;width:100%;"><span>Import CSV to <a href="https://soundiiz.com" target="_blank" style="color:var(--muted);text-underline-offset:3px;">Soundiiz</a> to create this playlist in Spotify</span><a href="/soundiiz" target="_blank" style="color:var(--muted);text-decoration:none;white-space:nowrap;margin-left:16px;">Click here for instructions</a></span></div>
   <div class="no-results" id="no-results">No songs match your search.</div>
   <div id="pl-tracks"></div>
 </div>
@@ -379,7 +388,7 @@ function calcAgeText(birthday, releaseDate, listenDateStr) {
 
   if (ageAtRelease < 0) {
     var ybb = Math.abs(ageAtRelease), yal = lYear - relYear;
-    return 'This song came out ' + ybb + ' year' + (ybb===1?'':'s') + ' before you were born.<br>You first played it ' + yal + ' year' + (yal===1?'':'s') + ' later.';
+    return 'This song came out ' + ybb + ' year' + (ybb===1?'':'s') + ' before you were born. You first played it ' + yal + ' year' + (yal===1?'':'s') + ' later.';
   }
   if (daysDiff === 0) return 'You first played this song the same day it came out.';
   if (daysDiff < 30)  return 'You first played this song ' + daysDiff + ' day' + (daysDiff===1?'':'s') + ' after it was released.';
@@ -643,10 +652,12 @@ function showGridView() {
   var totalPl = DATA.phase.length + DATA.month.length + DATA.season.length + DATA.year.length;
   document.getElementById('grid-meta').textContent =
     totalPl + ' playlists · ' + totalSongs.toLocaleString() + ' unique songs · ' + yearRange + ' · ' + numYears + ' year' + (numYears===1?'':'s');
+  var metaEl2 = document.getElementById('pl-meta-stats');
+  if (metaEl2) metaEl2.textContent = document.getElementById('grid-meta').textContent;
 
   var html = '';
   var tiers = [
-    { key:'phase',  label:'Phases',  fmt:function(pl){ return pl.label; } },
+    { key:'phase',  label:'Phases',  fmt:function(pl){ return pl.label.toUpperCase(); } },
     { key:'month',  label:'Months',  fmt:function(pl){ return pl.label; } },
     { key:'season', label:'Seasons', fmt:function(pl){ return pl.label; } },
     { key:'year',   label:'Years',   fmt:function(pl){ return pl.label; } }
@@ -713,12 +724,7 @@ function calcGapText(releaseDate, listenDateStr) {
   if (daysDiff === 0) return 'the day it was released';
   if (daysDiff < 30)  return daysDiff + ' day' + (daysDiff===1?'':'s') + ' after its release';
   if (totalMonths < 12) return totalMonths + ' month' + (totalMonths===1?'':'s') + ' after its release';
-  if (totalMonths === 12) return '1 year after its release';
-  if (totalMonths < 24) {
-    var y = Math.floor(totalMonths/12), mo = totalMonths%12;
-    return mo === 0 ? y+' year'+(y===1?'':'s')+' after its release' : y+' year'+(y===1?'':'s')+' and '+mo+' month'+(mo===1?'':'s')+' after its release';
-  }
-  var yrs = Math.round(totalMonths/12);
+  var yrs = Math.round(totalMonths / 12);
   return yrs + ' year' + (yrs===1?'':'s') + ' after its release';
 }
 
@@ -799,6 +805,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     document.getElementById('search-csv-note').style.display = 'none';
     window._searchResults = [];
     document.getElementById('main-search-sort-btn').style.display = 'none';
+    document.getElementById('main-search-rev-btn').style.display = 'none';
     return;
   }
 
@@ -1046,17 +1053,29 @@ document.getElementById('grid-search').addEventListener('input', function() {
   document.getElementById('search-csv-note').style.display = matches.length ? '' : 'none';
   document.getElementById('main-search-sort-btn').style.display = matches.length ? '' : 'none';
   document.getElementById('main-search-sort-btn').textContent = 'sort: most played';
+  document.getElementById('main-search-rev-btn').style.display = 'none';
   window._mainSearchChrono = false;
+  window._mainSearchReversed = false;
 
   document.getElementById('main-search-sort-btn').onclick = function() {
     window._mainSearchChrono = !window._mainSearchChrono;
+    window._mainSearchReversed = false;
     this.textContent = window._mainSearchChrono ? 'sort: chronological' : 'sort: most played';
+    document.getElementById('main-search-rev-btn').style.display = window._mainSearchChrono ? '' : 'none';
     var m = window._mainSearchMatches;
     if (window._mainSearchChrono) {
       m.sort(function(a,b){ return a.track.ts < b.track.ts ? -1 : 1; });
     } else {
       m.sort(function(a,b){ return b.track.plays - a.track.plays; });
     }
+    currentPage = 0;
+    renderPage(0);
+    clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
+  };
+
+  document.getElementById('main-search-rev-btn').onclick = function() {
+    window._mainSearchReversed = !window._mainSearchReversed;
+    window._mainSearchMatches.reverse();
     currentPage = 0;
     renderPage(0);
     clearTimeout(window._searchArtTimer); window._searchArtTimer = setTimeout(function(){ fetchSearchArt(listEl); }, 1000);
@@ -1168,7 +1187,8 @@ document.getElementById('dl-csv-plays').addEventListener('click', function() {
   downloadPlaylistCSV(sorted, 'strata-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-most-played.csv');
 });
 
-document.getElementById('reset-btn').addEventListener('click', function() {
+var resetBtn = document.getElementById('reset-btn');
+if (resetBtn) resetBtn.addEventListener('click', function() {
   DATA = {phase:[],month:[],season:[],year:[]};
   selectedFiles = []; renderFileList();
   processBtn.style.display='block'; processingMsg.style.display='none';
