@@ -1137,6 +1137,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
     document.getElementById('main-search-rev-btn').style.display = window._mainSearchChrono ? '' : 'none';
     var filterBtn = document.getElementById('main-search-filter-btn');
     filterBtn.style.display = window._mainSearchChrono ? '' : 'none';
+    if (window._mainSearchChrono) { filterBtn.style.color='var(--muted)'; filterBtn.style.borderColor='rgba(200,169,110,0.2)'; }
     if (!window._mainSearchChrono) { window._mainSearchFilter = false; filterBtn.style.color='var(--muted)'; filterBtn.style.borderColor='rgba(200,169,110,0.2)'; }
     var m = window._mainSearchMatches;
     if (window._mainSearchChrono) {
