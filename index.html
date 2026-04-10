@@ -54,7 +54,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 
 /* ── GRID ────────────────────────────────────────────────────────── */
 #grid-view { display:none; }
-.grid-head { padding-bottom:11px; border-bottom:none; margin-bottom:0; position:relative; }
+.grid-head { padding-bottom:20px; border-bottom:none; margin-bottom:0; position:relative; }
 .grid-head::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green) 0%,var(--amber) 50%,var(--accent2) 100%); opacity:0.5; }
 
 .grid-eyebrow { font-family:'Telegraf',sans-serif; font-size:clamp(36px,10vw,96px); font-weight:800; background:linear-gradient(90deg,#b5623e,#c8a96e 50%,#7a9e8a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; margin-bottom:6px; }
@@ -196,7 +196,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       <div class="grid-meta" id="grid-meta" style="margin-bottom:0;"></div>
     </div>
     <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);padding:28px 0 1px;">Each song is assigned to exactly one phase, month, season, and year — based on the first time you played it.</div>
-    <div style="position:relative;margin-top:16px;">
+    <div style="position:relative;margin-top:15px;">
       <input type="text" id="grid-search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
       <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;">
         <span class="bday-label">Birthday</span>
@@ -242,7 +242,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       <div class="pl-meta" id="pl-meta" style="margin-top:0;font-size:clamp(15px,3vw,23px);color:var(--muted);font-weight:300;font-family:'Telegraf',sans-serif;text-transform:uppercase;"></div>
     </div>
     <div id="pl-explainer" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);margin-top:20px;margin-bottom:1px;"></div>
-    <div style="position:relative;margin-top:16px;">
+    <div style="position:relative;margin-top:15px;">
       <input type="text" id="search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
       <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;">
         <span class="bday-label">Birthday</span>
