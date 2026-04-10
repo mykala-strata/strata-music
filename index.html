@@ -751,14 +751,14 @@ function fetchSearchArt(container) {
     var notice = document.createElement('div');
     notice.id = 'itunes-rate-notice';
     notice.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(15,13,10,0.95);border:1px solid rgba(200,169,110,0.25);color:var(--muted);font-family:Telegraf,sans-serif;font-size:11px;letter-spacing:.08em;padding:10px 18px;border-radius:2px;z-index:9999;text-align:center;max-width:420px;';
-    notice.innerHTML = 'Album art isn\'t loading — iTunes rate limit reached. Try again in 5–15 minutes.&nbsp;&nbsp;<span onclick="this.parentNode.remove()" style="cursor:pointer;color:var(--gold);opacity:0.7;">✕</span>';
+    notice.innerHTML = 'iTunes rate limit reached. Album art won\'t load for a bit.&nbsp;&nbsp;<span onclick="this.parentNode.remove()" style="cursor:pointer;color:var(--gold);opacity:0.7;">✕</span>';
     document.body.appendChild(notice);
     setTimeout(function(){ var n = document.getElementById('itunes-rate-notice'); if (n) n.remove(); }, 15000);
   }
 
   function tryFetch(title, artist, album, img, dateSpan, dateStr, retried) {
     var q = (!retried && album) ? title+' '+artist+' '+album : title+' '+artist;
-    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=song&limit=10')
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=song&limit=25')
       .then(function(r){ return r.json(); })
       .then(function(d){
         var match = null;
@@ -784,7 +784,7 @@ function fetchSearchArt(container) {
           }
         } else if (!d.results || d.results.length === 0) {
           consecutiveFails++;
-          if (consecutiveFails >= 3) showRateLimitNotice();
+          if (consecutiveFails >= 8) showRateLimitNotice();
         }
         if (!match && !retried && album) {
           setTimeout(function(){ tryFetch(title, artist, '', img, dateSpan, dateStr, true); }, 400);
@@ -809,7 +809,7 @@ function fetchSearchArt(container) {
         setTimeout(fetchNext, 600);
       }).catch(function(){
         consecutiveFails++;
-        if (consecutiveFails >= 3) showRateLimitNotice();
+        if (consecutiveFails >= 8) showRateLimitNotice();
         setTimeout(fetchNext, 600);
       });
   }
@@ -1024,8 +1024,9 @@ document.getElementById('grid-search').addEventListener('input', function() {
         container.innerHTML = renderChronoPage(page);
         clearTimeout(window._searchArtTimer);
         window._searchArtTimer = setTimeout(function(){ fetchSearchArt(container); }, 1000);
+        var top = container.getBoundingClientRect().top + window.scrollY - 110;
+        window.scrollTo({ top: top, behavior: 'smooth' });
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     html += '<div id="chrono-section">' + renderChronoPage(0) + '</div>';
