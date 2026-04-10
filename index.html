@@ -762,12 +762,25 @@ function fetchSearchArt(container) {
       .then(function(r){ return r.json(); })
       .then(function(d){
         var match = null;
+        var albumMatch = null;
         if (d.results && d.results.length) {
           consecutiveFails = 0;
           for (var i = 0; i < d.results.length; i++) {
             var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
             var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
-            if (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1) { match = d.results[i]; break; }
+            var artistOk = (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1);
+            if (artistOk) {
+              if (!match) match = d.results[i];
+              // Prefer result where album name also matches
+              if (album) {
+                var ra = (d.results[i].collectionName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
+                var rb = album.toLowerCase().replace(/[^a-z0-9 ]/g,'');
+                if (ra === rb || ra.indexOf(rb) !== -1 || rb.indexOf(ra) !== -1) {
+                  albumMatch = d.results[i];
+                  break;
+                }
+              }
+            }
           }
         } else if (!d.results || d.results.length === 0) {
           consecutiveFails++;
@@ -777,12 +790,14 @@ function fetchSearchArt(container) {
           setTimeout(function(){ tryFetch(title, artist, '', img, dateSpan, dateStr, true); }, 400);
           return;
         }
-        if (match && img && match.artworkUrl100) {
-          img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
+        var artSource = match;
+        var dateSource = albumMatch || match;
+        if (artSource && img && artSource.artworkUrl100) {
+          img.src = artSource.artworkUrl100.replace('100x100bb','200x200bb');
           img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
         }
-        if (match && match.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
-          var rd = match.releaseDate.substring(0,10);
+        if (dateSource && dateSource.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
+          var rd = dateSource.releaseDate.substring(0,10);
           if (rd <= dateStr && rd.substring(5) !== '01-01') {
             var gapText = calcGapText(rd, dateStr);
             if (gapText) {
