@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How to Request Your Extended Streaming History — Strata</title>
+<title>How to Import to Spotify — Strata</title>
 <style>
 @font-face { font-family:'Telegraf'; font-weight:200; src:url('../Telegraf UltraLight 200.otf') format('opentype'); }
 @font-face { font-family:'Telegraf'; font-weight:400; src:url('../TelegrafRegular_272984568a25d8528fe2de8b20b29011.otf') format('opentype'); }
@@ -44,68 +44,60 @@ h1 { font-size:clamp(24px,4vw,36px); font-weight:300; margin-bottom:10px; line-h
 </head>
 <body>
 <div class="wrap">
-  <a href="/playlists" class="back">← back to Strata</a>
+  <a href="/playlists" class="back">← back to playlists</a>
   <div class="eyebrow">Strata · Guide</div>
-  <h1>How to request your Extended Streaming History from Spotify</h1>
-  <p class="sub">Spotify's Extended Streaming History includes every song you've ever played — including the exact timestamps Strata needs to build your playlists. You'll need to request it from Spotify directly. This has to be done on a computer, not the mobile app.</p>
+  <h1>How to import your playlists into Spotify</h1>
+  <p class="sub">Once you've downloaded a CSV from Strata, you can use <a href="https://soundiiz.com" target="_blank">Soundiiz</a> to create that playlist directly in your Spotify account. It's free and takes about a minute.</p>
 
   <div class="steps">
     <div class="step">
       <div class="step-num">01</div>
       <div class="step-body">
-        <div class="step-title">Log in to Spotify on a computer</div>
-        <div class="step-desc">Go to <a href="https://spotify.com" target="_blank">spotify.com</a> and log in to your account. This cannot be done from the mobile app.</div>
+        <div class="step-title">Download your CSV from Strata</div>
+        <div class="step-desc">Open any playlist or run a search, then click the <strong>↓ Download CSV</strong> button. Save the file somewhere easy to find.</div>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">02</div>
       <div class="step-body">
-        <div class="step-title">Go to your Account Settings</div>
-        <div class="step-desc">Click your profile picture in the top right corner, then select <strong>Account</strong> from the dropdown menu.</div>
+        <div class="step-title">Go to Soundiiz and sign in with Spotify</div>
+        <div class="step-desc">Head to <a href="https://soundiiz.com" target="_blank">soundiiz.com</a> and click <strong>Start Now</strong>. Sign in using your Spotify account — Soundiiz only needs permission to create playlists, it won't modify anything else.</div>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">03</div>
       <div class="step-body">
-        <div class="step-title">Navigate to Security and Privacy</div>
-        <div class="step-desc">In the left sidebar, scroll down and click <strong>Security and Privacy</strong>. Then click <strong>Account Privacy</strong>.</div>
+        <div class="step-title">Click "Import Playlist" in the upper right</div>
+        <div class="step-desc">Once you're logged in, look for the <strong>Import Playlist</strong> button in the upper right corner of the Soundiiz dashboard.</div>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">04</div>
       <div class="step-body">
-        <div class="step-title">Find "Download your data"</div>
-        <div class="step-desc">Scroll down until you see the <strong>Download your data</strong> section. You'll see several checkboxes for different types of data.</div>
+        <div class="step-title">Select "From File"</div>
+        <div class="step-desc">In the import options, choose <strong>From File</strong>. Then select the CSV file you downloaded from Strata.</div>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">05</div>
       <div class="step-body">
-        <div class="step-title">Select only Extended Streaming History</div>
-        <div class="step-desc">Uncheck everything except <strong>Extended Streaming History</strong>. This is the only thing Strata needs — the other data types aren't used.</div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">06</div>
-      <div class="step-body">
-        <div class="step-title">Click "Request Data"</div>
-        <div class="step-desc">Scroll down and click <strong>Request Data</strong>. Spotify will send you a confirmation email, and then another email when your data is ready to download.</div>
+        <div class="step-title">Follow the prompts and export to Spotify</div>
+        <div class="step-desc">Soundiiz will read your file and match the tracks. Review the results, give your playlist a name, and choose <strong>Spotify</strong> as the destination. That's it — your playlist will appear in Spotify within seconds.</div>
       </div>
     </div>
   </div>
 
   <div class="tip">
     <div class="tip-label">Good to know</div>
-    <p>Spotify says it may take up to 30 days, but in practice it usually arrives within a few days. When your data is ready, you'll receive an email with a download link. The file will contain several JSON files — upload all of them to Strata at once.</p>
+    <p>The CSV from Strata includes Spotify URIs — the exact unique ID for each song. This means Soundiiz can match tracks with complete accuracy, no guessing from song titles. You won't get wrong versions or missing tracks.</p>
   </div>
 
   <div class="cta">
-    <a href="https://www.spotify.com/account/privacy" target="_blank">Go to Spotify Privacy Settings →</a>
+    <a href="https://soundiiz.com" target="_blank">Go to Soundiiz →</a>
   </div>
 </div>
 </body>
