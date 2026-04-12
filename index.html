@@ -795,7 +795,7 @@ function fetchSearchArt(container) {
         // Use earliest valid date across all artist-matching results
         if (validDates.length && dateSpan && !dateSpan.getAttribute('data-gap-set')) {
           validDates.sort();
-          var rd = validDates[0];
+          var rd = validDates[validDates.length-1];
           var gapText = calcGapText(rd, dateStr);
           if (gapText) {
             dateSpan.setAttribute('data-gap-set', '1');
@@ -1584,7 +1584,7 @@ function openPlaylist(tier, idx) {
           });
           if (!allDates.length) { setFallbackAge(tc, track.dateStr); return; }
           allDates.sort();
-          applyReleaseDate(allDates[0]);
+          applyReleaseDate(allDates[allDates.length-1]);
         }).catch(function(){ setFallbackAge(tc, track.dateStr); });
     }
 
@@ -1618,7 +1618,7 @@ function openPlaylist(tier, idx) {
         });
         if (!validDates.length) { return tryMusicBrainz(); }
         validDates.sort();
-        if (!applyReleaseDate(validDates[0])) tryMusicBrainz();
+        if (!applyReleaseDate(validDates[validDates.length-1])) tryMusicBrainz();
       }).catch(function(){ if (tc) return tryMusicBrainz(); });
   }
 
