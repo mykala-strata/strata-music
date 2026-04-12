@@ -1388,7 +1388,7 @@ function openPlaylist(tier, idx) {
     h += '<div class="ti">';
     h += '<div class="tt" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
     h += '<div class="ta" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;color:var(--text);">'+'<span class="artist-link" data-artist="'+escAttr(t.artist)+'" style="cursor:pointer;" title="search '+escAttr(t.artist)+'">'+escHtml(t.artist)+'</span>'+(t.album?pipe+'<span class="album-link" data-album="'+escAttr(t.album)+'" style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;cursor:pointer;" title="search '+escAttr(t.album)+'">'+escHtml(t.album)+'</span>':'')+(yrsAgo?pipe+yrsAgo:'')+'</div>';
-    h += '<div class="tc" style="color:var(--muted);display:flex;align-items:center;gap:0;flex-wrap:nowrap;min-width:0;" data-listen="'+t.dateStr+'"><span class="tt-reldate"></span></div>';
+    h += '<div class="tc" style="color:var(--muted);display:flex;align-items:center;min-width:0;overflow:hidden;white-space:nowrap;" data-listen="'+t.dateStr+'"><span class="tt-reldate"></span></div>';
     h += '</div>';
     h += '<div class="tn">#'+(i+1)+'</div>';
     h += '<div class="icons" data-sp="'+escAttr(sp)+'" data-yt="'+escAttr(yt)+'">'+SP_SVG+YT_SVG+'</div>';
@@ -1535,27 +1535,17 @@ function openPlaylist(tier, idx) {
       tc.setAttribute('data-ry', rd.substring(0,4));
       tc.setAttribute('data-rm', rd.substring(5,7));
       tc.setAttribute('data-rd', rd);
-      // Update title line with release date
       var relSpan = el.querySelector('.tt-reldate');
-      if (relSpan) {
-        var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-        var relD = new Date(rd + 'T12:00:00');
-        var relStr = MO_FULL[relD.getMonth()] + ' ' + relD.getDate() + ', ' + relD.getFullYear();
-        relSpan.innerHTML = '<span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on </span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+relStr+'</span>';
-      }
+      var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var relD = new Date(rd + 'T12:00:00');
+      var relStr = MO_FULL[relD.getMonth()] + ' ' + relD.getDate() + ', ' + relD.getFullYear();
       var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
-      if (ageText) {
-        var relSpan2 = tc.querySelector('.tt-reldate');
-        if (relSpan2) {
-          // Age text goes after the reldate span
-          var existing = tc.innerHTML;
-          tc.innerHTML = existing + '<span style="font-size:11px;color:var(--muted);white-space:nowrap;"> ' + ageText + '</span>';
-        } else {
-          tc.innerHTML = ageText;
-        }
-        return true;
+      var pipeHtml = '<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>';
+      var relHtml = '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+relStr+'</span>';
+      if (relSpan) {
+        relSpan.innerHTML = relHtml + (ageText ? pipeHtml + '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">'+ageText+'</span>' : '');
       }
-      return false;
+      return !!ageText;
     }
 
     function artistMatch(a, b) {
