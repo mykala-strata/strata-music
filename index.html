@@ -76,6 +76,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
 .grid-search-bar input { width:100%; background:var(--card); border:1px solid var(--border); color:var(--text); font-family:'Telegraf',sans-serif; font-weight:200; font-size:13px; padding:10px 14px; border-radius:2px; outline:none; transition:border-color .2s; box-sizing:border-box; }
 .grid-search-bar input::placeholder { color:var(--text); opacity:.8; }
 #grid-search::placeholder { color:var(--text); opacity:.8; }
+#search::placeholder { color:var(--text); opacity:.8; }
 .grid-search-bar input:focus { border-color:var(--green); }
 .sr-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.035); cursor:pointer; transition:background .15s; }
 .sr-row:hover { background:rgba(200,169,110,0.04); margin:0 -12px; padding:12px 12px; }
@@ -245,7 +246,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
     </div>
     <div id="pl-explainer" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);margin-top:14px;margin-bottom:1px;"></div>
     <div style="position:relative;margin-top:15px;">
-      <input type="text" id="search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
+      <input type="text" id="search" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Telegraf',sans-serif;font-weight:200;font-size:13px;padding:10px 14px;padding-right:220px;border-radius:2px;outline:none;transition:border-color .2s;box-sizing:border-box;opacity:1;" placeholder="search any song, artist, album, or date (e.g. november 20 or 11/20)">
       <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;">
         <span class="bday-label">Birthday</span>
         <input class="bday-input" type="date" id="bday-input-pl" style="border:none;border-bottom:1px solid rgba(154,144,128,0.2);background:transparent;">
@@ -718,7 +719,9 @@ document.addEventListener('click', function(e) {
   e.stopPropagation();
   var val = link ? link.getAttribute('data-artist') : albumLink.getAttribute('data-album');
   if (!val) return;
-  var searchEl = document.getElementById('grid-search');
+  // Use playlist search if in playlist view, otherwise grid search
+  var inPl = document.getElementById('pl-view').style.display !== 'none';
+  var searchEl = document.getElementById(inPl ? 'search' : 'grid-search');
   if (!searchEl) return;
   searchEl.value = val;
   searchEl.dispatchEvent(new Event('input'));
@@ -762,25 +765,12 @@ function fetchSearchArt(container) {
       .then(function(r){ return r.json(); })
       .then(function(d){
         var match = null;
-        var albumMatch = null;
         if (d.results && d.results.length) {
           consecutiveFails = 0;
           for (var i = 0; i < d.results.length; i++) {
             var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
             var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
-            var artistOk = (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1);
-            if (artistOk) {
-              if (!match) match = d.results[i];
-              // Prefer result where album name also matches
-              if (album) {
-                var ra = (d.results[i].collectionName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
-                var rb = album.toLowerCase().replace(/[^a-z0-9 ]/g,'');
-                if (ra === rb || ra.indexOf(rb) !== -1 || rb.indexOf(ra) !== -1) {
-                  albumMatch = d.results[i];
-                  break;
-                }
-              }
-            }
+            if (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1) { match = d.results[i]; break; }
           }
         } else if (!d.results || d.results.length === 0) {
           consecutiveFails++;
@@ -790,14 +780,12 @@ function fetchSearchArt(container) {
           setTimeout(function(){ tryFetch(title, artist, '', img, dateSpan, dateStr, true); }, 400);
           return;
         }
-        var artSource = match;
-        var dateSource = albumMatch || match;
-        if (artSource && img && artSource.artworkUrl100) {
-          img.src = artSource.artworkUrl100.replace('100x100bb','200x200bb');
+        if (match && img && match.artworkUrl100) {
+          img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
           img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
         }
-        if (dateSource && dateSource.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
-          var rd = dateSource.releaseDate.substring(0,10);
+        if (match && match.releaseDate && dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
+          var rd = match.releaseDate.substring(0,10);
           if (rd <= dateStr && rd.substring(5) !== '01-01') {
             var gapText = calcGapText(rd, dateStr);
             if (gapText) {
@@ -1097,7 +1085,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       }).join('');
       var spUrl = 'https://open.spotify.com/search/'+encodeURIComponent(t.title+' '+t.artist);
       var ytUrl = 'https://youtube.com/results?search_query='+t.ytQ;
-      html += '<div class="sr-row">';
+      html += '<div class="sr-row" data-uri="'+escAttr(t.uri)+'">';
       var listenYrN = parseInt(t.dateStr.substring(0,4));
       var diffN = new Date().getFullYear() - listenYrN;
       var ageAtListenN = diffN > 0 ? (new Date().getFullYear() - diffN) : new Date().getFullYear();
@@ -1116,6 +1104,7 @@ document.getElementById('grid-search').addEventListener('input', function() {
       html += '<div class="sr-info">';
       html += '<div class="sr-title" style="display:flex;align-items:center;min-width:0;overflow:hidden;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;min-width:0;max-width:55%;">'+escHtml(t.title)+'</span><span style="display:inline-block;width:1px;height:1em;background:rgba(154,144,128,0.35);margin:0 6px;flex-shrink:0;align-self:center;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">First streamed on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;" class="sr-listen-date" data-listen="'+t.dateStr+'">&nbsp;'+t.date+'</span></div>';
       html += '<div class="sr-artist" style="display:flex;align-items:center;flex-wrap:nowrap;gap:0;min-width:0;overflow:hidden;white-space:nowrap;">'+'<span class="artist-link" data-artist="'+escAttr(t.artist)+'" style="cursor:pointer;" title="search '+escAttr(t.artist)+'">'+escHtml(t.artist)+'</span>'+(t.album?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:clamp(160px,40vw,600px);display:inline-block;vertical-align:middle;cursor:pointer;" class="album-link" data-album="'+escAttr(t.album)+'">'+escHtml(t.album)+'</span>':'')+(yrsAgoN?'<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>'+yrsAgoN:'')+'</div>';
+      html += '<div class="tc" style="color:var(--muted);display:flex;align-items:center;min-width:0;overflow:hidden;white-space:nowrap;" data-listen="'+t.dateStr+'"><span class="tt-reldate"></span></div>';
       html += '<div class="sr-placements">'+tags+'</div>';
       html += '</div>';
       html += '<div class="tn">#'+(i+1)+'</div>';
@@ -1467,7 +1456,7 @@ function openPlaylist(tier, idx) {
     // Fetch for both modes: art+release in plays, release-only in chrono
     window._batchId = (window._batchId || 0) + 1;
     var thisBatchId = window._batchId;
-    els = Array.from(document.querySelectorAll('#pl-tracks .track'));
+    els = Array.from(document.querySelectorAll('#pl-tracks .track, #pl-tracks .sr-row'));
     setTimeout(function(){ doBatch(0, thisBatchId); }, 300);
     window._lastBatchEnd = Date.now();
   }
