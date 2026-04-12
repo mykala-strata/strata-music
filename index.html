@@ -1536,13 +1536,18 @@ function openPlaylist(tier, idx) {
       var MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
       var relD = new Date(rd + 'T12:00:00');
       var relStr = MO_FULL[relD.getMonth()] + ' ' + relD.getDate() + ', ' + relD.getFullYear();
-      var ageText = calcAgeText(BIRTHDAY, rd, track.dateStr);
-      var pipeHtml = '<span style="display:inline-block;width:1px;height:0.9em;background:rgba(154,144,128,0.35);vertical-align:middle;margin:0 5px 1px;"></span>';
       var relHtml = '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+relStr+'</span>';
-      if (relSpan) {
-        relSpan.innerHTML = relHtml + (ageText ? pipeHtml + '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">'+ageText+'</span>' : '');
+      if (relSpan) relSpan.innerHTML = relHtml;
+      // Add gap text to line 1 sr-listen-date span
+      var listenSpan = el.querySelector('.sr-listen-date');
+      if (listenSpan && !listenSpan.getAttribute('data-gap-set')) {
+        var gapText = calcGapText(rd, track.dateStr);
+        if (gapText) {
+          listenSpan.setAttribute('data-gap-set', '1');
+          listenSpan.innerHTML = listenSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
+        }
       }
-      return !!ageText;
+      return true;
     }
 
     function artistMatch(a, b) {
@@ -1781,15 +1786,13 @@ function syncBday(val) {
   if (bdayInput.value !== val) bdayInput.value = val;
   if (bdayInputPl && bdayInputPl.value !== val) bdayInputPl.value = val;
   document.querySelectorAll('#pl-tracks .tc').forEach(function(tc) {
-    var listen = tc.getAttribute('data-listen');
-    var rd     = tc.getAttribute('data-rd');
-    if (!listen) return;
-    if (rd) {
-      var text = calcAgeText(BIRTHDAY, rd, listen);
-      tc.innerHTML = text || '';
-    } else {
-      tc.textContent = '';
-    }
+    var rd = tc.getAttribute('data-rd');
+    if (!rd) { tc.textContent = ''; return; }
+    var MO_FULL2 = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var relD = new Date(rd + 'T12:00:00');
+    var relStr = MO_FULL2[relD.getMonth()] + ' ' + relD.getDate() + ', ' + relD.getFullYear();
+    var relSpan = tc.querySelector('.tt-reldate');
+    if (relSpan) relSpan.innerHTML = '<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--muted);white-space:nowrap;">Released on</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;color:var(--text);white-space:nowrap;">&nbsp;'+relStr+'</span>';
   });
 }
 
