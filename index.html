@@ -760,25 +760,18 @@ function fetchSearchArt(container) {
   }
 
   function tryFetch(title, artist, album, img, dateSpan, dateStr, retried) {
+    // iTunes: art only
     var q = (!retried && album) ? title+' '+artist+' '+album : title+' '+artist;
-    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=song&limit=25')
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=song&limit=10')
       .then(function(r){ return r.json(); })
       .then(function(d){
         var match = null;
-        var validDates = [];
         if (d.results && d.results.length) {
           consecutiveFails = 0;
           for (var i = 0; i < d.results.length; i++) {
             var a = (d.results[i].artistName||'').toLowerCase().replace(/[^a-z0-9 ]/g,'');
             var b = artist.toLowerCase().replace(/[^a-z0-9 ]/g,'');
-            if (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1) {
-              if (!match) match = d.results[i];
-              // Collect all valid release dates across artist matches
-              if (d.results[i].releaseDate) {
-                var rd2 = d.results[i].releaseDate.substring(0,10);
-                if (dateStr && rd2 <= dateStr && rd2.substring(5) !== '01-01') validDates.push(rd2);
-              }
-            }
+            if (a === b || a.indexOf(b) !== -1 || b.indexOf(a) !== -1) { match = d.results[i]; break; }
           }
         } else if (!d.results || d.results.length === 0) {
           consecutiveFails++;
@@ -792,15 +785,36 @@ function fetchSearchArt(container) {
           img.src = match.artworkUrl100.replace('100x100bb','200x200bb');
           img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
         }
-        // Use earliest valid date across all artist-matching results
-        if (validDates.length && dateSpan && !dateSpan.getAttribute('data-gap-set')) {
-          validDates.sort();
-          var rd = validDates[validDates.length-1];
-          var gapText = calcGapText(rd, dateStr);
-          if (gapText) {
-            dateSpan.setAttribute('data-gap-set', '1');
-            dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
-          }
+        // MusicBrainz: release date
+        if (dateSpan && dateStr && !dateSpan.getAttribute('data-gap-set')) {
+          var mbQ = encodeURIComponent('"'+title+'" AND artist:"'+artist+'"');
+          fetch('https://musicbrainz.org/ws/2/recording?query='+mbQ+'&limit=10&fmt=json', {
+            headers: { 'User-Agent': 'Strata/1.0 (strata-music.com)' }
+          }).then(function(r){ return r.json(); })
+            .then(function(mb){
+              if (!mb.recordings) return;
+              var validDates = [];
+              mb.recordings.forEach(function(rec) {
+                if (!rec.releases) return;
+                rec.releases.forEach(function(rel) {
+                  if (!rel.date) return;
+                  var rd = rel.date.substring(0,10);
+                  if (rd.length === 4) rd += '-01-01';
+                  if (rd.length === 7) rd += '-01';
+                  var isJan1 = rd.substring(5) === '01-01';
+                  var year = parseInt(rd.substring(0,4));
+                  if (rd <= dateStr && (!isJan1 || year < 1950)) validDates.push(rd);
+                });
+              });
+              if (!validDates.length) return;
+              validDates.sort();
+              var rd = validDates[validDates.length-1];
+              var gapText = calcGapText(rd, dateStr);
+              if (gapText && !dateSpan.getAttribute('data-gap-set')) {
+                dateSpan.setAttribute('data-gap-set', '1');
+                dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
+              }
+            }).catch(function(){});
         }
         setTimeout(fetchNext, 600);
       }).catch(function(){
@@ -1597,37 +1611,24 @@ function openPlaylist(tier, idx) {
     }
 
     var itunesQ = track.album ? track.title+' '+track.artist+' '+track.album : track.title+' '+track.artist;
-    return fetch('https://itunes.apple.com/search?term='+encodeURIComponent(itunesQ)+'&media=music&entity=song&limit=10')
+    // Get art from iTunes
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(itunesQ)+'&media=music&entity=song&limit=10')
       .then(function(r){ return r.json(); })
       .then(function(d){
-        // Collect all artist-matching results, pick earliest valid release date
         var artistMatches = [];
         if (d.results) {
           d.results.forEach(function(r) {
             if (artistMatch(r.artistName || '', track.artist)) artistMatches.push(r);
           });
         }
-        if (!artistMatches.length) { if (tc) return tryMusicBrainz(); return; }
-
-        // Use best art from first match
-        if (img) {
+        if (img && artistMatches.length && artistMatches[0].artworkUrl100) {
           img.src = artistMatches[0].artworkUrl100.replace('100x100bb','200x200bb');
           img.onload = function(){ img.style.opacity='1'; img.classList.add('loaded'); };
         }
-
-        if (!tc) return;
-        // Find earliest release date that is on or before listen date
-        // Reject Jan 1 dates — iTunes uses these as placeholders for compilations
-        var validDates = [];
-        artistMatches.forEach(function(r) {
-          if (!r.releaseDate) return;
-          var rd = r.releaseDate.substring(0,10);
-          if (rd <= track.dateStr && rd.substring(5) !== '01-01') validDates.push(rd);
-        });
-        if (!validDates.length) { return tryMusicBrainz(); }
-        validDates.sort();
-        if (!applyReleaseDate(validDates[validDates.length-1])) tryMusicBrainz();
-      }).catch(function(){ if (tc) return tryMusicBrainz(); });
+      }).catch(function(){});
+    // Get release date from MusicBrainz
+    if (tc) return tryMusicBrainz();
+    return Promise.resolve();
   }
 
   function ageAtDate(dateStr) {
