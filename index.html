@@ -214,7 +214,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
         <button class="back-btn" id="search-back-btn" style="margin-bottom:0;">← back</button>
         <button class="dl-btn" id="main-search-sort-btn" style="display:none;">sort: most played</button>
         <button class="dl-btn" id="main-search-rev-btn" style="display:none;color:var(--muted);" title="reverse order">↑↓</button>
-        <button class="dl-btn" id="main-search-filter-btn" style="display:none;color:var(--muted);border-color:rgba(154,144,128,0.25);">2+ plays</button>
+        <button class="dl-btn" id="main-search-filter-btn" style="display:none;color:var(--muted);">2+ plays</button>
       </div>
       <div style="display:flex; gap:8px;">
         <button class="dl-btn" id="dl-search-csv-plays" style="display:none;">↓ CSV (most played)</button>
@@ -258,7 +258,7 @@ button { font-family:'Telegraf',sans-serif; cursor:pointer; border:none; border-
       <button class="back-btn" id="back-btn" style="margin-bottom:0;">← all playlists</button>
       <button class="dl-btn" id="pl-mode-btn">sort: chronological</button>
       <button class="dl-btn" id="pl-sort-btn" style="color:var(--muted);" title="reverse order">↑↓</button>
-      <button id="pl-filter-btn" class="dl-btn" style="display:none;color:var(--muted);" onclick="window._plFilter=!window._plFilter;this.style.color=window._plFilter?'var(--green)':'var(--muted)';this.style.borderColor=window._plFilter?'rgba(200,169,110,0.4)':'rgba(154,144,128,0.25)';window._plPage=0;var srch=document.getElementById('search');if(srch&&srch.value.trim()){srch.dispatchEvent(new Event('input'));}else if(window._plRenderFn){window._plRenderFn();window._plWireAndFetchFn();}">2+ plays</button>
+      <button id="pl-filter-btn" class="dl-btn" style="display:none;color:var(--muted);" onclick="window._plFilter=!window._plFilter;this.style.color=window._plFilter?'var(--green)':'var(--muted)';this.style.borderColor=window._plFilter?'rgba(200,169,110,0.4)':'rgba(200,169,110,0.2)';window._plPage=0;var srch=document.getElementById('search');if(srch&&srch.value.trim()){srch.dispatchEvent(new Event('input'));}else if(window._plRenderFn){window._plRenderFn();window._plWireAndFetchFn();}">2+ plays</button>
     </div>
     <div style="display:flex; gap:8px;">
       <button class="dl-btn" id="dl-csv-plays">↓ CSV (most played)</button>
