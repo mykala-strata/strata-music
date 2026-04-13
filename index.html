@@ -748,6 +748,7 @@ function fetchSearchArt(container) {
   if (!artWraps.length) return;
   var idx = 0;
   var consecutiveFails = 0;
+  var mbFails = 0;
 
   function showRateLimitNotice() {
     if (document.getElementById('itunes-rate-notice')) return;
@@ -757,6 +758,16 @@ function fetchSearchArt(container) {
     notice.innerHTML = 'iTunes rate limit reached. Album art won\'t load for a bit.&nbsp;&nbsp;<span onclick="this.parentNode.remove()" style="cursor:pointer;color:var(--gold);opacity:0.7;">✕</span>';
     document.body.appendChild(notice);
     setTimeout(function(){ var n = document.getElementById('itunes-rate-notice'); if (n) n.remove(); }, 15000);
+  }
+
+  function showMBNotice() {
+    if (document.getElementById('mb-rate-notice')) return;
+    var notice = document.createElement('div');
+    notice.id = 'mb-rate-notice';
+    notice.style.cssText = 'position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(15,13,10,0.95);border:1px solid rgba(200,169,110,0.25);color:var(--muted);font-family:Telegraf,sans-serif;font-size:11px;letter-spacing:.08em;padding:10px 18px;border-radius:2px;z-index:9999;text-align:center;max-width:420px;';
+    notice.innerHTML = 'MusicBrainz rate limit reached. Release date info won\'t load for a bit.&nbsp;&nbsp;<span onclick="this.parentNode.remove()" style="cursor:pointer;color:var(--gold);opacity:0.7;">✕</span>';
+    document.body.appendChild(notice);
+    setTimeout(function(){ var n = document.getElementById('mb-rate-notice'); if (n) n.remove(); }, 15000);
   }
 
   function tryFetch(title, artist, album, img, dateSpan, dateStr, retried) {
@@ -811,10 +822,11 @@ function fetchSearchArt(container) {
               var rd = validDates[validDates.length-1];
               var gapText = calcGapText(rd, dateStr);
               if (gapText && !dateSpan.getAttribute('data-gap-set')) {
+                mbFails = 0;
                 dateSpan.setAttribute('data-gap-set', '1');
                 dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
               }
-            }).catch(function(){});
+            }).catch(function(){ mbFails++; if (mbFails >= 5) showMBNotice(); });
         }
         setTimeout(fetchNext, 600);
       }).catch(function(){
@@ -1607,7 +1619,7 @@ function openPlaylist(tier, idx) {
           if (!allDates.length) { setFallbackAge(tc, track.dateStr); return; }
           allDates.sort();
           applyReleaseDate(allDates[allDates.length-1]);
-        }).catch(function(){ setFallbackAge(tc, track.dateStr); });
+        }).catch(function(){ setFallbackAge(tc, track.dateStr); showMBNotice(); });
     }
 
     var itunesQ = track.album ? track.title+' '+track.artist+' '+track.album : track.title+' '+track.artist;
