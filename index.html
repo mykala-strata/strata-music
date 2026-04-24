@@ -743,12 +743,12 @@ function calcGapText(releaseDate, listenDateStr) {
 }
 
 
+window._mbFails = window._mbFails || 0;
 function fetchSearchArt(container) {
   var artWraps = Array.from(container.querySelectorAll('.art-wrap[data-title]')).slice(0, 25);
   if (!artWraps.length) return;
   var idx = 0;
   var consecutiveFails = 0;
-  var mbFails = 0;
 
   function showRateLimitNotice() {
     if (document.getElementById('itunes-rate-notice')) return;
@@ -803,7 +803,7 @@ function fetchSearchArt(container) {
             headers: { 'User-Agent': 'Strata/1.0 (strata-music.com)' }
           }).then(function(r){ return r.json(); })
             .then(function(mb){
-              if (!mb.recordings) return;
+              if (!mb.recordings || !mb.recordings.length) { window._mbFails++; if (window._mbFails >= 5) showMBNotice(); return; }
               var validDates = [];
               mb.recordings.forEach(function(rec) {
                 if (!rec.releases) return;
@@ -822,11 +822,11 @@ function fetchSearchArt(container) {
               var rd = validDates[validDates.length-1];
               var gapText = calcGapText(rd, dateStr);
               if (gapText && !dateSpan.getAttribute('data-gap-set')) {
-                mbFails = 0;
+                window._mbFails = 0;
                 dateSpan.setAttribute('data-gap-set', '1');
                 dateSpan.innerHTML = dateSpan.innerHTML + '<span style="color:var(--muted);font-weight:400;text-transform:uppercase;">, '+gapText+'</span>';
               }
-            }).catch(function(){ mbFails++; if (mbFails >= 5) showMBNotice(); });
+            }).catch(function(){ window._mbFails++; if (window._mbFails >= 5) showMBNotice(); });
         }
         setTimeout(fetchNext, 600);
       }).catch(function(){
@@ -1324,15 +1324,21 @@ document.getElementById('dl-csv').addEventListener('click', function() {
   if (!window._currentPlaylist) return;
   var pl = window._currentPlaylist;
   var name = document.getElementById('pl-name').textContent;
-  downloadPlaylistCSV(pl.tracks, 'strata-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-chronological.csv');
+  var tracks = pl.tracks.slice();
+  if (window._plFilter) tracks = tracks.filter(function(t){ return t.plays >= 2; });
+  if (window._plReversed) tracks = tracks.reverse();
+  else tracks.sort(function(a,b){ return a.ts < b.ts ? -1 : 1; });
+  downloadPlaylistCSV(tracks, 'strata-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-chronological.csv');
 });
 
 document.getElementById('dl-csv-plays').addEventListener('click', function() {
   if (!window._currentPlaylist) return;
   var pl = window._currentPlaylist;
   var name = document.getElementById('pl-name').textContent;
-  var sorted = pl.tracks.slice().sort(function(a,b){ return b.plays - a.plays; });
-  downloadPlaylistCSV(sorted, 'strata-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-most-played.csv');
+  var tracks = pl.tracks.slice();
+  if (window._plFilter) tracks = tracks.filter(function(t){ return t.plays >= 2; });
+  tracks.sort(function(a,b){ return b.plays - a.plays; });
+  downloadPlaylistCSV(tracks, 'strata-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-most-played.csv');
 });
 
 var resetBtn = document.getElementById('reset-btn');
@@ -1601,7 +1607,7 @@ function openPlaylist(tier, idx) {
       })
         .then(function(r){ return r.json(); })
         .then(function(d){
-          if (!d.recordings || !d.recordings[0]) { setFallbackAge(tc, track.dateStr); return; }
+          if (!d.recordings || !d.recordings[0]) { window._mbFails = (window._mbFails||0)+1; if (window._mbFails >= 5) showMBNotice(); setFallbackAge(tc, track.dateStr); return; }
           var allDates = [];
           d.recordings.forEach(function(rec) {
             if (!rec.releases) return;
@@ -1827,6 +1833,19 @@ function ageAtDate2(dateStr) {
 // ── UTILS ─────────────────────────────────────────────────────────────────────
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function escAttr(s){ return String(s).replace(/"/g,'&quot;'); }
+</script>
+<script>
+(function() {
+  if (!/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
+  if (localStorage.getItem('strata-mobile-dismissed')) return;
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(15,13,10,0.85);display:flex;align-items:center;justify-content:center;padding:24px;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#0f0d0a;border:1px solid rgba(200,169,110,0.25);border-radius:2px;padding:28px 24px;max-width:320px;width:100%;text-align:center;';
+  box.innerHTML = '<div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">Heads up</div><div style="font-size:13px;color:#9a9080;line-height:1.7;font-family:Telegraf,sans-serif;font-weight:200;margin-bottom:22px;">Strata is best experienced on a computer. The mobile version is still a work in progress.</div><button onclick="this.closest(\'div[style*=inset]\').remove();localStorage.setItem(\'strata-mobile-dismissed\',\'1\')" style="background:none;border:1px solid rgba(200,169,110,0.25);color:#c8a96e;font-family:Telegraf,sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 20px;border-radius:2px;cursor:pointer;">Got it</button>';
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+})();
 </script>
 </body>
 </html>
